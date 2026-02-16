@@ -28,7 +28,7 @@ export default function ProductDetailsPage() {
       <Col>
         <h2 className="text-primary">{name}</h2>
         <Image
-          src={'/images/products/' + id + '.jpg'}
+          src={'/images/' + id + '.png'}
           alt={'Product image of the product ' + name + '.'}
         />
         {description.split('\n').map((x, i) => <p key={i}>{x}</p>)}

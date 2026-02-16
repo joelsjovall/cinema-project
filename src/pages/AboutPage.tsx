@@ -11,7 +11,7 @@ export default function AboutPage() {
   return <>
     <Row>
       <Col>
-        <h2 className="text-primary">About us</h2>
+        <h2 className="text-primary">yes sir</h2>
         <Image
           src="/images/us.jpg"
           alt="A group photo of our employees."
