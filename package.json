@@ -19,7 +19,7 @@
     "bcryptjs": "^3.0.2",
     "better-express-store": "^1.0.5",
     "boostrap": "^2.0.0",
-    "bootstrap": "^5.3.6",
+    "bootstrap": "^5.3.8",
     "callsites": "^4.2.0",
     "chokidar": "^4.0.3",
     "express": "^5.1.0",
