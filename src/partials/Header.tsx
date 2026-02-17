@@ -1,9 +1,11 @@
+import React from 'react';
+
 
 function Header() {
   return (
     <header className="header">
       <div className="logo">
-
+        <img src="/pictures/util_images/logo.png" alt="logo" className="starting_picture" />
       </div>
 
       <nav className="nav">

@@ -3,10 +3,9 @@ import Header from '../partials/Header.tsx';   // sökväg beror på var filen l
 export default function Home() {
     return (
         <div>
-            <Header />           {/* ← kallar på den här */}
+            <Header />
 
-            <h1>Välkommen till startsidan</h1>
-            <p>Resten av innehållet...</p>
+
         </div>
     );
 }

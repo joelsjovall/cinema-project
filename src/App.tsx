@@ -1,21 +1,22 @@
-// src/App.tsx
-import { Outlet } from 'react-router-dom';
-import Main from './partials/Main.tsx';   // din header
+import { useLocation } from 'react-router-dom';
+import Header from "./partials/Header";
+import Main from './partials/Main';
+import Footer from './partials/Footer';
+import BootstrapBreakpoints from './parts/BootstrapBreakpoints';
+
+// turn off when not needed for debugging
+const showBootstrapBreakpoints = true;
 
 export default function App() {
-  return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#f8f9fa' }}>
-      <Main />   {/* din header med logo och nav */}
 
-      <div style={{
-        padding: '20px',
-        maxWidth: '1200px',
-        margin: '0 auto',
-        backgroundColor: '#ffffff',
-        border: '2px dashed #ccc'   // för att se var innehållet hamnar
-      }}>
-        <Outlet />   {/* här ska sidorna visas */}
-      </div>
-    </div>
-  );
-}
+  // scroll to top when the route changes
+  useLocation();
+  window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+
+  return <>
+    <Header />
+    <Main />
+    <Footer />
+    {showBootstrapBreakpoints ? <BootstrapBreakpoints /> : null}
+  </>;
+};
