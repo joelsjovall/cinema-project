@@ -1,4 +1,5 @@
 namespace WebApp;
+
 public static class Server
 {
     public static void Start()
@@ -8,6 +9,7 @@ public static class Server
         Middleware();
         DebugLog.Start();
         Acl.Start();
+        MovieRoutes.Start();
         ErrorHandler.Start();
         FileServer.Start();
         LoginRoutes.Start();
