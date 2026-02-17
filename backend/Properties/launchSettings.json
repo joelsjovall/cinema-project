@@ -13,6 +13,7 @@
       "commandName": "Project",
       "launchBrowser": false,
       "applicationUrl": "http://localhost:3001",
+      "commandLineArgs": "3001 ../../../../src",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

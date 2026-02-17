@@ -1,0 +1,9 @@
+C:\Users\måns\cinema-project\obj\Debug\net10.0\cinema-project.csproj.AssemblyReference.cache
+C:\Users\måns\cinema-project\obj\Debug\net10.0\rpswa.dswa.cache.json
+C:\Users\måns\cinema-project\obj\Debug\net10.0\cinema-project.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\måns\cinema-project\obj\Debug\net10.0\cinema-project.AssemblyInfoInputs.cache
+C:\Users\måns\cinema-project\obj\Debug\net10.0\cinema-project.AssemblyInfo.cs
+C:\Users\måns\cinema-project\obj\Debug\net10.0\cinema-project.csproj.CoreCompileInputs.cache
+C:\Users\måns\cinema-project\obj\Debug\net10.0\cinema-project.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\måns\cinema-project\obj\Debug\net10.0\cinema-project.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\måns\cinema-project\obj\Debug\net10.0\cinema-project.sourcelink.json
