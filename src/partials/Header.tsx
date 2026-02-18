@@ -3,22 +3,23 @@ import React from 'react';
 
 function Header() {
   return (
-    <header className="header">
-      <div className="logo">
-        <img src="/pictures/util_images/logo.png" alt="logo" className="starting_picture" />
+    <header className="custom-header fixed-top text-white">
+      <div className="header-logo img">
+        <img src="pictures/util_images/logo.png" alt="logga" />
       </div>
 
-      <nav className="nav">
-        <a href="#">Startsida</a>
-        <a href="#">Kommande filmer</a>
-        <a href="#">Kiosken</a>
-      </nav>
+      <div className="bubble-group">
+        <button className="bubble left">Startsida</button>
+        <button className="bubble middle">Kommande filmer</button>
+        <button className="bubble right">Kiosken</button>
+      </div>
 
-      <div className="account">
-        <a className="btn" href="/login">
-          Mina sidor
-        </a>
-        <div className="avatar"></div>
+      <div className="right-area">
+        <div className="avatar-logo img">
+          <img src="pictures/util_images/avatar.png" alt="avatar" />
+        </div>
+
+        <button className="mina-sidor-btn">Mina sidor</button>
       </div>
     </header>
   );
