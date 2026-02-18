@@ -1,10 +1,10 @@
+import { Outlet } from "react-router-dom";
+
 function Main() {
   return (
-    <header className="header">
-      <div>
-
-      </div>
-    </header>
+    <main>
+      <Outlet />
+    </main>
   );
 }
 

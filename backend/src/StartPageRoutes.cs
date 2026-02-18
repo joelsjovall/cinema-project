@@ -67,6 +67,17 @@ namespace WebApp
       return ReadMovies(cmd);
     }
 
+    public Movie GetById(int id)
+    {
+      const string sql = BaseQuery + " WHERE m.id = @id";
+      using var conn = GetConnection();
+      conn.Open();
+      using var cmd = new MySqlCommand(sql, conn);
+      cmd.Parameters.AddWithValue("@id", id);
+      var list = ReadMovies(cmd);
+      return list.FirstOrDefault();
+    }
+
     // ── 2. Search by title ────────────────────────────────────────────────
 
     public List<Movie> SearchByTitle(string title)

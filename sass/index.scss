@@ -1,5 +1,5 @@
 @use 'bootstrap-breakpoints';
-@use 'bootstrap';
+
 @use 'card-colors';
 @use 'buttons';
 @use 'images';
@@ -7,3 +7,5 @@
 
 // Import fonts from Google Fonts
 @import url('https://fonts.googleapis.com/css2?family=Chewy&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+@import 'bootstrap/scss/bootstrap';

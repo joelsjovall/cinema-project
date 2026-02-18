@@ -10,6 +10,8 @@ public static class MovieRoutes
     // GET /movies
     App.MapGet("/movies", () => repo.GetAll());
 
+    App.MapGet("/movies/{id}", (int id) => repo.GetById(id));
+
     // GET /movies/search?title=avengers
     App.MapGet("/movies/search", (string title) => repo.SearchByTitle(title));
 
