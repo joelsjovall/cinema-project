@@ -67,6 +67,57 @@ namespace WebApp
       return ReadMovies(cmd);
     }
 
+    public Movie GetById(int id)
+    {
+      const string sql = BaseQuery + " WHERE m.id = @id";
+      using var conn = GetConnection();
+      conn.Open();
+      using var cmd = new MySqlCommand(sql, conn);
+      cmd.Parameters.AddWithValue("@id", id);
+      var list = ReadMovies(cmd);
+      return list.FirstOrDefault();
+    }
+
+    public List<string> GetGenres()
+    {
+      const string sql = @"
+            SELECT DISTINCT m.genre
+            FROM movies m
+            JOIN screenings s ON s.movieId = m.id
+            ORDER BY m.genre";
+
+      using var conn = GetConnection();
+      conn.Open();
+      using var cmd = new MySqlCommand(sql, conn);
+      using var reader = cmd.ExecuteReader();
+      var genres = new List<string>();
+      while (reader.Read())
+      {
+        genres.Add(reader.GetString("genre"));
+      }
+      return genres;
+    }
+
+    public List<int> GetAgeRestrictions()
+    {
+      const string sql = @"
+            SELECT DISTINCT m.age_restriction
+            FROM movies m
+            JOIN screenings s ON s.movieId = m.id
+            ORDER BY m.age_restriction";
+
+      using var conn = GetConnection();
+      conn.Open();
+      using var cmd = new MySqlCommand(sql, conn);
+      using var reader = cmd.ExecuteReader();
+      var ages = new List<int>();
+      while (reader.Read())
+      {
+        ages.Add(reader.GetInt32("age_restriction"));
+      }
+      return ages;
+    }
+
     // ── 2. Search by title ────────────────────────────────────────────────
 
     public List<Movie> SearchByTitle(string title)
