@@ -11,6 +11,8 @@ namespace WebApp
     public string Genre { get; set; }
     public int AgeRestriction { get; set; }
     public DateTime ScreeningDate { get; set; }
+
+    public string? Image_url { get; set; }
   }
 
   public class MovieRepository
@@ -35,7 +37,8 @@ namespace WebApp
                 m.title,
                 m.genre,
                 m.age_restriction,
-                s.screeningDate
+                s.screeningDate,
+                m.image_url
             FROM movies m
             JOIN screenings s ON s.movieId = m.id";
 
@@ -51,7 +54,9 @@ namespace WebApp
           Title = reader.GetString("title"),
           Genre = reader.GetString("genre"),
           AgeRestriction = reader.GetInt32("age_restriction"),
-          ScreeningDate = reader.GetDateTime("screeningDate")
+          ScreeningDate = reader.GetDateTime("screeningDate"),
+          // Image_url = reader.GetString("image_url")
+          Image_url = reader.IsDBNull(reader.GetOrdinal("image_url")) ? null : reader.GetString("image_url")
         });
       }
       return list;

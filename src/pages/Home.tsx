@@ -3,12 +3,14 @@ import { useState, useEffect } from "react";
 const API = "";
 
 interface Movie {
-    id: number;
-    title: string;
-    genre: string;
-    ageRestriction: number;
-    screeningDate: string;
+  id: number;
+  title: string;
+  genre: string;
+  ageRestriction: number;
+  screeningDate: string;
+  image_url?: string | null;
 }
+
 
 export default function Home() {
     console.log("Home component loaded");
@@ -72,8 +74,9 @@ export default function Home() {
             console.log("Response:", res);
             const data = await res.json();
             console.log("Data:", data);
-            setMovies(data);
-            updateFilterOptions(data);
+            const list = Array.isArray(data) ? data : data.movies ?? [];
+            setMovies(list);
+            updateFilterOptions(list);
         } catch (e) {
             console.log("Error:", e);
             setError("Could not load movies.");
@@ -221,10 +224,14 @@ export default function Home() {
                 <div className="alert alert-info">Inga filmer hittade.</div>
             ) : (
                 <div className="row row-cols-1 row-cols-md-3 g-3">
-                    {movies.map((movie) => (
+                    {movies.map((movie) => 
                         <div className="col" key={`${movie.id}-${movie.screeningDate}`}>
                             <div className="card h-100">
                                 <div className="card-body">
+                                    <img
+                                        src={movie.image_url ?? "/images/placeholder.jpg"}
+                                        alt={movie.title}
+                                        className="img-fluid" />
                                     <h5 className="card-title">{movie.title}</h5>
                                     <p className="card-text text-muted mb-1">{movie.genre}</p>
                                     <span className="badge bg-secondary me-2">
@@ -236,7 +243,7 @@ export default function Home() {
                                 </div>
                             </div>
                         </div>
-                    ))}
+                    )}
                 </div>
             )}
         </div>
