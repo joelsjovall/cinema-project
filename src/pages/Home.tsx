@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-const API = "http://localhost:3001";
+const API = "";
 
 interface Movie {
     id: number;
@@ -13,6 +13,8 @@ interface Movie {
 export default function Home() {
     console.log("Home component loaded");
     const [movies, setMovies] = useState<Movie[]>([]);
+    const [availableGenres, setAvailableGenres] = useState<string[]>([]);
+    const [availableMaxAges, setAvailableMaxAges] = useState<number[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
@@ -27,7 +29,39 @@ export default function Home() {
     // Load all movies on mount
     useEffect(() => {
         fetchAll();
+        fetchFilterOptions();
     }, []);
+
+    function updateFilterOptions(movieList: Movie[]) {
+        const genres = Array.from(new Set(movieList.map((m) => m.genre))).sort((a, b) =>
+            a.localeCompare(b)
+        );
+        const ages = Array.from(new Set(movieList.map((m) => m.ageRestriction))).sort(
+            (a, b) => a - b
+        );
+        setAvailableGenres(genres);
+        setAvailableMaxAges(ages);
+    }
+
+    async function fetchFilterOptions() {
+        try {
+            const [genresRes, agesRes] = await Promise.all([
+                fetch(`${API}/movies/options/genres`),
+                fetch(`${API}/movies/options/ages`),
+            ]);
+
+            if (!genresRes.ok || !agesRes.ok) {
+                throw new Error("Could not load filter options");
+            }
+
+            const genres = await genresRes.json();
+            const ages = await agesRes.json();
+            setAvailableGenres(genres);
+            setAvailableMaxAges(ages);
+        } catch (e) {
+            console.log("Options error:", e);
+        }
+    }
 
     async function fetchAll() {
         console.log("Fetching movies...");
@@ -39,6 +73,7 @@ export default function Home() {
             const data = await res.json();
             console.log("Data:", data);
             setMovies(data);
+            updateFilterOptions(data);
         } catch (e) {
             console.log("Error:", e);
             setError("Could not load movies.");
@@ -92,16 +127,17 @@ export default function Home() {
         setFilterMaxAge("");
         setFilterDate("");
         fetchAll();
+        fetchFilterOptions();
     }
 
     return (
         <div className="container py-4">
-            <h1 className="mb-4">🎬 Movies</h1>
+            <h1 className="mb-4">Filmer på bio just nu</h1>
 
             {/* ── Search ── */}
             <div className="card mb-3">
                 <div className="card-body">
-                    <h5 className="card-title">Search</h5>
+                    <h5 className="card-title">Sök</h5>
                     <div className="input-group">
                         <input
                             type="text"
@@ -112,10 +148,10 @@ export default function Home() {
                             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                         />
                         <button className="btn btn-primary" onClick={handleSearch}>
-                            Search
+                            Sök
                         </button>
                         <button className="btn btn-outline-secondary" onClick={handleReset}>
-                            Reset
+                            Rensa
                         </button>
                     </div>
                 </div>
@@ -127,22 +163,32 @@ export default function Home() {
                     <h5 className="card-title">Filter</h5>
                     <div className="row g-2">
                         <div className="col-md-4">
-                            <input
-                                type="text"
+                            <select
                                 className="form-control"
-                                placeholder="Genre (e.g. Action)"
                                 value={filterGenre}
                                 onChange={(e) => setFilterGenre(e.target.value)}
-                            />
+                            >
+                                <option value="">Alla genrer</option>
+                                {availableGenres.map((genre) => (
+                                    <option key={genre} value={genre}>
+                                        {genre}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
                         <div className="col-md-4">
-                            <input
-                                type="number"
+                            <select
                                 className="form-control"
-                                placeholder="Max age restriction"
                                 value={filterMaxAge}
                                 onChange={(e) => setFilterMaxAge(e.target.value)}
-                            />
+                            >
+                                <option value="">Alla åldersgränser</option>
+                                {availableMaxAges.map((age) => (
+                                    <option key={age} value={age}>
+                                        Up to {age}+
+                                    </option>
+                                ))}
+                            </select>
                         </div>
                         <div className="col-md-4">
                             <input
@@ -155,10 +201,10 @@ export default function Home() {
                     </div>
                     <div className="mt-2">
                         <button className="btn btn-primary me-2" onClick={handleFilter}>
-                            Apply Filters
+                            Applicera Filter
                         </button>
                         <button className="btn btn-outline-secondary" onClick={handleReset}>
-                            Reset
+                            Rensa
                         </button>
                     </div>
                 </div>
@@ -172,7 +218,7 @@ export default function Home() {
                     <div className="spinner-border" role="status" />
                 </div>
             ) : movies.length === 0 ? (
-                <div className="alert alert-info">No movies found.</div>
+                <div className="alert alert-info">Inga filmer hittade.</div>
             ) : (
                 <div className="row row-cols-1 row-cols-md-3 g-3">
                     {movies.map((movie) => (
@@ -182,7 +228,7 @@ export default function Home() {
                                     <h5 className="card-title">{movie.title}</h5>
                                     <p className="card-text text-muted mb-1">{movie.genre}</p>
                                     <span className="badge bg-secondary me-2">
-                                        Age {movie.ageRestriction}+
+                                        Åldersgräns {movie.ageRestriction}+
                                     </span>
                                     <span className="badge bg-primary">
                                         {new Date(movie.screeningDate).toLocaleDateString()}
