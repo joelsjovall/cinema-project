@@ -1,10 +1,9 @@
 function Main() {
   return (
-    <header className="header">
-      <div>
+    <main className="main-content">
+      { /* dina routes eller innehåll */}
+    </main>
 
-      </div>
-    </header>
   );
 }
 

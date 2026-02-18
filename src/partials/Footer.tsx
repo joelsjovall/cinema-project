@@ -12,12 +12,12 @@ function Footer() {
 
             <div className="text-center">
               <h6>
-                <a href="/om-biografen" className="text-white text-decoration-none">
+                <a href="/om-biografen" className="text-black text-decoration-none">
                   Hjälp och kontakt
                 </a>
               </h6>
               <p className="mb-0">
-                <a href="/om-biografen" className="text-white text-decoration-none">
+                <a href="/om-biografen" className="text-black text-decoration-none">
                   Om biografen
                 </a>
               </p>
@@ -25,12 +25,12 @@ function Footer() {
 
             <div className="text-center">
               <h6>
-                <a href="/kundservice" className="text-white text-decoration-none">
+                <a href="/kundservice" className="text-black text-decoration-none">
                   Kundservice
                 </a>
               </h6>
               <p className="mb-0">
-                <a href="tel:0763207855" className="text-white text-decoration-none">
+                <a href="tel:0763207855" className="text-black text-decoration-none">
                   0763207855
                 </a>
               </p>
