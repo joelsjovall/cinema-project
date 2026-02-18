@@ -38,7 +38,7 @@ function Footer() {
 
           </div>
 
-          {/* AI-botten */}
+
           <div className="col-3 text-end">
             <p className="mb-1">Behöver du hjälp?</p>
             <button className="btn btn-primary">Chatta med vår ai-bot</button>
