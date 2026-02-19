@@ -11,6 +11,8 @@ interface Movie {
     image_url?: string | null;
 }
 
+// Tar bort dubletter sa att varje film (id) bara visas en gang,
+// aven om API:et skickar flera visningar med olika datum.
 function dedupeMoviesById(movieList: Movie[]): Movie[] {
     const seen = new Set<number>();
     return movieList.filter((movie) => {
@@ -23,9 +25,12 @@ function dedupeMoviesById(movieList: Movie[]): Movie[] {
 
 export default function Home() {
     console.log("Home component loaded");
+    // Filmer som visas i kort-griden.
     const [movies, setMovies] = useState<Movie[]>([]);
+    // Val i filter-dropdowns.
     const [availableGenres, setAvailableGenres] = useState<string[]>([]);
     const [availableMaxAges, setAvailableMaxAges] = useState<number[]>([]);
+    // UI-state for laddning och fel.
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
@@ -37,12 +42,13 @@ export default function Home() {
     const [filterMaxAge, setFilterMaxAge] = useState("");
     const [filterDate, setFilterDate] = useState("");
 
-    // Load all movies on mount
+    // Hamta filmer + filterval nar sidan laddas.
     useEffect(() => {
         fetchAll();
         fetchFilterOptions();
     }, []);
 
+    // Bygg lokala filterval baserat pa aktuell filmlista.
     function updateFilterOptions(movieList: Movie[]) {
         const genres = Array.from(new Set(movieList.map((m) => m.genre))).sort((a, b) =>
             a.localeCompare(b)
@@ -54,6 +60,7 @@ export default function Home() {
         setAvailableMaxAges(ages);
     }
 
+    // Hamta filterval fran backend (genrer + aldersgranser).
     async function fetchFilterOptions() {
         try {
             const [genresRes, agesRes] = await Promise.all([
@@ -74,6 +81,7 @@ export default function Home() {
         }
     }
 
+    // Hamta alla filmer, deduplicera och uppdatera listan.
     async function fetchAll() {
         console.log("Fetching movies...");
         setLoading(true);
@@ -94,6 +102,7 @@ export default function Home() {
         }
     }
 
+    // Sok pa titel. Tom sokning fallbackar till alla filmer.
     async function handleSearch() {
         if (!searchTitle.trim()) {
             fetchAll();
@@ -114,6 +123,7 @@ export default function Home() {
         }
     }
 
+    // Filtrera filmer med valda query-parametrar.
     async function handleFilter() {
         setLoading(true);
         setError("");
@@ -133,6 +143,7 @@ export default function Home() {
         }
     }
 
+    // Nollstall sok/filter och ladda om standardlistan.
     function handleReset() {
         setSearchTitle("");
         setFilterGenre("");
@@ -227,6 +238,7 @@ export default function Home() {
 
             {error && <div className="alert alert-danger">{error}</div>}
 
+            {/* Visa loader under hamtning, annars resultat eller tomlista. */}
             {loading ? (
                 <div className="text-center py-5">
                     <div className="spinner-border" role="status" />
