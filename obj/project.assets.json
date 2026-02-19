@@ -269,19 +269,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\måns\\.nuget\\packages\\": {}
+    "C:\\Users\\User\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\måns\\cinema-project\\cinema-project.csproj",
+      "projectUniqueName": "C:\\Users\\User\\repos\\cinema-project\\cinema-project.csproj",
       "projectName": "cinema-project",
-      "projectPath": "C:\\Users\\måns\\cinema-project\\cinema-project.csproj",
-      "packagesPath": "C:\\Users\\måns\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\måns\\cinema-project\\obj\\",
+      "projectPath": "C:\\Users\\User\\repos\\cinema-project\\cinema-project.csproj",
+      "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\User\\repos\\cinema-project\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\måns\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net10.0"

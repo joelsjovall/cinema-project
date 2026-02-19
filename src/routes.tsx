@@ -6,10 +6,10 @@ import Login from "./pages/Login";
 import Createaccount from "./pages/Createaccount";
 
 const routes: RouteObject[] = [
-    { path: "/", element: <Home /> },
-    { path: "/kommande", element: <Kommande /> },
-    { path: "/kiosk", element: <Kiosk /> },
-    { path: "/login", element: <Login /> },
+    { index: true, element: <Home /> },
+    { path: "kommande", element: <Kommande /> },
+    { path: "kiosk", element: <Kiosk /> },
+    { path: "login", element: <Login /> },
     { path: "*", element: <div>404 - Sidan finns inte</div> },
     { path: "/Createaccount", element: <Createaccount /> },
 ];

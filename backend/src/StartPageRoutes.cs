@@ -11,6 +11,8 @@ namespace WebApp
     public string Genre { get; set; }
     public int AgeRestriction { get; set; }
     public DateTime ScreeningDate { get; set; }
+
+    public string? Image_url { get; set; }
   }
 
   public class MovieRepository
@@ -35,7 +37,8 @@ namespace WebApp
                 m.title,
                 m.genre,
                 m.age_restriction,
-                s.screeningDate
+                s.screeningDate,
+                m.image_url
             FROM movies m
             JOIN screenings s ON s.movieId = m.id";
 
@@ -51,7 +54,9 @@ namespace WebApp
           Title = reader.GetString("title"),
           Genre = reader.GetString("genre"),
           AgeRestriction = reader.GetInt32("age_restriction"),
-          ScreeningDate = reader.GetDateTime("screeningDate")
+          ScreeningDate = reader.GetDateTime("screeningDate"),
+          // Image_url = reader.GetString("image_url")
+          Image_url = reader.IsDBNull(reader.GetOrdinal("image_url")) ? null : reader.GetString("image_url")
         });
       }
       return list;
@@ -65,6 +70,57 @@ namespace WebApp
       conn.Open();
       using var cmd = new MySqlCommand(BaseQuery + " ORDER BY m.title", conn);
       return ReadMovies(cmd);
+    }
+
+    public Movie GetById(int id)
+    {
+      const string sql = BaseQuery + " WHERE m.id = @id";
+      using var conn = GetConnection();
+      conn.Open();
+      using var cmd = new MySqlCommand(sql, conn);
+      cmd.Parameters.AddWithValue("@id", id);
+      var list = ReadMovies(cmd);
+      return list.FirstOrDefault();
+    }
+
+    public List<string> GetGenres()
+    {
+      const string sql = @"
+            SELECT DISTINCT m.genre
+            FROM movies m
+            JOIN screenings s ON s.movieId = m.id
+            ORDER BY m.genre";
+
+      using var conn = GetConnection();
+      conn.Open();
+      using var cmd = new MySqlCommand(sql, conn);
+      using var reader = cmd.ExecuteReader();
+      var genres = new List<string>();
+      while (reader.Read())
+      {
+        genres.Add(reader.GetString("genre"));
+      }
+      return genres;
+    }
+
+    public List<int> GetAgeRestrictions()
+    {
+      const string sql = @"
+            SELECT DISTINCT m.age_restriction
+            FROM movies m
+            JOIN screenings s ON s.movieId = m.id
+            ORDER BY m.age_restriction";
+
+      using var conn = GetConnection();
+      conn.Open();
+      using var cmd = new MySqlCommand(sql, conn);
+      using var reader = cmd.ExecuteReader();
+      var ages = new List<int>();
+      while (reader.Read())
+      {
+        ages.Add(reader.GetInt32("age_restriction"));
+      }
+      return ages;
     }
 
     // ── 2. Search by title ────────────────────────────────────────────────
