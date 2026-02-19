@@ -13,7 +13,7 @@ export default function Login() {
                 <button className="login-btn">Logga in</button>
 
                 <p className="login-text">
-                    Har du inget konto? <a href="/register">Bli medlem!</a>
+                    Har du inget konto? <a href="/Createaccount">Bli medlem!</a>
                 </p>
             </div>
         </div>
