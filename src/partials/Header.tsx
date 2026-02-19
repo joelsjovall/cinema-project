@@ -1,7 +1,9 @@
 import React from 'react';
-
+import { useNavigate } from 'react-router-dom';
 
 function Header() {
+  const navigate = useNavigate();   // <-- DU MÅSTE HA DETTA
+
   return (
     <header className="custom-header fixed-top text-white">
       <div className="header-logo img">
@@ -9,9 +11,9 @@ function Header() {
       </div>
 
       <div className="bubble-group">
-        <button className="bubble left">Startsida</button>
-        <button className="bubble middle">Kommande filmer</button>
-        <button className="bubble right">Kiosken</button>
+        <button className="bubble left" onClick={() => navigate("/")}>Startsida</button>
+        <button className="bubble middle" onClick={() => navigate("/kommande")}>Kommande filmer</button>
+        <button className="bubble right" onClick={() => navigate("/kiosk")}>Kiosken</button>
       </div>
 
       <div className="right-area">
@@ -19,7 +21,7 @@ function Header() {
           <img src="pictures/util_images/avatar.png" alt="avatar" />
         </div>
 
-        <button className="mina-sidor-btn">Mina sidor</button>
+        <button className="mina-sidor-btn" onClick={() => navigate("/login")}>Mina sidor</button>
       </div>
     </header>
   );
