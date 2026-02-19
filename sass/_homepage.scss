@@ -16,12 +16,16 @@
     box-shadow: none;
   }
 
-  .card img.movie-poster {
+  .card img.movie-poster {      //filmposterns utseende
     width: 65%;
     max-height: 300px;
     object-fit: cover;
     display: block;
-    margin: 0 auto 0.75rem;
+    margin: 0 0 0.75rem 0;  //flyttar bilden höger/vänster
+
+    border: 3px solid #2e673d;  //färgen
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0,0,0, 0.25);
   }
 
 }

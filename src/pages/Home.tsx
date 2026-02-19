@@ -25,12 +25,9 @@ function dedupeMoviesById(movieList: Movie[]): Movie[] {
 
 export default function Home() {
     console.log("Home component loaded");
-    // Filmer som visas i kort-griden.
     const [movies, setMovies] = useState<Movie[]>([]);
-    // Val i filter-dropdowns.
     const [availableGenres, setAvailableGenres] = useState<string[]>([]);
     const [availableMaxAges, setAvailableMaxAges] = useState<number[]>([]);
-    // UI-state for laddning och fel.
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
