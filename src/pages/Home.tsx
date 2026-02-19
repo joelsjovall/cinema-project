@@ -11,6 +11,15 @@ interface Movie {
     image_url?: string | null;
 }
 
+function dedupeMoviesById(movieList: Movie[]): Movie[] {
+    const seen = new Set<number>();
+    return movieList.filter((movie) => {
+        if (seen.has(movie.id)) return false;
+        seen.add(movie.id);
+        return true;
+    });
+}
+
 
 export default function Home() {
     console.log("Home component loaded");
@@ -74,7 +83,7 @@ export default function Home() {
             console.log("Response:", res);
             const data = await res.json();
             console.log("Data:", data);
-            const list = Array.isArray(data) ? data : data.movies ?? [];
+            const list = dedupeMoviesById(Array.isArray(data) ? data : data.movies ?? []);
             setMovies(list);
             updateFilterOptions(list);
         } catch (e) {
@@ -97,7 +106,7 @@ export default function Home() {
                 `${API}/movies/search?title=${encodeURIComponent(searchTitle)}`
             );
             const data = await res.json();
-            setMovies(data);
+            setMovies(dedupeMoviesById(data));
         } catch {
             setError("Search failed.");
         } finally {
@@ -116,7 +125,7 @@ export default function Home() {
         try {
             const res = await fetch(`${API}/movies/filter?${params.toString()}`);
             const data = await res.json();
-            setMovies(data);
+            setMovies(dedupeMoviesById(data));
         } catch {
             setError("Filter failed.");
         } finally {
@@ -227,13 +236,13 @@ export default function Home() {
             ) : (
                 <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
                     {movies.map((movie) =>
-                        <div className="col" key={`${movie.id}-${movie.screeningDate}`}>
+                        <div className="col" key={movie.id}>
                             <div className="card h-100">
                                 <div className="card-body">
                                     <img
                                         src={movie.image_url ?? "/images/placeholder.jpg"}
                                         alt={movie.title}
-                                        className="img-fluid" />
+                                        className="img-fluid movie-poster" />
                                     <h5 className="card-title">{movie.title}</h5>
                                     <p className="card-text text-muted mb-1">{movie.genre}</p>
                                     <span className="badge bg-secondary me-2">

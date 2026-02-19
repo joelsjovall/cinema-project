@@ -1,7 +1,7 @@
 .home-page.container-fluid {
   background-color: rgb(181, 236, 181);
 
-  width: 70%;
+  width: 75%;
   margin: 0 auto;
 
   padding-top: 120px;
@@ -16,13 +16,12 @@
     box-shadow: none;
   }
 
-  .card img {
-    width: 80%;
-    max-height: 400px;
+  .card img.movie-poster {
+    width: 65%;
+    max-height: 300px;
     object-fit: cover;
     display: block;
-    margin: auto 0.75 rem;
-    margin-bottom: 0.75 rem;
+    margin: 0 auto 0.75rem;
   }
 
 }
