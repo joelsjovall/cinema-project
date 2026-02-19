@@ -3,12 +3,12 @@ import { useState, useEffect } from "react";
 const API = "";
 
 interface Movie {
-  id: number;
-  title: string;
-  genre: string;
-  ageRestriction: number;
-  screeningDate: string;
-  image_url?: string | null;
+    id: number;
+    title: string;
+    genre: string;
+    ageRestriction: number;
+    screeningDate: string;
+    image_url?: string | null;
 }
 
 
@@ -134,86 +134,88 @@ export default function Home() {
     }
 
     return (
-        <div className="container py-4">
+        <div className="home-page container-fluid pb-4">
             <h1 className="mb-4">Filmer på bio just nu</h1>
+            <div className="row g-3 mb-4">
+                <div className="col-12 col-md-6">
+                    <div className="card h-100">
+                        <div className="card-body">
+                            <h5 className="card-title">Sök</h5>
+                            <div className="input-group">
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Sök efter titel..."
+                                    value={searchTitle}
+                                    onChange={(e) => setSearchTitle(e.target.value)}
+                                    onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                                />
+                                <button className="btn btn-primary" onClick={handleSearch}>
+                                    Sök
+                                </button>
+                                <button className="btn btn-outline-secondary" onClick={handleReset}>
+                                    Rensa
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-            {/* ── Search ── */}
-            <div className="card mb-3">
-                <div className="card-body">
-                    <h5 className="card-title">Sök</h5>
-                    <div className="input-group">
-                        <input
-                            type="text"
-                            className="form-control"
-                            placeholder="Search by title..."
-                            value={searchTitle}
-                            onChange={(e) => setSearchTitle(e.target.value)}
-                            onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-                        />
-                        <button className="btn btn-primary" onClick={handleSearch}>
-                            Sök
-                        </button>
-                        <button className="btn btn-outline-secondary" onClick={handleReset}>
-                            Rensa
-                        </button>
+                <div className="col-12 col-lg-6">
+                    <div className="card h-100">
+                        <div className="card-body">
+                            <h5 className="card-title">Filter</h5>
+                            <div className="row g-2">
+                                <div className="col-md-4">
+                                    <select
+                                        className="form-control"
+                                        value={filterGenre}
+                                        onChange={(e) => setFilterGenre(e.target.value)}
+                                    >
+                                        <option value="">Alla genrer</option>
+                                        {availableGenres.map((genre) => (
+                                            <option key={genre} value={genre}>
+                                                {genre}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="col-md-4">
+                                    <select
+                                        className="form-control"
+                                        value={filterMaxAge}
+                                        onChange={(e) => setFilterMaxAge(e.target.value)}
+                                    >
+                                        <option value="">Alla Åldersgränser</option>
+                                        {availableMaxAges.map((age) => (
+                                            <option key={age} value={age}>
+                                                {age}+
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="col-md-4">
+                                    <input
+                                        type="date"
+                                        className="form-control"
+                                        value={filterDate}
+                                        onChange={(e) => setFilterDate(e.target.value)}
+                                    />
+                                </div>
+                            </div>
+                            <div className="mt-2">
+                                <button className="btn btn-primary me-2" onClick={handleFilter}>
+                                    Applicera Filter
+                                </button>
+                                <button className="btn btn-outline-secondary" onClick={handleReset}>
+                                    Rensa
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            {/* ── Filter ── */}
-            <div className="card mb-4">
-                <div className="card-body">
-                    <h5 className="card-title">Filter</h5>
-                    <div className="row g-2">
-                        <div className="col-md-4">
-                            <select
-                                className="form-control"
-                                value={filterGenre}
-                                onChange={(e) => setFilterGenre(e.target.value)}
-                            >
-                                <option value="">Alla genrer</option>
-                                {availableGenres.map((genre) => (
-                                    <option key={genre} value={genre}>
-                                        {genre}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                        <div className="col-md-4">
-                            <select
-                                className="form-control"
-                                value={filterMaxAge}
-                                onChange={(e) => setFilterMaxAge(e.target.value)}
-                            >
-                                <option value="">Alla åldersgränser</option>
-                                {availableMaxAges.map((age) => (
-                                    <option key={age} value={age}>
-                                        Up to {age}+
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                        <div className="col-md-4">
-                            <input
-                                type="date"
-                                className="form-control"
-                                value={filterDate}
-                                onChange={(e) => setFilterDate(e.target.value)}
-                            />
-                        </div>
-                    </div>
-                    <div className="mt-2">
-                        <button className="btn btn-primary me-2" onClick={handleFilter}>
-                            Applicera Filter
-                        </button>
-                        <button className="btn btn-outline-secondary" onClick={handleReset}>
-                            Rensa
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            {/* ── Results ── */}
             {error && <div className="alert alert-danger">{error}</div>}
 
             {loading ? (
@@ -223,8 +225,8 @@ export default function Home() {
             ) : movies.length === 0 ? (
                 <div className="alert alert-info">Inga filmer hittade.</div>
             ) : (
-                <div className="row row-cols-1 row-cols-md-3 g-3">
-                    {movies.map((movie) => 
+                <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
+                    {movies.map((movie) =>
                         <div className="col" key={`${movie.id}-${movie.screeningDate}`}>
                             <div className="card h-100">
                                 <div className="card-body">
