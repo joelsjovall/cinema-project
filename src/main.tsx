@@ -6,6 +6,20 @@ import { createBrowserRouter, RouterProvider }
 import '../sass/index.scss';
 import routes from './routes';
 import App from './App';
+import { Outlet } from "react-router-dom";
+
+export default function Main() {
+  return (
+    <main className="page-main">
+      <Outlet />
+    </main>
+  );
+}
+
+
+
+
+
 // Create a router using settings/content from 'routes.tsx'
 const router = createBrowserRouter([
   {

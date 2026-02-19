@@ -1,0 +1,75 @@
+.center-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 160px); // minus header + footer
+}
+
+/* Själva rutan */
+.register-box {
+    width: 60%; // din inställning
+    background: #ffffffcc; // lätt transparent vit
+    padding: 2rem 3rem;
+    border-radius: 12px;
+    margin: 0 auto;
+    text-align: left; // viktigt för att inputs ska fylla bredden
+}
+
+/* Titel */
+.register-box h2 {
+    margin-bottom: 1.5rem;
+    color: #000000;
+    text-align: center;
+}
+
+/* Alla inputs */
+.register-input {
+    width: 100%; // fyller hela kolumnen
+    padding: 0.6rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    box-sizing: border-box; // gör att padding inte spränger bredden
+    display: block;
+}
+
+/* Namn + Efternamn bredvid varandra */
+.name-row {
+    width: 100%; // fyller hela register-box
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.name-row>div {
+    flex: 1; // båda kolumnerna blir lika breda
+}
+
+/* Registrera-knappen */
+.register-btn {
+    width: 100%;
+    padding: 0.7rem;
+    background-color: #1f6b3a;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 0.5rem;
+}
+
+.register-btn:hover {
+    background-color: #18552e;
+}
+
+/* Texten längst ner */
+.register-text {
+    margin-top: 1rem;
+    text-align: center;
+}
+
+.register-text a {
+    color: #040c07;
+    font-weight: bold;
+    text-decoration: none;
+}
