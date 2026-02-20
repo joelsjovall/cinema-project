@@ -13,6 +13,12 @@ body {
     font-family: Arial, sans-serif;
 }
 
+.start_picture {
+
+    display: flex;
+    align-items: center;
+
+}
 
 .header {
     background: var(--header);

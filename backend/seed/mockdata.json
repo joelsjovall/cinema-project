@@ -1,0 +1,963 @@
+{
+  "movies": [
+    {
+      "title": "Call Me By Your Name",
+      "genre": "Drama",
+      "description": "A coming-of-age story set in northern Italy during the summer of 1983.",
+      "age_restriction": 15
+    },
+    {
+      "title": "The Grand Budapest Hotel",
+      "genre": "Comedy",
+      "description": "A visually distinctive comedy about the adventures of a legendary concierge.",
+      "age_restriction": 11
+    },
+    {
+      "title": "Parasite",
+      "genre": "Thriller",
+      "description": "A dark social satire about class struggle and inequality.",
+      "age_restriction": 15
+    },
+    {
+      "title": "Interstellar",
+      "genre": "Science Fiction",
+      "description": "A team of explorers travel through a wormhole in space in an attempt to save humanity.",
+      "age_restriction": 11
+    },
+    {
+      "title": "The Dark Knight",
+      "genre": "Action",
+      "description": "Batman faces the Joker in a battle for the soul of Gotham City.",
+      "age_restriction": 15
+    },
+    {
+      "title": "Spirited Away",
+      "genre": "Fantasy",
+      "description": "A young girl enters a mysterious spirit world and must find her way back home.",
+      "age_restriction": 7
+    },
+    {
+      "title": "Arrival",
+      "genre": "Science Fiction",
+      "description": "A linguist works with the military to communicate with alien lifeforms.",
+      "age_restriction": 11
+    },
+    {
+      "title": "Joker",
+      "genre": "Drama",
+      "description": "A troubled comedian descends into madness in Gotham.",
+      "age_restriction": 18
+    },
+    {
+      "title": "Dune",
+      "genre": "Science Fiction",
+      "description": "A noble family is drawn into a conflict over a desert planet.",
+      "age_restriction": 11
+    },
+    {
+      "title": "Whiplash",
+      "genre": "Drama",
+      "description": "A young drummer is pushed to the limit by an intense instructor.",
+      "age_restriction": 15
+    },
+    {
+      "title": "Blade Runner 2049",
+      "genre": "Science Fiction",
+      "description": "A new blade runner uncovers secrets linked to a former blade runner.",
+      "age_restriction": 15
+    },
+    {
+      "title": "La La Land",
+      "genre": "Romance",
+      "description": "A musician and an actress chase their dreams in Los Angeles.",
+      "age_restriction": 7
+    },
+    {
+      "title": "Mad Max: Fury Road",
+      "genre": "Action",
+      "description": "A woman rebels against a tyrant in a post-apocalyptic wasteland.",
+      "age_restriction": 18
+    },
+    {
+      "title": "The Social Network",
+      "genre": "Drama",
+      "description": "The founding of a social network and the conflicts that followed.",
+      "age_restriction": 11
+    },
+    {
+      "title": "Coco",
+      "genre": "Family",
+      "description": "A boy journeys to the Land of the Dead to discover his family history.",
+      "age_restriction": 7
+    },
+    {
+      "title": "Inception",
+      "genre": "Thriller",
+      "description": "A thief enters dreams to steal secrets and is offered an impossible job.",
+      "age_restriction": 18
+    },
+    {
+      "title": "The Matrix",
+      "genre": "Action",
+      "description": "A hacker discovers the true nature of reality.",
+      "age_restriction": 18
+    },
+    {
+      "title": "Her",
+      "genre": "Drama",
+      "description": "A lonely man forms a relationship with an AI operating system.",
+      "age_restriction": 11
+    },
+    {
+      "title": "The Revenant",
+      "genre": "Drama",
+      "description": "A frontiersman fights for survival after being mauled by a bear.",
+      "age_restriction": 18
+    },
+    {
+      "title": "Black Panther",
+      "genre": "Action",
+      "description": "T’Challa returns to Wakanda to take his place as king.",
+      "age_restriction": 11
+    },
+    {
+      "title": "Toy Story",
+      "genre": "Family",
+      "description": "Toys come to life when humans are not around.",
+      "age_restriction": 7
+    },
+    {
+      "title": "The Shawshank Redemption",
+      "genre": "Drama",
+      "description": "Two imprisoned men bond over years and find redemption.",
+      "age_restriction": 15
+    },
+    {
+      "title": "Gladiator",
+      "genre": "Action",
+      "description": "A former Roman general seeks revenge against a corrupt emperor.",
+      "age_restriction": 18
+    },
+    {
+      "title": "Inside Out",
+      "genre": "Family",
+      "description": "A girl’s emotions navigate a major life change.",
+      "age_restriction": 7
+    },
+    {
+      "title": "The Imitation Game",
+      "genre": "Drama",
+      "description": "A mathematician works to crack the Enigma code during WWII.",
+      "age_restriction": 11
+    },
+    {
+      "title": "The Lion King",
+      "genre": "Family",
+      "description": "A young lion prince learns responsibility and courage.",
+      "age_restriction": 7
+    }
+  ],
+  "movieMedia": [
+    {
+      "movieId": 1,
+      "mediaType": "image",
+      "url": "/assets/movies/1/poster.jpg",
+      "title": "Poster",
+      "sortOrder": 1
+    },
+    {
+      "movieId": 1,
+      "mediaType": "image",
+      "url": "/assets/movies/1/backdrop.jpg",
+      "title": "Backdrop",
+      "sortOrder": 2
+    },
+    {
+      "movieId": 1,
+      "mediaType": "trailer",
+      "url": "https://www.youtube.com/watch?v=VIDEOID_1",
+      "title": "Trailer",
+      "sortOrder": 1
+    },
+
+    {
+      "movieId": 2,
+      "mediaType": "image",
+      "url": "/assets/movies/2/poster.jpg",
+      "title": "Poster",
+      "sortOrder": 1
+    },
+    {
+      "movieId": 2,
+      "mediaType": "image",
+      "url": "/assets/movies/2/backdrop.jpg",
+      "title": "Backdrop",
+      "sortOrder": 2
+    },
+    {
+      "movieId": 2,
+      "mediaType": "trailer",
+      "url": "https://www.youtube.com/watch?v=VIDEOID_2",
+      "title": "Trailer",
+      "sortOrder": 1
+    },
+
+    {
+      "movieId": 3,
+      "mediaType": "image",
+      "url": "/assets/movies/3/poster.jpg",
+      "title": "Poster",
+      "sortOrder": 1
+    },
+    {
+      "movieId": 3,
+      "mediaType": "image",
+      "url": "/assets/movies/3/backdrop.jpg",
+      "title": "Backdrop",
+      "sortOrder": 2
+    },
+    {
+      "movieId": 3,
+      "mediaType": "trailer",
+      "url": "https://www.youtube.com/watch?v=VIDEOID_3",
+      "title": "Trailer",
+      "sortOrder": 1
+    },
+
+    {
+      "movieId": 4,
+      "mediaType": "image",
+      "url": "/assets/movies/4/poster.jpg",
+      "title": "Poster",
+      "sortOrder": 1
+    },
+    {
+      "movieId": 4,
+      "mediaType": "image",
+      "url": "/assets/movies/4/backdrop.jpg",
+      "title": "Backdrop",
+      "sortOrder": 2
+    },
+    {
+      "movieId": 4,
+      "mediaType": "trailer",
+      "url": "https://www.youtube.com/watch?v=VIDEOID_4",
+      "title": "Trailer",
+      "sortOrder": 1
+    },
+
+    {
+      "movieId": 5,
+      "mediaType": "image",
+      "url": "/assets/movies/5/poster.jpg",
+      "title": "Poster",
+      "sortOrder": 1
+    },
+    {
+      "movieId": 5,
+      "mediaType": "image",
+      "url": "/assets/movies/5/backdrop.jpg",
+      "title": "Backdrop",
+      "sortOrder": 2
+    },
+    {
+      "movieId": 5,
+      "mediaType": "trailer",
+      "url": "https://www.youtube.com/watch?v=VIDEOID_5",
+      "title": "Trailer",
+      "sortOrder": 1
+    },
+
+    {
+      "movieId": 6,
+      "mediaType": "image",
+      "url": "/assets/movies/6/poster.jpg",
+      "title": "Poster",
+      "sortOrder": 1
+    },
+    {
+      "movieId": 6,
+      "mediaType": "image",
+      "url": "/assets/movies/6/backdrop.jpg",
+      "title": "Backdrop",
+      "sortOrder": 2
+    },
+    {
+      "movieId": 6,
+      "mediaType": "trailer",
+      "url": "https://www.youtube.com/watch?v=VIDEOID_6",
+      "title": "Trailer",
+      "sortOrder": 1
+    },
+
+    {
+      "movieId": 7,
+      "mediaType": "image",
+      "url": "/assets/movies/7/poster.jpg",
+      "title": "Poster",
+      "sortOrder": 1
+    },
+    {
+      "movieId": 7,
+      "mediaType": "image",
+      "url": "/assets/movies/7/backdrop.jpg",
+      "title": "Backdrop",
+      "sortOrder": 2
+    },
+    {
+      "movieId": 7,
+      "mediaType": "trailer",
+      "url": "https://www.youtube.com/watch?v=VIDEOID_7",
+      "title": "Trailer",
+      "sortOrder": 1
+    },
+
+    {
+      "movieId": 8,
+      "mediaType": "image",
+      "url": "/assets/movies/8/poster.jpg",
+      "title": "Poster",
+      "sortOrder": 1
+    },
+    {
+      "movieId": 8,
+      "mediaType": "image",
+      "url": "/assets/movies/8/backdrop.jpg",
+      "title": "Backdrop",
+      "sortOrder": 2
+    },
+    {
+      "movieId": 8,
+      "mediaType": "trailer",
+      "url": "https://www.youtube.com/watch?v=VIDEOID_8",
+      "title": "Trailer",
+      "sortOrder": 1
+    },
+
+    {
+      "movieId": 9,
+      "mediaType": "image",
+      "url": "/assets/movies/9/poster.jpg",
+      "title": "Poster",
+      "sortOrder": 1
+    },
+    {
+      "movieId": 9,
+      "mediaType": "image",
+      "url": "/assets/movies/9/backdrop.jpg",
+      "title": "Backdrop",
+      "sortOrder": 2
+    },
+    {
+      "movieId": 9,
+      "mediaType": "trailer",
+      "url": "https://www.youtube.com/watch?v=VIDEOID_9",
+      "title": "Trailer",
+      "sortOrder": 1
+    },
+
+    {
+      "movieId": 10,
+      "mediaType": "image",
+      "url": "/assets/movies/10/poster.jpg",
+      "title": "Poster",
+      "sortOrder": 1
+    },
+    {
+      "movieId": 10,
+      "mediaType": "image",
+      "url": "/assets/movies/10/backdrop.jpg",
+      "title": "Backdrop",
+      "sortOrder": 2
+    },
+    {
+      "movieId": 10,
+      "mediaType": "trailer",
+      "url": "https://www.youtube.com/watch?v=VIDEOID_10",
+      "title": "Trailer",
+      "sortOrder": 1
+    },
+
+    {
+      "movieId": 11,
+      "mediaType": "image",
+      "url": "/assets/movies/11/poster.jpg",
+      "title": "Poster",
+      "sortOrder": 1
+    },
+    {
+      "movieId": 11,
+      "mediaType": "image",
+      "url": "/assets/movies/11/backdrop.jpg",
+      "title": "Backdrop",
+      "sortOrder": 2
+    },
+    {
+      "movieId": 11,
+      "mediaType": "trailer",
+      "url": "https://www.youtube.com/watch?v=VIDEOID_11",
+      "title": "Trailer",
+      "sortOrder": 1
+    },
+
+    {
+      "movieId": 12,
+      "mediaType": "image",
+      "url": "/assets/movies/12/poster.jpg",
+      "title": "Poster",
+      "sortOrder": 1
+    },
+    {
+      "movieId": 12,
+      "mediaType": "image",
+      "url": "/assets/movies/12/backdrop.jpg",
+      "title": "Backdrop",
+      "sortOrder": 2
+    },
+    {
+      "movieId": 12,
+      "mediaType": "trailer",
+      "url": "https://www.youtube.com/watch?v=VIDEOID_12",
+      "title": "Trailer",
+      "sortOrder": 1
+    },
+
+    {
+      "movieId": 13,
+      "mediaType": "image",
+      "url": "/assets/movies/13/poster.jpg",
+      "title": "Poster",
+      "sortOrder": 1
+    },
+    {
+      "movieId": 13,
+      "mediaType": "image",
+      "url": "/assets/movies/13/backdrop.jpg",
+      "title": "Backdrop",
+      "sortOrder": 2
+    },
+    {
+      "movieId": 13,
+      "mediaType": "trailer",
+      "url": "https://www.youtube.com/watch?v=VIDEOID_13",
+      "title": "Trailer",
+      "sortOrder": 1
+    },
+
+    {
+      "movieId": 14,
+      "mediaType": "image",
+      "url": "/assets/movies/14/poster.jpg",
+      "title": "Poster",
+      "sortOrder": 1
+    },
+    {
+      "movieId": 14,
+      "mediaType": "image",
+      "url": "/assets/movies/14/backdrop.jpg",
+      "title": "Backdrop",
+      "sortOrder": 2
+    },
+    {
+      "movieId": 14,
+      "mediaType": "trailer",
+      "url": "https://www.youtube.com/watch?v=VIDEOID_14",
+      "title": "Trailer",
+      "sortOrder": 1
+    },
+
+    {
+      "movieId": 15,
+      "mediaType": "image",
+      "url": "/assets/movies/15/poster.jpg",
+      "title": "Poster",
+      "sortOrder": 1
+    },
+    {
+      "movieId": 15,
+      "mediaType": "image",
+      "url": "/assets/movies/15/backdrop.jpg",
+      "title": "Backdrop",
+      "sortOrder": 2
+    },
+    {
+      "movieId": 15,
+      "mediaType": "trailer",
+      "url": "https://www.youtube.com/watch?v=VIDEOID_15",
+      "title": "Trailer",
+      "sortOrder": 1
+    },
+
+    {
+      "movieId": 16,
+      "mediaType": "image",
+      "url": "/assets/movies/16/poster.jpg",
+      "title": "Poster",
+      "sortOrder": 1
+    },
+    {
+      "movieId": 16,
+      "mediaType": "image",
+      "url": "/assets/movies/16/backdrop.jpg",
+      "title": "Backdrop",
+      "sortOrder": 2
+    },
+    {
+      "movieId": 16,
+      "mediaType": "trailer",
+      "url": "https://www.youtube.com/watch?v=VIDEOID_16",
+      "title": "Trailer",
+      "sortOrder": 1
+    },
+
+    {
+      "movieId": 17,
+      "mediaType": "image",
+      "url": "/assets/movies/17/poster.jpg",
+      "title": "Poster",
+      "sortOrder": 1
+    },
+    {
+      "movieId": 17,
+      "mediaType": "image",
+      "url": "/assets/movies/17/backdrop.jpg",
+      "title": "Backdrop",
+      "sortOrder": 2
+    },
+    {
+      "movieId": 17,
+      "mediaType": "trailer",
+      "url": "https://www.youtube.com/watch?v=VIDEOID_17",
+      "title": "Trailer",
+      "sortOrder": 1
+    },
+
+    {
+      "movieId": 18,
+      "mediaType": "image",
+      "url": "/assets/movies/18/poster.jpg",
+      "title": "Poster",
+      "sortOrder": 1
+    },
+    {
+      "movieId": 18,
+      "mediaType": "image",
+      "url": "/assets/movies/18/backdrop.jpg",
+      "title": "Backdrop",
+      "sortOrder": 2
+    },
+    {
+      "movieId": 18,
+      "mediaType": "trailer",
+      "url": "https://www.youtube.com/watch?v=VIDEOID_18",
+      "title": "Trailer",
+      "sortOrder": 1
+    },
+
+    {
+      "movieId": 19,
+      "mediaType": "image",
+      "url": "/assets/movies/19/poster.jpg",
+      "title": "Poster",
+      "sortOrder": 1
+    },
+    {
+      "movieId": 19,
+      "mediaType": "image",
+      "url": "/assets/movies/19/backdrop.jpg",
+      "title": "Backdrop",
+      "sortOrder": 2
+    },
+    {
+      "movieId": 19,
+      "mediaType": "trailer",
+      "url": "https://www.youtube.com/watch?v=VIDEOID_19",
+      "title": "Trailer",
+      "sortOrder": 1
+    },
+
+    {
+      "movieId": 20,
+      "mediaType": "image",
+      "url": "/assets/movies/20/poster.jpg",
+      "title": "Poster",
+      "sortOrder": 1
+    },
+    {
+      "movieId": 20,
+      "mediaType": "image",
+      "url": "/assets/movies/20/backdrop.jpg",
+      "title": "Backdrop",
+      "sortOrder": 2
+    },
+    {
+      "movieId": 20,
+      "mediaType": "trailer",
+      "url": "https://www.youtube.com/watch?v=VIDEOID_20",
+      "title": "Trailer",
+      "sortOrder": 1
+    },
+
+    {
+      "movieId": 21,
+      "mediaType": "image",
+      "url": "/assets/movies/21/poster.jpg",
+      "title": "Poster",
+      "sortOrder": 1
+    },
+    {
+      "movieId": 21,
+      "mediaType": "image",
+      "url": "/assets/movies/21/backdrop.jpg",
+      "title": "Backdrop",
+      "sortOrder": 2
+    },
+    {
+      "movieId": 21,
+      "mediaType": "trailer",
+      "url": "https://www.youtube.com/watch?v=VIDEOID_21",
+      "title": "Trailer",
+      "sortOrder": 1
+    },
+
+    {
+      "movieId": 22,
+      "mediaType": "image",
+      "url": "/assets/movies/22/poster.jpg",
+      "title": "Poster",
+      "sortOrder": 1
+    },
+    {
+      "movieId": 22,
+      "mediaType": "image",
+      "url": "/assets/movies/22/backdrop.jpg",
+      "title": "Backdrop",
+      "sortOrder": 2
+    },
+    {
+      "movieId": 22,
+      "mediaType": "trailer",
+      "url": "https://www.youtube.com/watch?v=VIDEOID_22",
+      "title": "Trailer",
+      "sortOrder": 1
+    },
+
+    {
+      "movieId": 23,
+      "mediaType": "image",
+      "url": "/assets/movies/23/poster.jpg",
+      "title": "Poster",
+      "sortOrder": 1
+    },
+    {
+      "movieId": 23,
+      "mediaType": "image",
+      "url": "/assets/movies/23/backdrop.jpg",
+      "title": "Backdrop",
+      "sortOrder": 2
+    },
+    {
+      "movieId": 23,
+      "mediaType": "trailer",
+      "url": "https://www.youtube.com/watch?v=VIDEOID_23",
+      "title": "Trailer",
+      "sortOrder": 1
+    },
+
+    {
+      "movieId": 24,
+      "mediaType": "image",
+      "url": "/assets/movies/24/poster.jpg",
+      "title": "Poster",
+      "sortOrder": 1
+    },
+    {
+      "movieId": 24,
+      "mediaType": "image",
+      "url": "/assets/movies/24/backdrop.jpg",
+      "title": "Backdrop",
+      "sortOrder": 2
+    },
+    {
+      "movieId": 24,
+      "mediaType": "trailer",
+      "url": "https://www.youtube.com/watch?v=VIDEOID_24",
+      "title": "Trailer",
+      "sortOrder": 1
+    },
+
+    {
+      "movieId": 25,
+      "mediaType": "image",
+      "url": "/assets/movies/25/poster.jpg",
+      "title": "Poster",
+      "sortOrder": 1
+    },
+    {
+      "movieId": 25,
+      "mediaType": "image",
+      "url": "/assets/movies/25/backdrop.jpg",
+      "title": "Backdrop",
+      "sortOrder": 2
+    },
+    {
+      "movieId": 25,
+      "mediaType": "trailer",
+      "url": "https://www.youtube.com/watch?v=VIDEOID_25",
+      "title": "Trailer",
+      "sortOrder": 1
+    },
+
+    {
+      "movieId": 26,
+      "mediaType": "image",
+      "url": "/assets/movies/26/poster.jpg",
+      "title": "Poster",
+      "sortOrder": 1
+    },
+    {
+      "movieId": 26,
+      "mediaType": "image",
+      "url": "/assets/movies/26/backdrop.jpg",
+      "title": "Backdrop",
+      "sortOrder": 2
+    },
+    {
+      "movieId": 26,
+      "mediaType": "trailer",
+      "url": "https://www.youtube.com/watch?v=VIDEOID_26",
+      "title": "Trailer",
+      "sortOrder": 1
+    }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "name": "Croissant",
+      "description": "Buttery, flaky French-style croissant baked fresh daily with premium European butter. Perfect for breakfast with jam, afternoon coffee, or as the base for elegant sandwiches.\nGolden layers that melt in your mouth with authentic French pastry techniques.",
+      "quantity": "1 large",
+      "price$": 0.99,
+      "slug": "croissant",
+      "categories": ["Bread & rice"]
+    }
+  ],
+  "sessions": [
+    {
+      "created": "2026-02-09 02:17:23",
+      "modified": "2026-02-09 02:49:02",
+      "data": { "sessionId": "ad0eb427-2995-461b-83d2-8985fe929c8c" }
+    }
+  ],
+  "acl": [
+    {
+      "id": 1,
+      "userRoles": "visitor, user",
+      "method": "GET",
+      "allow": "disallow",
+      "route": "/secret.html",
+      "matchType": "true",
+      "comment": "No access to /secret.html for visitors and normal users"
+    },
+    {
+      "id": 2,
+      "userRoles": "visitor,user, admin",
+      "method": "GET",
+      "allow": "allow",
+      "route": "/api",
+      "matchType": "false",
+      "comment": "Allow access to all routes not starting with /api"
+    },
+    {
+      "id": 3,
+      "userRoles": "visitor",
+      "method": "POST",
+      "allow": "allow",
+      "route": "/api/users",
+      "matchType": "true",
+      "comment": "Allow registration as new user for visitors"
+    },
+    {
+      "id": 4,
+      "userRoles": "visitor, user,admin",
+      "method": "*",
+      "allow": "allow",
+      "route": "/api/login",
+      "matchType": "true",
+      "comment": "Allow access to all login routes"
+    },
+    {
+      "id": 5,
+      "userRoles": "admin",
+      "method": "*",
+      "allow": "allow",
+      "route": "/api/users",
+      "matchType": "true",
+      "comment": "Allow admins to see and edit users"
+    },
+    {
+      "id": 6,
+      "userRoles": "admin",
+      "method": "*",
+      "allow": "allow",
+      "route": "/api/sessions",
+      "matchType": "true",
+      "comment": "Allow admins to see and edit sessions"
+    },
+    {
+      "id": 7,
+      "userRoles": "admin",
+      "method": "*",
+      "allow": "allow",
+      "route": "/api/acl",
+      "matchType": "true",
+      "comment": "Allow admins to see and edit acl rules"
+    },
+    {
+      "id": 8,
+      "userRoles": "visitor,user,admin",
+      "method": "GET",
+      "allow": "allow",
+      "route": "/api/products",
+      "matchType": "true",
+      "comment": "Allow all user roles to read products"
+    }
+  ],
+  "ticketTypes": [
+    { "name": "Vuxen", "price": 140 },
+    { "name": "Pensionär", "price": 120 },
+    { "name": "Barn", "price": 80 }
+  ],
+  "salons": [
+    { "name": "Lilla Salongen", "totalSeats": 55 },
+    { "name": "Stora Salongen", "totalSeats": 81 }
+  ],
+  "salonRows": [
+    { "salonId": 1, "rowNumber": 1, "seatsInRow": 6 },
+    { "salonId": 1, "rowNumber": 2, "seatsInRow": 8 },
+    { "salonId": 1, "rowNumber": 3, "seatsInRow": 9 },
+    { "salonId": 1, "rowNumber": 4, "seatsInRow": 10 },
+    { "salonId": 1, "rowNumber": 5, "seatsInRow": 10 },
+    { "salonId": 1, "rowNumber": 6, "seatsInRow": 12 },
+    { "salonId": 2, "rowNumber": 1, "seatsInRow": 8 },
+    { "salonId": 2, "rowNumber": 2, "seatsInRow": 9 },
+    { "salonId": 2, "rowNumber": 3, "seatsInRow": 10 },
+    { "salonId": 2, "rowNumber": 4, "seatsInRow": 10 },
+    { "salonId": 2, "rowNumber": 5, "seatsInRow": 10 },
+    { "salonId": 2, "rowNumber": 6, "seatsInRow": 10 },
+    { "salonId": 2, "rowNumber": 7, "seatsInRow": 12 },
+    { "salonId": 2, "rowNumber": 8, "seatsInRow": 12 }
+  ],
+  "seats": [
+    { "salonId": 1, "rowNumber": 1, "seatNumber": 1 },
+    { "salonId": 1, "rowNumber": 1, "seatNumber": 2 },
+    { "salonId": 1, "rowNumber": 1, "seatNumber": 3 },
+    { "salonId": 1, "rowNumber": 2, "seatNumber": 1 },
+    { "salonId": 1, "rowNumber": 2, "seatNumber": 2 },
+    { "salonId": 1, "rowNumber": 2, "seatNumber": 3 },
+    { "salonId": 2, "rowNumber": 1, "seatNumber": 1 },
+    { "salonId": 2, "rowNumber": 1, "seatNumber": 2 },
+    { "salonId": 2, "rowNumber": 1, "seatNumber": 3 },
+    { "salonId": 2, "rowNumber": 2, "seatNumber": 1 },
+    { "salonId": 2, "rowNumber": 2, "seatNumber": 2 },
+    { "salonId": 2, "rowNumber": 2, "seatNumber": 3 }
+  ],
+  "screenings": [
+    {
+      "salonId": 1,
+      "movieId": 1,
+      "screeningDate": "2026-03-01",
+      "screeningTime": "18:00"
+    },
+    {
+      "salonId": 1,
+      "movieId": 1,
+      "screeningDate": "2026-03-02",
+      "screeningTime": "18:00"
+    },
+    {
+      "salonId": 2,
+      "movieId": 1,
+      "screeningDate": "2026-03-03",
+      "screeningTime": "19:00"
+    },
+    {
+      "salonId": 2,
+      "movieId": 1,
+      "screeningDate": "2026-03-04",
+      "screeningTime": "20:30"
+    },
+    {
+      "salonId": 1,
+      "movieId": 1,
+      "screeningDate": "2026-03-05",
+      "screeningTime": "21:00"
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "created": "2024-04-02",
+      "email": "thomas@nodehill.com",
+      "firstName": "Thomas",
+      "lastName": "Frank",
+      "role": "admin",
+      "password": "$2a$13$IahRVtN2pxc1Ne1NzJUPpOQO5JCtDZvXpSF.IF8uW85S6VoZKCwZq"
+    },
+    {
+      "id": 2,
+      "created": "2024-04-02",
+      "email": "olle@nodehill.com",
+      "firstName": "Olle",
+      "lastName": "Olofsson",
+      "role": "user",
+      "password": "$2a$13$O2Gs3FME3oA1DAzwE0FkOuMAOOAgRyuvNQq937.cl7D.xq0IjgzN."
+    },
+    {
+      "id": 3,
+      "created": "2024-04-02",
+      "email": "maria@nodehill.com",
+      "firstName": "Maria",
+      "lastName": "Mårtensson",
+      "role": "user",
+      "password": "$2a$13$p4sqCN3V3C1wQXspq4eN0eYwK51ypw7NPL6b6O4lMAOyATJtKqjHS"
+    }
+  ],
+  "categories": [
+    {
+      "id": 1,
+      "title": "Drama",
+      "description": "Dramatic and emotional storytelling"
+    },
+    {
+      "id": 2,
+      "title": "Comedy",
+      "description": "Humorous and light-hearted films"
+    },
+    {
+      "id": 3,
+      "title": "Action",
+      "description": "Action-packed and fast-paced movies"
+    },
+    {
+      "id": 4,
+      "title": "Family",
+      "description": "Movies suitable for all ages"
+    },
+    {
+      "id": 5,
+      "title": "Thriller",
+      "description": "Suspenseful and intense films"
+    }
+  ],
+  "moviesXcategories": [
+    { "movieId": 1, "categoryId": 1 },
+    { "movieId": 1, "categoryId": 5 },
+    { "movieId": 2, "categoryId": 5 },
+    { "movieId": 3, "categoryId": 3 },
+    { "movieId": 3, "categoryId": 5 },
+    { "movieId": 4, "categoryId": 2 },
+    { "movieId": 4, "categoryId": 4 },
+    { "movieId": 5, "categoryId": 3 },
+    { "movieId": 6, "categoryId": 4 }
+  ]
+}

@@ -1,18 +1,13 @@
-import { Outlet } from 'react-router-dom';
-import { Container } from 'react-bootstrap';
-import { useStateObject } from '../utils/useStateObject';
+import { Outlet } from "react-router-dom";
 
-export default function Main() {
-  // a state to use with outlet context
-  const stateAndSetter = useStateObject({
-    categoryChoice: 'All',
-    sortChoice: 'Price (low to high)',
-    bwImages: false
-  });
+function Main() {
+  return (
+    <main className="main-content">
+      { /* dina routes eller innehåll */}
+       <Outlet />
+    </main>
 
-  return <main className="mt-5">
-    <Container className="mt-5 mb-4">
-      <Outlet context={stateAndSetter} />
-    </Container>
-  </main>;
+  );
 }
+
+export default Main;

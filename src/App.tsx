@@ -7,6 +7,7 @@ import BootstrapBreakpoints from './parts/BootstrapBreakpoints';
 // turn off when not needed for debugging
 const showBootstrapBreakpoints = true;
 
+
 export default function App() {
 
   // scroll to top when the route changes
@@ -17,6 +18,7 @@ export default function App() {
     <Header />
     <Main />
     <Footer />
-    {showBootstrapBreakpoints ? <BootstrapBreakpoints /> : null}
   </>;
+
+
 };

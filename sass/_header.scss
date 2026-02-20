@@ -1,0 +1,105 @@
+.custom-header {
+    background-color: #2e673d;
+    padding: 25px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+/* Grupp som håller ihop bubblorna */
+.bubble-group {
+    display: flex;
+    background: white;
+    border-radius: 300px;
+    overflow: hidden;
+    width: 650px;
+    margin: 0 auto;
+    /* gör så att hörnen blir gemensamma */
+}
+
+/* Individuella knappar */
+.bubble {
+    background: rgb(230, 228, 228);
+    color: #000000;
+    border: none;
+    padding: 10px 25px;
+    font-weight: 300;
+    cursor: pointer;
+    transition: 0.2s ease;
+    font-size: smaller;
+    flex: 1;
+    text-align: center;
+}
+
+/* Hover-effekt */
+.bubble:hover {
+    background: #c8e6c9;
+}
+
+/* Rundning per sida */
+.left {
+    border-radius: 30px 0 0 30px;
+}
+
+.middle {
+    border-radius: 0;
+}
+
+.right {
+    border-radius: 0 30px 30px 0;
+}
+
+.header-logo img {
+    width: 60px;
+    /* ändra storlek här */
+    height: auto;
+    float: left;
+    position: absolute;
+    left: 20px;
+    /* avstånd från vänster */
+    top: 0px;
+    /* avstånd från toppen */
+
+}
+
+.avatar-logo img {
+    width: 60px;
+
+    height: auto;
+    float: right;
+    position: absolute;
+    right: 30px;
+    top: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+}
+
+.mina-sidor-btn {
+    float: right;
+    right: 110px;
+    display: flex;
+    position: absolute;
+    top: 28px;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.35rem 1.1rem; // styr höjd + bredd
+    border-radius: 9999px; // gör den rund/pillformad
+    background: rgb(230, 228, 228);
+    border: 1px solid #fff;
+    color: #000000;
+    font-weight: 300;
+    font-size: smaller;
+
+    white-space: nowrap; // så texten inte bryts
+}
+
+
+.main-content {
+    background-color: rgb(181, 236, 181);
+    min-height: 100vh;
+}

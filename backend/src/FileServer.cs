@@ -1,4 +1,5 @@
 namespace WebApp;
+
 public static class FileServer
 {
     private static string FPath;
@@ -6,9 +7,8 @@ public static class FileServer
     public static void Start()
     {
         // Convert frontendPath to an absolute path
-        FPath = Path.Combine(
-            Directory.GetCurrentDirectory(),
-            Globals.frontendPath
+        FPath = Path.GetFullPath(
+        Path.Combine(AppContext.BaseDirectory, Globals.frontendPath)
         );
 
         HandleStatusCodes();
