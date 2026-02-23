@@ -1,10 +1,11 @@
 @use 'bootstrap-breakpoints';
-@use 'bootstrap';
+@use 'homepage';
 @use 'card-colors';
 @use 'buttons';
 @use 'images';
 @use 'sticky-footer';
 @use 'header';
+@use 'bootstrap';
 @use 'Login';
 @use 'Createaccount';
 @import "kiosk";

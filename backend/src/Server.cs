@@ -31,6 +31,17 @@ public static class Server
         App.Use(async (context, next) =>
         {
             context.Response.Headers.Append("Server", (string)Globals.serverName);
+            context.Response.Headers["Access-Control-Allow-Origin"] = "http://localhost:5173";
+            context.Response.Headers["Access-Control-Allow-Methods"] = "GET,POST,PUT,PATCH,DELETE,OPTIONS";
+            context.Response.Headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization";
+            context.Response.Headers["Access-Control-Allow-Credentials"] = "true";
+
+            if (context.Request.Method == "OPTIONS")
+            {
+                context.Response.StatusCode = 204;
+                return;
+            }
+
             DebugLog.Register(context);
             Session.Touch(context);
             if (!Acl.Allow(context))
