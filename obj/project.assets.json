@@ -269,19 +269,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\måns\\.nuget\\packages\\": {}
+    "/Users/lukaseriksson/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\måns\\cinema-project\\cinema-project.csproj",
+      "projectUniqueName": "/Users/lukaseriksson/GitHub/cinema-project/cinema-project.csproj",
       "projectName": "cinema-project",
-      "projectPath": "C:\\Users\\måns\\cinema-project\\cinema-project.csproj",
-      "packagesPath": "C:\\Users\\måns\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\måns\\cinema-project\\obj\\",
+      "projectPath": "/Users/lukaseriksson/GitHub/cinema-project/cinema-project.csproj",
+      "packagesPath": "/Users/lukaseriksson/.nuget/packages/",
+      "outputPath": "/Users/lukaseriksson/GitHub/cinema-project/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\måns\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "/Users/lukaseriksson/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net10.0"
@@ -347,7 +347,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.103/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/10.0.102/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.AspNetCore": "(,10.0.32767]",
           "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",
