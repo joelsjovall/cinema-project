@@ -33,3 +33,25 @@ dist-ssr
 backend/db-config.json
 backend/obj/
 backend/bin/
+
+# .NET / C# byggfiler och cache (viktigt!)
+bin/
+obj/
+*.cache
+*.assets.cache
+*.nuget.g.props
+*.nuget.dgspec.json
+*.AssemblyInfo.cs
+*.editorconfig
+*.deps.json
+*.runtimeconfig.json
+*.csproj.user
+*.user
+*.vs/
+.vs/
+
+# Vite / React byggfiler (om ni har frontend i samma repo)
+dist/
+build/
+node_modules/
+.vite/
