@@ -1,3 +1,4 @@
+
 function Kiosk() {
     return <h1>Kiosk</h1>;
 }
