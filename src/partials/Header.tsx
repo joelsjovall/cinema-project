@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function Header() {
-  const navigate = useNavigate();   // <-- DU MÅSTE HA DETTA
+  const navigate = useNavigate();   
 
   return (
     <header className="custom-header fixed-top text-white">
