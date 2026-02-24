@@ -203,7 +203,7 @@ export default function Home() {
                                         value={filterMaxAge}
                                         onChange={(e) => setFilterMaxAge(e.target.value)}
                                     >
-                                        <option value="">Alla Åldersgränser</option>
+                                        <option value="">Åldersgräns</option>
                                         {availableMaxAges.map((age) => (
                                             <option key={age} value={age}>
                                                 {age}+
