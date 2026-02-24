@@ -7,12 +7,16 @@ namespace WebApp
   public class Movie
   {
     public int Id { get; set; }
-    public string Title { get; set; }
-    public string Genre { get; set; }
+    public string Title { get; set; } = "";
+    public string Genre { get; set; } = "";
     public int AgeRestriction { get; set; }
     public DateTime ScreeningDate { get; set; }
 
     public string? Image_url { get; set; }
+
+    public string? Trailer_url { get; set; }
+
+    public string Description { get; set; }
   }
 
   public class MovieRepository
@@ -38,7 +42,9 @@ namespace WebApp
                 m.genre,
                 m.age_restriction,
                 s.screeningDate,
-                m.image_url
+                m.image_url,
+                m.trailer_url,
+                m.description
             FROM movies m
             JOIN screenings s ON s.movieId = m.id";
 
@@ -53,10 +59,12 @@ namespace WebApp
           Id = reader.GetInt32("id"),
           Title = reader.GetString("title"),
           Genre = reader.GetString("genre"),
+          Description = reader.GetString("description"),
           AgeRestriction = reader.GetInt32("age_restriction"),
           ScreeningDate = reader.GetDateTime("screeningDate"),
           // Image_url = reader.GetString("image_url")
-          Image_url = reader.IsDBNull(reader.GetOrdinal("image_url")) ? null : reader.GetString("image_url")
+          Image_url = reader.IsDBNull(reader.GetOrdinal("image_url")) ? null : reader.GetString("image_url"),
+          Trailer_url = reader.IsDBNull(reader.GetOrdinal("trailer_url")) ? null : reader.GetString("trailer_url")
         });
       }
       return list;
@@ -72,7 +80,7 @@ namespace WebApp
       return ReadMovies(cmd);
     }
 
-    public Movie GetById(int id)
+    public Movie? GetById(int id)
     {
       const string sql = BaseQuery + " WHERE m.id = @id";
       using var conn = GetConnection();
@@ -138,7 +146,7 @@ namespace WebApp
     // ── 3. Filter by age, genre and/or date ───────────────────────────────
     // All three filters are optional — only applied when a value is passed in.
 
-    public List<Movie> Filter(int? maxAge = null, string genre = null, DateTime? date = null)
+    public List<Movie> Filter(int? maxAge = null, string? genre = null, DateTime? date = null)
     {
       var sql = BaseQuery + " WHERE 1=1";
 

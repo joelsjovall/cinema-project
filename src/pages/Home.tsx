@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const API = "";
 
@@ -9,6 +10,8 @@ interface Movie {
     ageRestriction: number;
     screeningDate: string;
     image_url?: string | null;
+    trailer_url?: string | null;
+    description: string;
 }
 
 // Tar bort dubletter sa att varje film (id) bara visas en gang,
@@ -246,22 +249,24 @@ export default function Home() {
                 <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
                     {movies.map((movie) =>
                         <div className="col" key={movie.id}>
-                            <div className="card h-100">
-                                <div className="card-body">
-                                    <img
-                                        src={movie.image_url ?? "/images/placeholder.jpg"}
-                                        alt={movie.title}
-                                        className="img-fluid movie-poster" />
-                                    <h5 className="card-title text-center">{movie.title}</h5>
-                                    <p className="card-text text-muted mb-1">{movie.genre}</p>
-                                    <span className="badge bg-secondary me-2">
-                                        Åldersgräns {movie.ageRestriction}+
-                                    </span>
-                                    <span className="badge bg-primary">
-                                        {new Date(movie.screeningDate).toLocaleDateString()}
-                                    </span>
+                            <Link to={`/movie/${movie.id}`} className="text-decoration-none text-reset">
+                                <div className="card h-100">
+                                    <div className="card-body">
+                                        <img
+                                            src={movie.image_url ?? "/images/placeholder.jpg"}
+                                            alt={movie.title}
+                                            className="img-fluid movie-poster" />
+                                        <h5 className="card-title text-center">{movie.title}</h5>
+                                        <p className="card-text text-muted mb-1">{movie.genre}</p>
+                                        <span className="badge bg-secondary me-2">
+                                            Åldersgräns {movie.ageRestriction}+
+                                        </span>
+                                        <span className="badge bg-primary">
+                                            {new Date(movie.screeningDate).toLocaleDateString()}
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
+                            </Link>
                         </div>
                     )}
                 </div>

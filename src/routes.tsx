@@ -4,10 +4,12 @@ import Kiosk from "./pages/Kiosk";
 import Kommande from "./pages/Kommande";
 import Login from "./pages/Login";
 import Createaccount from "./pages/Createaccount";
+import Movie from "./pages/Movie";
 
 const routes: RouteObject[] = [
     { index: true, element: <Home /> },
     { path: "kommande", element: <Kommande /> },
+    { path: "movie/:id", element: <Movie /> },
     { path: "kiosk", element: <Kiosk /> },
     { path: "login", element: <Login /> },
     { path: "*", element: <div>404 - Sidan finns inte</div> },

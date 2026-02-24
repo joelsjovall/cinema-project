@@ -1,0 +1,132 @@
+.movie-page {
+  width: 100%;
+  margin: 0;
+  padding-left: 3%;
+  padding-right: 3%;
+
+  .movie-layout {
+    display: grid;
+    grid-template-columns: 52% 46%;
+    gap: 2%;
+    align-items: start;
+    margin-top: 5rem;
+  }
+
+  .movie-info {
+    grid-column: 1;
+    text-align: left;
+    padding-right: 2%;
+  }
+
+  .movie-title {
+    margin: 0 0 1rem;
+    font-size: clamp(2rem, 4vw, 2.9rem);
+    font-style: italic;
+    font-weight: 500;
+    text-shadow: none !important;
+  }
+
+  .movie-meta,
+  .movie-description,
+  h1,
+  p {
+    text-align: left !important;
+    text-shadow: none !important;
+    margin: 0 0 0.6rem;
+  }
+
+  .movie-description {
+    max-width: 72ch;
+    line-height: 1.45;
+  }
+
+  .movie-right {
+    grid-column: 2;
+    display: grid;
+    gap: 1.1rem;
+    align-content: start;
+  }
+
+  .trailer-container {
+    border: 3px solid #1c1c1c;
+    background: #000;
+    overflow: hidden;
+
+    .ratio {
+      --bs-aspect-ratio: 54%;
+    }
+
+    iframe,
+    .trailer-fallback {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      object-fit: cover;
+      display: block;
+    }
+  }
+
+  .showtime-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.9rem;
+  }
+
+  .showtime-pill {
+    border: 2px solid #111;
+    background: #171717;
+    color: #f4f4f4;
+    border-radius: 14px;
+    min-height: 56px;
+    padding: 0.65rem 0.5rem;
+    font-size: 0.78rem;
+    text-transform: capitalize;
+    line-height: 1.1;
+
+    span {
+      display: block;
+      margin-top: 0.2rem;
+      font-size: 0.72rem;
+      opacity: 0.86;
+      text-transform: none;
+    }
+
+    &.is-active {
+      border-color: #2655c7;
+      box-shadow: inset 0 0 0 1px #2655c7;
+    }
+
+    &.action {
+      font-weight: 600;
+      text-transform: none;
+
+      &:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+        border-color: #3a3a3a;
+        box-shadow: none;
+      }
+    }
+  }
+}
+
+@media (max-width: 991.98px) {
+  .movie-page {
+    padding-left: 5%;
+    padding-right: 5%;
+
+    .movie-layout {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    .movie-info,
+    .movie-right {
+      grid-column: 1;
+    }
+
+    .showtime-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+}
