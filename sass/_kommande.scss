@@ -17,3 +17,62 @@
   gap: 5rem;
   margin-bottom: 3.2rem;
 }
+
+h1,
+h2 {
+  margin: 0;
+  color: #1b1b1b;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+}
+
+h1 {
+  font-size: clamp(1.9rem, 3.5vw, 2.7rem);
+}
+
+h2 {
+  font-size: clamp(1.9rem, 3.5vw, 2.7rem);
+}
+
+.kommande-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(150px, 1fr));
+  gap: 2.1rem;
+}
+
+kommande-card {
+  h3 {
+    margin: 0.75rem 0 0.2rem;
+    color: 1f1f1f;
+    font-size: 1.05rem;
+    font-weight: 400;
+  }
+
+  p {
+    margin: 0;
+    color: #2f2f2f;
+    font-size: 0.9;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-align: left;
+  }
+}
+
+.kommande-poster {
+  width: 100%;
+  max-width: 190;
+  aspect-ratio: 2/3;
+  object-fit: cover;
+  display: block;
+}
+
+@media (max-width: 992px) {
+  .kommande-grid {
+    grid-template-columns: repeat(2, min(150px, 1fr));
+    row-gap: 2.3rem;
+  }
+
+  .kommande-heading-row {
+    gap: 2.2rem;
+  }
+}
