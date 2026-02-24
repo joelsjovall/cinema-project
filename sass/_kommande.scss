@@ -4,3 +4,16 @@
   padding-top: 150px;
   padding-bottom: 80px;
 }
+
+.kommande.inner {
+  width: mine(980px, 92%);
+  margin: 0 auto;
+}
+
+.kommande-heading-row {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 5rem;
+  margin-bottom: 3.2rem;
+}
