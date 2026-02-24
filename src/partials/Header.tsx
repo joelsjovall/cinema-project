@@ -12,7 +12,7 @@ function Header() {
 
       <div className="bubble-group">
         <button className="bubble left" onClick={() => navigate("/")}>Startsida</button>
-        <button className="bubble middle" onClick={() => navigate("/kommande")}>Kommande filmer</button>
+        <button className="bubble middle" onClick={() => navigate("/kommande")}>Kommande_filmer</button>
         <button className="bubble right" onClick={() => navigate("/kiosk")}>Kiosken</button>
       </div>
 
