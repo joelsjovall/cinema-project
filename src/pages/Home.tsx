@@ -252,7 +252,7 @@ export default function Home() {
                                         src={movie.image_url ?? "/images/placeholder.jpg"}
                                         alt={movie.title}
                                         className="img-fluid movie-poster" />
-                                    <h5 className="card-title">{movie.title}</h5>
+                                    <h5 className="card-title text-center">{movie.title}</h5>
                                     <p className="card-text text-muted mb-1">{movie.genre}</p>
                                     <span className="badge bg-secondary me-2">
                                         Åldersgräns {movie.ageRestriction}+
