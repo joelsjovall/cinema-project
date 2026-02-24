@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const API = "";
 
@@ -151,121 +152,136 @@ export default function Home() {
     }
 
     return (
-        <div className="home-page container-fluid pb-4">
-            <h1 className="mb-4">Filmer på bio just nu</h1>
-            <div className="row g-3 mb-4">
-                <div className="col-12 col-md-6">
-                    <div className="card h-100">
-                        <div className="card-body">
-                            <h5 className="card-title">Sök</h5>
-                            <div className="input-group">
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    placeholder="Sök efter titel..."
-                                    value={searchTitle}
-                                    onChange={(e) => setSearchTitle(e.target.value)}
-                                    onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-                                />
-                                <button className="btn btn-primary" onClick={handleSearch}>
-                                    Sök
-                                </button>
-                                <button className="btn btn-outline-secondary" onClick={handleReset}>
-                                    Rensa
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+      <div className="home-page container-fluid pb-4">
+        <h1 className="mb-4">Filmer på bio just nu</h1>
+        <div className="row g-3 mb-4">
+          <div className="col-12 col-md-6">
+            <div className="card h-100">
+              <div className="card-body">
+                <h5 className="card-title">Sök</h5>
+                <div className="input-group">
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Sök efter titel..."
+                    value={searchTitle}
+                    onChange={(e) => setSearchTitle(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                  />
+                  <button className="btn btn-primary" onClick={handleSearch}>
+                    Sök
+                  </button>
+                  <button
+                    className="btn btn-outline-secondary"
+                    onClick={handleReset}
+                  >
+                    Rensa
+                  </button>
                 </div>
-
-                <div className="col-12 col-lg-6">
-                    <div className="card h-100">
-                        <div className="card-body">
-                            <h5 className="card-title">Filter</h5>
-                            <div className="row g-2">
-                                <div className="col-md-4">
-                                    <select
-                                        className="form-control"
-                                        value={filterGenre}
-                                        onChange={(e) => setFilterGenre(e.target.value)}
-                                    >
-                                        <option value="">Alla genrer</option>
-                                        {availableGenres.map((genre) => (
-                                            <option key={genre} value={genre}>
-                                                {genre}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
-                                <div className="col-md-4">
-                                    <select
-                                        className="form-control"
-                                        value={filterMaxAge}
-                                        onChange={(e) => setFilterMaxAge(e.target.value)}
-                                    >
-                                        <option value="">Åldersgräns</option>
-                                        {availableMaxAges.map((age) => (
-                                            <option key={age} value={age}>
-                                                {age}+
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
-                                <div className="col-md-4">
-                                    <input
-                                        type="date"
-                                        className="form-control"
-                                        value={filterDate}
-                                        onChange={(e) => setFilterDate(e.target.value)}
-                                    />
-                                </div>
-                            </div>
-                            <div className="mt-2">
-                                <button className="btn btn-primary me-2" onClick={handleFilter}>
-                                    Applicera Filter
-                                </button>
-                                <button className="btn btn-outline-secondary" onClick={handleReset}>
-                                    Rensa
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+              </div>
             </div>
+          </div>
 
-            {error && <div className="alert alert-danger">{error}</div>}
-
-            {/* Visa loader under hamtning, annars resultat eller tomlista. */}
-            {loading ? (
-                <div className="text-center py-5">
-                    <div className="spinner-border" role="status" />
+          <div className="col-12 col-lg-6">
+            <div className="card h-100">
+              <div className="card-body">
+                <h5 className="card-title">Filter</h5>
+                <div className="row g-2">
+                  <div className="col-md-4">
+                    <select
+                      className="form-control"
+                      value={filterGenre}
+                      onChange={(e) => setFilterGenre(e.target.value)}
+                    >
+                      <option value="">Alla genrer</option>
+                      {availableGenres.map((genre) => (
+                        <option key={genre} value={genre}>
+                          {genre}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="col-md-4">
+                    <select
+                      className="form-control"
+                      value={filterMaxAge}
+                      onChange={(e) => setFilterMaxAge(e.target.value)}
+                    >
+                      <option value="">Åldersgräns</option>
+                      {availableMaxAges.map((age) => (
+                        <option key={age} value={age}>
+                          {age}+
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="col-md-4">
+                    <input
+                      type="date"
+                      className="form-control"
+                      value={filterDate}
+                      onChange={(e) => setFilterDate(e.target.value)}
+                    />
+                  </div>
                 </div>
-            ) : movies.length === 0 ? (
-                <div className="alert alert-info">Inga filmer hittade.</div>
-            ) : (
-                <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
-                    {movies.map((movie) =>
-                        <div className="col" key={movie.id}>
-                            <div className="card h-100">
-                                <div className="card-body">
-                                    <img
-                                        src={movie.image_url ?? "/images/placeholder.jpg"}
-                                        alt={movie.title}
-                                        className="img-fluid movie-poster" />
-                                    <h5 className="card-title text-center">{movie.title}</h5>
-                                    <p className="card-text text-muted mb-1">{movie.genre}</p>
-                                    <span className="badge bg-secondary me-2">
-                                        Åldersgräns {movie.ageRestriction}+
-                                    </span>
-                                    <span className="badge bg-primary">
-                                        {new Date(movie.screeningDate).toLocaleDateString()}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    )}
+                <div className="mt-2">
+                  <button
+                    className="btn btn-primary me-2"
+                    onClick={handleFilter}
+                  >
+                    Applicera Filter
+                  </button>
+                  <button
+                    className="btn btn-outline-secondary"
+                    onClick={handleReset}
+                  >
+                    Rensa
+                  </button>
                 </div>
-            )}
+              </div>
+            </div>
+          </div>
         </div>
+
+        {error && <div className="alert alert-danger">{error}</div>}
+
+        {/* Visa loader under hamtning, annars resultat eller tomlista. */}
+        {loading ? (
+          <div className="text-center py-5">
+            <div className="spinner-border" role="status" />
+          </div>
+        ) : movies.length === 0 ? (
+          <div className="alert alert-info">Inga filmer hittade.</div>
+        ) : (
+          <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-3">
+            {movies.map((movie) => (
+              <div className="col" key={movie.id}>
+                <Link
+                  to={`/movies/${movie.id}`}
+                  style={{ textDecoration: "none", color: "inherit" }}
+                >
+                  <div className="card h-100">
+                    <div className="card-body">
+                      <img
+                        src={movie.image_url ?? "/images/placeholder.jpg"}
+                        alt={movie.title}
+                        className="img-fluid movie-poster"
+                      />
+                      <h5 className="card-title text-center">{movie.title}</h5>
+                      <p className="card-text text-muted mb-1">{movie.genre}</p>
+                      <span className="badge bg-secondary me-2">
+                        Åldersgräns {movie.ageRestriction}+
+                      </span>
+                      <span className="badge bg-primary">
+                        {new Date(movie.screeningDate).toLocaleDateString()}
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     );
 }
