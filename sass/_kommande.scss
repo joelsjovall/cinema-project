@@ -1,49 +1,50 @@
-.kommande-page {
+.kommande-page {  //lägger till bakgrundsfärgen och ser till att den täcker hela hemsidan
   background-color: rgb(206, 226, 204);
   min-height: 100vh;
   padding-top: 150px;
   padding-bottom: 80px;
 }
 
-.kommande.inner {
-  width: mine(980px, 92%);
+.kommande-inner {     //begränsar maxbredd och gör layouten responsiv
+  width: min(980px, 92%);
   margin: 0 auto;
 }
 
-.kommande-heading-row {
+.kommande-heading-row { //Sätter rubrikerna bredvid varandra genom flexbox
   display: flex;
   justify-content: center;
   align-items: baseline;
   gap: 5rem;
   margin-bottom: 3.2rem;
+
+  h1,   //gemensam styling för båda rubrikerna
+  h2 {
+    margin: 0;
+    color: #1b1b1b;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+    text-shadow: none;    //tar bort skuggan då det finns i en global h1:a
+  }
+
+  h1 {      //fontstorlek
+    font-size: clamp(1.9rem, 3.5vw, 2.7rem);
+  }
+
+  h2 {      //fontstorlek
+    font-size: clamp(1.9rem, 3.5vw, 2.7rem);
+  }
 }
 
-h1,
-h2 {
-  margin: 0;
-  color: #1b1b1b;
-  font-weight: 500;
-  letter-spacing: 0.2px;
-}
-
-h1 {
-  font-size: clamp(1.9rem, 3.5vw, 2.7rem);
-}
-
-h2 {
-  font-size: clamp(1.9rem, 3.5vw, 2.7rem);
-}
-
-.kommande-grid {
+.kommande-grid {    //grid layout för filmer
   display: grid;
   grid-template-columns: repeat(4, minmax(150px, 1fr));
   gap: 2.1rem;
 }
 
-kommande-card {
+.kommande-card {    //för varje film
   h3 {
     margin: 0.75rem 0 0.2rem;
-    color: 1f1f1f;
+    color: #1f1f1f;
     font-size: 1.05rem;
     font-weight: 400;
   }
@@ -51,28 +52,51 @@ kommande-card {
   p {
     margin: 0;
     color: #2f2f2f;
-    font-size: 0.9;
+    font-size: 0.9rem;
     text-decoration: underline;
     text-underline-offset: 2px;
     text-align: left;
   }
 }
 
-.kommande-poster {
+.kommande-poster {    //filmposters proportion
   width: 100%;
-  max-width: 190;
-  aspect-ratio: 2/3;
-  object-fit: cover;
+  max-width: 190px;   //begränsar kortets bredd
+  aspect-ratio: 2/3;  //proportion
+  object-fit: cover;  //beskär bilden
+  //lägg till snygg ram runt korten?
   display: block;
 }
 
-@media (max-width: 992px) {
+@media (max-width: 992px) {   //på surfplatta
   .kommande-grid {
-    grid-template-columns: repeat(2, min(150px, 1fr));
+    grid-template-columns: repeat(2, minmax(150px, 1fr));
     row-gap: 2.3rem;
   }
 
   .kommande-heading-row {
     gap: 2.2rem;
+  }
+}
+
+@media (max-width: 560px) {   //på mobil
+  .kommande-page{
+    padding-top: 130px;
+  }
+
+  .kommande-grid {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+
+  .kommande-card{
+    width: 190px;
+  }
+
+  .kommande-heading-row {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 2.2rem;
   }
 }
