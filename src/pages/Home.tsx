@@ -25,6 +25,7 @@ function dedupeMoviesById(movieList: Movie[]): Movie[] {
 
 export default function Home() {
     console.log("Home component loaded");
+    const [allMovies, setAllMovies] = useState<Movie[]>([]);
     const [movies, setMovies] = useState<Movie[]>([]);
     const [availableGenres, setAvailableGenres] = useState<string[]>([]);
     const [availableMaxAges, setAvailableMaxAges] = useState<number[]>([]);
@@ -88,7 +89,10 @@ export default function Home() {
             console.log("Response:", res);
             const data = await res.json();
             console.log("Data:", data);
-            const list = dedupeMoviesById(Array.isArray(data) ? data : data.movies ?? []);
+            const list = dedupeMoviesById(
+              Array.isArray(data) ? data : (data.movies ?? []),
+            );
+            setAllMovies(list);
             setMovies(list);
             updateFilterOptions(list);
         } catch (e) {
@@ -112,7 +116,10 @@ export default function Home() {
                 `${API}/movies/search?title=${encodeURIComponent(searchTitle)}`
             );
             const data = await res.json();
-            setMovies(dedupeMoviesById(data));
+            const result = allMovies.filter((m) =>
+              m.title.toLowerCase().includes(searchTitle.toLowerCase()),
+            );
+            setMovies(dedupeMoviesById(result));
         } catch {
             setError("Search failed.");
         } finally {
@@ -121,23 +128,39 @@ export default function Home() {
     }
 
     // Filtrera filmer med valda query-parametrar.
-    async function handleFilter() {
-        setLoading(true);
-        setError("");
-        const params = new URLSearchParams();
-        if (filterGenre) params.append("genre", filterGenre);
-        if (filterMaxAge) params.append("maxAge", filterMaxAge);
-        if (filterDate) params.append("date", filterDate);
+    function handleFilter() {
+      setLoading(true);
+      setError("");
 
-        try {
-            const res = await fetch(`${API}/movies/filter?${params.toString()}`);
-            const data = await res.json();
-            setMovies(dedupeMoviesById(data));
-        } catch {
-            setError("Filter failed.");
-        } finally {
-            setLoading(false);
+      try {
+        let result = [...allMovies];
+
+        if (filterGenre) {
+          result = result.filter((m) => m.genre === filterGenre);
         }
+
+        if (filterMaxAge) {
+          const age = Number(filterMaxAge);
+          result = result.filter((m) => m.ageRestriction === age);
+          // Om man vill visa filmer som passar användarens ålder:
+          // result = result.filter((m) => m.ageRestriction <= age);
+        }
+
+        if (filterDate) {
+          result = result.filter((m) => {
+            const movieDate = new Date(m.screeningDate)
+              .toISOString()
+              .slice(0, 10);
+            return movieDate === filterDate;
+          });
+        }
+
+        setMovies(dedupeMoviesById(result));
+      } catch {
+        setError("Filter failed.");
+      } finally {
+        setLoading(false);
+      }
     }
 
     // Nollstall sok/filter och ladda om standardlistan.
