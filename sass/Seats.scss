@@ -1,0 +1,222 @@
+.booking-wrapper {
+    width: 70%;
+    margin: 200px auto 2rem auto;
+}
+
+.main-container {
+    background-color: rgb(181, 236, 181);
+    /* samma gröna som headern */
+    min-height: 100vh;
+    /* täcker hela sidan */
+    padding-top: 160px;
+    /* flyttar ner allt under headern */
+}
+
+.movie-title {
+    text-align: center;
+    color: #1f6b3a;
+    margin-bottom: 0.5rem;
+}
+
+.movie-info {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.ticket-section h3,
+.seat-section h3 {
+    margin-bottom: 1rem;
+    color: #1f6b3a;
+}
+
+.ticket-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.7rem;
+    background: #f3f3f3;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+}
+
+.ticket-row input {
+    width: 60px;
+}
+
+.legend {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    padding-left: 75px;
+
+}
+
+.legend-item {
+    padding: 0.3rem 0.7rem;
+    border-radius: 6px;
+    color: white;
+}
+
+.green {
+    background: #2ecc71;
+}
+
+.yellow {
+    background: #f1c40f;
+}
+
+.red {
+    background: #e74c3c;
+}
+
+/* ---- STOLAR ---- */
+
+.seat-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 2rem;
+}
+
+.seat-row {
+    display: flex;
+    justify-content: center;
+    gap: 0.4rem;
+}
+
+.seat {
+    width: 32px;
+    height: 32px;
+    background: #2ecc71;
+    color: white;
+    border-radius: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.8rem;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.seat.selected {
+    background: #f1c40f;
+}
+
+.seat.taken {
+    background: #e74c3c;
+    cursor: not-allowed;
+}
+
+/* ---- EMAIL + KNAPP ---- */
+
+.email-section {
+    margin-bottom: 1.5rem;
+}
+
+.email-section input {
+    width: 100%;
+    padding: 0.7rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.confirm-btn {
+    width: 100%;
+    padding: 0.9rem;
+    background: #1f6b3a;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+.confirm-btn:hover {
+    background: #18552e;
+}
+
+/* ---- PLUS / MINUS KNAPPAR ---- */
+
+.counter {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.counter button {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: #1f6b3a;
+    color: white;
+    border-radius: 100%; // <-- gör knappen helt rund
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.counter button:hover {
+    background: #18552e;
+}
+
+.counter span {
+    width: 24px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+/* ---- TVÅ KOLUMNER ---- */
+
+.booking-columns {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+/* Vänster kolumn (biljetter) */
+.left-column {
+    flex: 1;
+    margin-left: -100px;
+}
+
+/* Höger kolumn (stolar) */
+.right-column {
+    flex: 2; // gör stolsdelen större, som i din bil
+}
+
+.seat-section {
+    padding-left: 300px;
+
+
+}
+
+.seat-section h3 {
+
+    padding-left: 75px;
+
+}
+
+.seat.selected {
+    background-color: #f1c40f;
+    color: black;
+}
+
+.seat {
+    transition: background-color 0.2s ease;
+    cursor: pointer;
+}
+
+.Bta {
+    margin-top: 60px;
+    width: 40%;
+    padding: 0.9rem;
+    background: #000000;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    cursor: pointer;
+
+}
