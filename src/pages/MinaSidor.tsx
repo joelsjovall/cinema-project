@@ -84,7 +84,7 @@ export default function MinaSidor() {
     }
 
     return (
-        <div className="center-page">
+        <div className="center-page mina-page">
             <div className="mina-box">
                 <div className="mina-hero">
                     <h1>Mina sidor</h1>
