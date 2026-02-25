@@ -74,7 +74,7 @@ export default function MinaSidor() {
             <div className="center-page">
                 <div className="login-box">
                     <h2>Mina sidor</h2>
-                    <p>Du mÂste vara inloggad fˆr att se denna sida.</p>
+                    <p>Du m√•ste vara inloggad f√∂r att se denna sida.</p>
                     <button className="login-btn" onClick={() => navigate("/login")}>
                         Logga in
                     </button>
@@ -88,7 +88,7 @@ export default function MinaSidor() {
             <div className="mina-box">
                 <div className="mina-hero">
                     <h1>Mina sidor</h1>
-                    <p>Inloggad som {user.email ?? "ok‰nd anv‰ndare"}</p>
+                    <p>Inloggad som {user.email ?? "ok√§nd anv√§ndare"}</p>
                 </div>
 
                 <div className="mina-section">
@@ -98,7 +98,7 @@ export default function MinaSidor() {
                     ) : error ? (
                         <p className="text-danger mt-2 mb-2">{error}</p>
                     ) : bookings.length === 0 ? (
-                        <p>Du har inga bokningar ‰nnu.</p>
+                        <p>Du har inga bokningar ÔøΩnnu.</p>
                     ) : (
                         <div className="booking-list">
                             {bookings.map((b) => (
@@ -111,7 +111,7 @@ export default function MinaSidor() {
                                         )}
                                     </div>
                                     <div className="booking-info">
-                                        <div className="booking-title">{b.title ?? "Ok‰nd film"}</div>
+                                        <div className="booking-title">{b.title ?? "Ok√§nd film"}</div>
                                         <div className="booking-row">
                                             <span>{b.screeningDate ?? ""}</span>
                                             <span>{b.screeningTime ?? ""}</span>
