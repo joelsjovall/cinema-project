@@ -10,6 +10,7 @@ public static class Server
         DebugLog.Start();
         Acl.Start();
         MovieRoutes.Start();
+        BookingRoutes.Start();
         ErrorHandler.Start();
         FileServer.Start();
         LoginRoutes.Start();

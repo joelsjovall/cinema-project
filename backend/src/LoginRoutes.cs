@@ -31,10 +31,25 @@ public static class LoginRoutes
             }
 
             // If the password doesn't match
-            if (!Password.Verify(
-                (string)body.password,
-                (string)dbUser.password
-            ))
+            var storedPassword = (dbUser.password + "");
+            var inputPassword = (body.password + "");
+            bool passwordOk;
+            if (storedPassword.StartsWith("$2"))
+            {
+                try
+                {
+                    passwordOk = Password.Verify(inputPassword, storedPassword);
+                }
+                catch
+                {
+                    passwordOk = false;
+                }
+            }
+            else
+            {
+                passwordOk = storedPassword == inputPassword;
+            }
+            if (!passwordOk)
             {
                 return RestResult.Parse(context,
                     new { error = "Password mismatch." });
