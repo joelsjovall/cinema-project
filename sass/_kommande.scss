@@ -49,12 +49,19 @@
     font-weight: 400;
   }
 
-  p {
+  .kommande-genre {
     margin: 0;
     color: #2f2f2f;
     font-size: 0.9rem;
     text-decoration: underline;
     text-underline-offset: 2px;
+    text-align: left;
+  }
+
+  .kommande-release-date {
+    margin: 0.3rem 0 0;
+    color: #2f2f2f;
+    font-size: 0.88rem;
     text-align: left;
   }
 }
@@ -64,8 +71,10 @@
   max-width: 190px;   //begränsar kortets bredd
   aspect-ratio: 2/3;  //proportion
   object-fit: cover;  //beskär bilden
-  //lägg till snygg ram runt korten?
-  display: block;
+  border: 3px solid #448547;    //samma border som på startsidan kodas nedan
+  border-radius: 12px;             
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25); 
+  display: block;                 
 }
 
 @media (max-width: 992px) {   //på surfplatta
