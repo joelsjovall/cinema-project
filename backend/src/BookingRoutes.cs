@@ -12,8 +12,7 @@ public static class BookingRoutes
                 return RestResult.Parse(context, new { error = "Not logged in." });
             }
 
-            var sql = @"
-                SELECT
+            var sql = @"SELECT 
                     b.id,
                     b.bookingCode,
                     b.screeningId,

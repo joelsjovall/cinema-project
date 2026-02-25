@@ -35,7 +35,7 @@ function Createaccount() {
                 setError(data?.error ?? "Registrering misslyckades.");
                 return;
             }
-            setSuccess("Kontot är skapat. Du kan logga in nu.");
+            setSuccess("Kontot Ã¤r skapat. Du kan logga in nu.");
             setTimeout(() => navigate("/login"), 600);
         } catch {
             setError("Kunde inte ansluta till servern.");
@@ -47,7 +47,7 @@ function Createaccount() {
     return (
         <div className="center-page">
             <div className="register-box">
-                <h2>Registrera ny användare</h2>
+                <h2>Registrera ny anvÃ¤ndare</h2>
 
                 <form onSubmit={handleSubmit}>
                     <label>E-post</label>
@@ -59,7 +59,7 @@ function Createaccount() {
                         required
                     />
 
-                    <label>Lösenord</label>
+                    <label>LÃ¶senord</label>
                     <input
                         type="password"
                         className="register-input"

@@ -14,6 +14,10 @@ export default defineConfig({
         target: "http://localhost:5001",
         changeOrigin: true,
       },
+      "/bookings": {
+        target: "http://localhost:5001",
+        changeOrigin: true,
+      },
     },
   },
 })
