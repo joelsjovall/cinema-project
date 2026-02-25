@@ -64,8 +64,10 @@
   max-width: 190px;   //begränsar kortets bredd
   aspect-ratio: 2/3;  //proportion
   object-fit: cover;  //beskär bilden
-  //lägg till snygg ram runt korten?
-  display: block;
+  border: 3px solid #448547;    //samma border som på startsidan kodas nedan
+  border-radius: 12px;             
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25); 
+  display: block;                 
 }
 
 @media (max-width: 992px) {   //på surfplatta

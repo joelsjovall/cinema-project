@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 const API = "";
+const UPCOMING_YEAR = 2027;
 
 interface Movie {
     id: number;
@@ -38,11 +39,8 @@ useEffect(() => {
             const data = await res.json();
             const list: Movie[] = Array.isArray(data) ? data : data.movies ?? [];
 
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-
             const upcoming = list
-                .filter((movie) => new Date(movie.screeningDate) >= today)
+                .filter((movie) => new Date(movie.screeningDate).getFullYear() === UPCOMING_YEAR)
                 .sort(
                     (a, b) =>
                         new Date(a.screeningDate).getTime() -
@@ -69,7 +67,7 @@ useEffect(() => {
       <div className="kommande-inner">
         <header className="kommande-heading-row">
           <h1>Kommande filmer :</h1>
-          <h2>April</h2>
+          <h2>{UPCOMING_YEAR}</h2>
         </header>
 
         {error && <div className="alert alert-danger">{error}</div>}
