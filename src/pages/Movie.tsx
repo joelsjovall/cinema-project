@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 const API = "";
 
@@ -23,6 +23,13 @@ interface Screening {
 }
 
 function normalizeScreening(raw: Screening) {
+  const id =
+    raw.id ??
+    (raw as any).ID ??
+    (raw as any).screeningId ??
+    (raw as any).screening_id ??
+    null;
+
   const screeningDate =
     raw.screeningDate ??
     (raw as any).screeningdate ??
@@ -49,7 +56,7 @@ function normalizeScreening(raw: Screening) {
     (raw as any).salon_id ??
     null;
 
-  return { screeningDate, screeningTime, movieId, salonId };
+  return { id, screeningDate, screeningTime, movieId, salonId };
 }
 
 function formatDateLabel(dateKey: string) {
@@ -69,8 +76,11 @@ export default function Movie() {
 
   const [availableDates, setAvailableDates] = useState<string[]>([]);
   const [timesByDate, setTimesByDate] = useState<Record<string, string[]>>({});
+  const [screeningIdByDateTime, setScreeningIdByDateTime] = useState<Record<string, Record<string, string>>>({});
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
+  const [selectedScreeningId, setSelectedScreeningId] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!id) {
@@ -108,6 +118,7 @@ export default function Movie() {
         }
 
         const grouped = new Map<string, Set<string>>();
+        const screeningIdMap: Record<string, Record<string, string>> = {};
         for (const s of movieScreenings) {
           const normalized = normalizeScreening(s);
           const dateKey = normalized.screeningDate?.slice(0, 10);
@@ -125,7 +136,13 @@ export default function Movie() {
           }
 
           if (!grouped.has(dateKey)) grouped.set(dateKey, new Set<string>());
-          if (timeValue) grouped.get(dateKey)!.add(timeValue);
+          if (timeValue) {
+            grouped.get(dateKey)!.add(timeValue);
+            if (!screeningIdMap[dateKey]) screeningIdMap[dateKey] = {};
+            if (!screeningIdMap[dateKey][timeValue] && normalized.id != null) {
+              screeningIdMap[dateKey][timeValue] = String(normalized.id);
+            }
+          }
         }
 
         const sortedDates = Array.from(grouped.keys()).sort(
@@ -139,8 +156,10 @@ export default function Movie() {
 
         setAvailableDates(sortedDates);
         setTimesByDate(timesObject);
+        setScreeningIdByDateTime(screeningIdMap);
         setSelectedDate("");
         setSelectedTime("");
+        setSelectedScreeningId("");
       } catch {
         setError("Kunde inte ladda filmens detaljer.");
       } finally {
@@ -156,7 +175,7 @@ export default function Movie() {
     return timesByDate[selectedDate] ?? [];
   }, [selectedDate, timesByDate]);
 
-  const canContinue = selectedDate !== "" && selectedTime !== "";
+  const canContinue = selectedDate !== "" && selectedTime !== "" && selectedScreeningId !== "";
 
   return (
     <div className="movie-page py-4">
@@ -202,6 +221,7 @@ export default function Movie() {
                 onChange={(e) => {
                   setSelectedDate(e.target.value);
                   setSelectedTime("");
+                  setSelectedScreeningId("");
                 }}
               >
                 <option value="">Välj en dag</option>
@@ -221,7 +241,10 @@ export default function Movie() {
                       key={time}
                       className={`showtime-pill ${selectedTime === time ? "is-active" : ""}`}
                       type="button"
-                      onClick={() => setSelectedTime(time)}
+                      onClick={() => {
+                        setSelectedTime(time);
+                        setSelectedScreeningId(screeningIdByDateTime[selectedDate]?.[time] ?? "");
+                      }}
                     >
                       {time}
                     </button>
@@ -233,7 +256,16 @@ export default function Movie() {
             )}
 
             <div className="showtime-grid single-action">
-              <button className="showtime-pill action" type="button" disabled={!canContinue}>
+              <button
+                className="showtime-pill action"
+                type="button"
+                disabled={!canContinue}
+                onClick={() => {
+                  if (canContinue) {
+                    navigate(`/Seats?screeningId=${encodeURIComponent(selectedScreeningId)}`);
+                  }
+                }}
+              >
                 Gå vidare
               </button>
             </div>

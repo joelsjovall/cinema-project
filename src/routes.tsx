@@ -9,7 +9,7 @@ import Seats from "./pages/Seats";
 
 const routes: RouteObject[] = [
     { index: true, element: <Home /> },
-    { path: "kommande", element: <Kommande /> },
+    { path: "kommande_Filmer", element: <Kommande /> },
     { path: "movie/:id", element: <Movie /> },
     { path: "kiosk", element: <Kiosk /> },
     { path: "login", element: <Login /> },
