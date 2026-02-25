@@ -37,6 +37,13 @@ public static class Acl
         // Get info about the requested route and logged in user
         method = method != "" ? method : context.Request.Method;
         path = path != "" ? path : context.Request.Path;
+
+        // Allow booking creation route without requiring a DB ACL rule.
+        if (method == "POST" && Regex.IsMatch(path + "", @"^\/movies\/screenings\/\d+\/book$"))
+        {
+            return true;
+        }
+
         var user = Session.Get(context, "user");
         var userRole = user == null ? "visitor" : user.role;
         var userEmail = user == null ? "" : user.email;
