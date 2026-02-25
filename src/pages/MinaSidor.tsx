@@ -20,12 +20,17 @@ type Booking = {
     seats?: string | null;
 };
 
+function formatDate(date?: string) {
+    return date?.split("T")[0] ?? "";
+}
+
 export default function MinaSidor() {
     const navigate = useNavigate();
     const { user, logout, authLoading } = useAuth();
     const [bookings, setBookings] = useState<Booking[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+    const [confirmId, setConfirmId] = useState<number | null>(null);
 
     async function loadBookings() {
         setLoading(true);
@@ -46,7 +51,6 @@ export default function MinaSidor() {
     }
 
     async function cancelBooking(id: number) {
-        if (!confirm("Vill du avbryta den här bokningen?")) return;
         try {
             const res = await fetch(`${API}/bookings/${id}/cancel`, {
                 method: "DELETE",
@@ -56,6 +60,7 @@ export default function MinaSidor() {
             if (!res.ok || data?.error) {
                 throw new Error(data?.error ?? "Kunde inte avbryta bokningen.");
             }
+            setConfirmId(null);
             await loadBookings();
         } catch (err) {
             setError(err instanceof Error ? err.message : "Kunde inte avbryta bokningen.");
@@ -97,7 +102,7 @@ export default function MinaSidor() {
             <div className="mina-box">
                 <div className="mina-hero">
                     <h1>Mina sidor</h1>
-                    <p>Inloggad som {user.email ?? "okänd användare"}</p>
+                    <p>Inloggad som {user.email ?? "ok�nd anv�ndare"}</p>
                 </div>
 
                 <div className="mina-section">
@@ -122,7 +127,7 @@ export default function MinaSidor() {
                                     <div className="booking-info">
                                         <div className="booking-title">{b.title ?? "Ok�nd film"}</div>
                                         <div className="booking-row">
-                                            <span>{b.screeningDate ?? ""}</span>
+                                            <span>{formatDate(b.screeningDate)}</span>
                                             <span>{b.screeningTime ?? ""}</span>
                                         </div>
                                         <div className="booking-row">
@@ -135,12 +140,30 @@ export default function MinaSidor() {
                                             <span>{b.status ?? ""}</span>
                                         </div>
                                         {b.status !== "cancelled" && (
-                                            <button
-                                                className="booking-cancel-btn"
-                                                onClick={() => cancelBooking(b.id)}
-                                            >
-                                                Avbryt bokning
-                                            </button>
+                                            confirmId === b.id ? (
+                                                <div className="booking-confirm">
+                                                    <span>Är du säkerpå att du vill avbryta din bokning?</span>
+                                                    <button
+                                                        className="booking-confirm-yes"
+                                                        onClick={() => cancelBooking(b.id)}
+                                                    >
+                                                        Ja
+                                                    </button>
+                                                    <button
+                                                        className="booking-confirm-no"
+                                                        onClick={() => setConfirmId(null)}
+                                                    >
+                                                        Nej
+                                                    </button>
+                                                </div>
+                                            ) : (
+                                                <button
+                                                    className="booking-cancel-btn"
+                                                    onClick={() => setConfirmId(b.id)}
+                                                >
+                                                    Avbryt bokning
+                                                </button>
+                                            )
                                         )}
                                     </div>
                                 </div>

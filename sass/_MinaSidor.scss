@@ -113,6 +113,33 @@
     color: #ffffff;
 }
 
+.booking-confirm {
+    margin-top: 0.5rem;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.booking-confirm-yes,
+.booking-confirm-no {
+    padding: 0.3rem 0.7rem;
+    font-size: 0.85rem;
+    border-radius: 6px;
+    border: 1px solid #2b6b3a;
+    background: transparent;
+    cursor: pointer;
+}
+
+.booking-confirm-yes {
+    background: #2b6b3a;
+    color: #ffffff;
+}
+
+.booking-confirm-no {
+    color: #2b6b3a;
+}
+
 .mina-footer {
     margin-top: 2rem;
     display: flex;
