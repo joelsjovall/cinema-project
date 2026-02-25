@@ -1,8 +1,29 @@
-import { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+
+interface Screening {
+    id: number;
+    salonId: number;
+    movieId: number;
+    screeningDate: string;
+    screeningTime: string;
+}
+
+interface Salon {
+    id: number;
+    name: string;
+    totalSeats: number;
+}
 
 export default function Seats() {
-    const seatRows = [8, 9, 10, 10, 10, 10, 12, 12];
+    const [screening, setScreening] = useState<Screening | null>(null);
+    const [salon, setSalon] = useState<Salon | null>(null);
+
+    const seatMaps: Record<number, number[]> = {
+        2: [8, 9, 10, 10, 10, 10, 12, 12],
+        1: [6, 7, 7, 8, 8, 6],
+    };
+
+    const seatRows = salon ? seatMaps[Number(salon.id)] ?? [] : [];
 
 
     const [adult, setAdult] = useState(0);
@@ -12,7 +33,7 @@ export default function Seats() {
 
     const [selectedSeats, setSelectedSeats] = useState<number[]>([]);
 
-    // Så at när man klickar ska det bli gult
+    // Klick funktion
     const toggleSeat = (seatNumber: number) => {
         setSelectedSeats((prev) =>
             prev.includes(seatNumber)
