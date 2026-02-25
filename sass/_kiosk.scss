@@ -6,52 +6,52 @@ body {
 }
 
 .kiosk-page {
-  padding-top: 220px; // öka detta – testa 200–300 px beroende på header + hero-höjd
+  padding-top: 220px; 
   min-height: 100vh;
   background: rgb(181, 236, 181);
   color: #f0f0f0;
-  font-family: 'Poppins', 'Segoe UI', sans-serif; // modern sans-serif (lägg till @import om du vill)
+  font-family: 'Poppins', 'Segoe UI', sans-serif; // font
 }
 
-// Om hero känns för "fast" mot header – lägg till lite extra luft
-.kiosk-hero {
-  margin-top: -20px; // liten negativ margin om hero ska "smälta" in bättre mot header
 
-  // eller ta bort om ni vill ha tydlig separation
+.kiosk-hero {
+  margin-top: -20px; 
+
+  
   .hero-content {
     max-width: 1050px;
     margin: 0 auto;
     padding: 2.5rem 2.5rem;
 
-    // ── NYA FÄRGER ──
+    
     background: linear-gradient(135deg, #9cf8a0, #a4c6a6);
-    border: 2px solid #2e4a2e; // lite ljusare grön kant för kontrast (eller ta bort border helt)
-    border-radius: 16px; // samma rundning som korten
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45); // samma skugga som produktkorten
+    border: 2px solid #2e4a2e; // lite ljusare grön kant 
+    border-radius: 16px; 
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45); 
   }
 }
 
 .product-emoji {
-  font-size: 6rem; // STOR emoji – ändra till 5rem eller 7rem om du vill
+  font-size: 6rem; 
   margin-bottom: 1rem;
-  line-height: 1; // tar bort extra luft under emojin
+  line-height: 1; 
   margin-left: 85px;
   margin-top: 100px;
 }
 
 
-// Resten av era styles (hero, container, grid osv.) behåll som det är
-// Men lägg eventuellt till detta för bättre mobil-anpassning:
+
+// mobilanpassning
 @media (max-width: 768px) {
 
 
 
   .kiosk-page {
-    padding-top: 160px; // mindre på mobil – testa!
+    padding-top: 160px; 
   }
 
   .kiosk-hero {
-    height: 30vh; // minska hero-höjd på små skärmar
+    height: 30vh; 
     min-height: 220px;
   }
 }
@@ -85,7 +85,7 @@ p {
   text-align: center;
   font-size: 2.4rem;
   margin: 0 0 2.5rem;
-  color: #252b25; // er gröna tema
+  color: #252b25; // gröna temat på hemsidan
 }
 
 .products-grid {
