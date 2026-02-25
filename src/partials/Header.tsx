@@ -1,8 +1,18 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../utils/auth';
 
 function Header() {
   const navigate = useNavigate();
+  const { user, logout, authLoading } = useAuth();
+
+  function handleAuthClick() {
+    if (user) {
+      navigate("/mina-sidor");
+      return;
+    }
+    navigate("/login");
+  }
 
   return (
     <header className="custom-header fixed-top text-white">
@@ -21,7 +31,13 @@ function Header() {
           <img src="pictures/util_images/avatar.png" alt="avatar" />
         </div>
 
-        <button className="mina-sidor-btn" onClick={() => navigate("/login")}>Mina sidor</button>
+        <button
+          className="mina-sidor-btn"
+          onClick={handleAuthClick}
+          disabled={authLoading}
+        >
+          Mina sidor
+        </button>
       </div>
     </header>
   );

@@ -7,6 +7,7 @@ import '../sass/index.scss';
 import routes from './routes';
 import App from './App';
 import { Outlet } from "react-router-dom";
+import { AuthProvider } from "./utils/auth";
 
 export default function Main() {
   return (
@@ -33,6 +34,8 @@ const router = createBrowserRouter([
 // Create the React root element
 createRoot(document.querySelector('#root')!).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </StrictMode>
 );

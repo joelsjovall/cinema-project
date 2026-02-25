@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import Createaccount from "./pages/Createaccount";
 import Movie from "./pages/Movie";
 import Seats from "./pages/Seats";
+import MinaSidor from "./pages/MinaSidor";
 
 const routes: RouteObject[] = [
     { index: true, element: <Home /> },
@@ -13,6 +14,7 @@ const routes: RouteObject[] = [
     { path: "movie/:id", element: <Movie /> },
     { path: "kiosk", element: <Kiosk /> },
     { path: "login", element: <Login /> },
+    { path: "mina-sidor", element: <MinaSidor /> },
     { path: "*", element: <div>404 - Sidan finns inte</div> },
     { path: "/Createaccount", element: <Createaccount /> },
     { path: "/Seats", element: <Seats /> }

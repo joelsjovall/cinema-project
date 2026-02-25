@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 interface Screening {
@@ -15,23 +15,85 @@ interface Salon {
     totalSeats: number;
 }
 
+interface BookedSeatRow {
+    seatNumber: number;
+}
+
+interface MovieInfo {
+    title?: string;
+}
+
+interface CreateBookingResponse {
+    error?: string;
+    bookingId?: number;
+    bookingCode?: string;
+}
+
+interface LoginUserResponse {
+    error?: string;
+    email?: string;
+}
+
 export default function Seats() {
+    const ADULT_PRICE = 140;
+    const SENIOR_PRICE = 120;
+    const CHILD_PRICE = 80;
+
     const [searchParams] = useSearchParams();
     const screeningId = searchParams.get("screeningId") ?? "";
+
     const [screening, setScreening] = useState<Screening | null>(null);
     const [salon, setSalon] = useState<Salon | null>(null);
+    const [movieTitle, setMovieTitle] = useState("");
+
+    const [adult, setAdult] = useState(0);
+    const [senior, setSenior] = useState(0);
+    const [child, setChild] = useState(0);
+
+    const [selectedSeats, setSelectedSeats] = useState<number[]>([]);
+    const [occupiedSeats, setOccupiedSeats] = useState<number[]>([]);
+    const [guestEmail, setGuestEmail] = useState("");
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [bookingMessage, setBookingMessage] = useState<string>("");
+    const [isBooking, setIsBooking] = useState(false);
 
     const seatMaps: Record<number, number[]> = {
+        1: [6, 8, 9, 10, 10, 12],
         2: [8, 9, 10, 10, 10, 10, 12, 12],
-        1: [6, 7, 7, 8, 8, 6],
     };
 
     const seatRows = salon ? seatMaps[Number(salon.id)] ?? [] : [];
+    const displayDate = screening?.screeningDate?.split("T")[0] ?? "";
+
+    const totalTickets = adult + senior + child;
+    const totalPrice = adult * ADULT_PRICE + senior * SENIOR_PRICE + child * CHILD_PRICE;
+    const hasGuestEmail = guestEmail.trim().length > 0;
+    const canConfirm = totalTickets > 0 && selectedSeats.length === totalTickets && (isLoggedIn || hasGuestEmail);
+
+    useEffect(() => {
+        async function fetchLoginStatus() {
+            try {
+                const res = await fetch("/api/login");
+                if (!res.ok) {
+                    setIsLoggedIn(false);
+                    return;
+                }
+
+                const data: LoginUserResponse = await res.json();
+                setIsLoggedIn(!data.error && !!data.email);
+            } catch {
+                setIsLoggedIn(false);
+            }
+        }
+
+        fetchLoginStatus();
+    }, []);
 
     useEffect(() => {
         if (!screeningId) {
             setScreening(null);
             setSalon(null);
+            setMovieTitle("");
             return;
         }
 
@@ -39,58 +101,150 @@ export default function Seats() {
             try {
                 const res = await fetch(`/movies/screenings/${encodeURIComponent(screeningId)}`);
                 if (!res.ok) return;
-                const data = await res.json();
+
+                const data: Screening = await res.json();
                 setScreening(data);
+
                 if (data?.salonId != null) {
                     setSalon({
                         id: Number(data.salonId),
                         name: "",
-                        totalSeats: 0
+                        totalSeats: 0,
                     });
+                }
+
+                if (data?.movieId != null) {
+                    const movieRes = await fetch(`/movies/${encodeURIComponent(String(data.movieId))}`);
+                    if (movieRes.ok) {
+                        const movie: MovieInfo = await movieRes.json();
+                        setMovieTitle(movie?.title ?? "");
+                    } else {
+                        setMovieTitle("");
+                    }
+                } else {
+                    setMovieTitle("");
                 }
             } catch {
                 setScreening(null);
                 setSalon(null);
+                setMovieTitle("");
             }
         }
 
         fetchScreening();
     }, [screeningId]);
 
+    useEffect(() => {
+        if (!screeningId) {
+            setOccupiedSeats([]);
+            return;
+        }
 
-    const [adult, setAdult] = useState(0);
-    const [senior, setSenior] = useState(0);
-    const [child, setChild] = useState(0);
+        async function fetchBookedSeats() {
+            try {
+                const res = await fetch(`/movies/screenings/${encodeURIComponent(screeningId)}/booked-seats`);
+                if (!res.ok) {
+                    setOccupiedSeats([]);
+                    return;
+                }
 
+                const rows: BookedSeatRow[] = await res.json();
+                setOccupiedSeats(rows.map((row) => Number(row.seatNumber)).filter((n) => Number.isFinite(n)));
+            } catch {
+                setOccupiedSeats([]);
+            }
+        }
 
-    const [selectedSeats, setSelectedSeats] = useState<number[]>([]);
+        fetchBookedSeats();
+    }, [screeningId]);
 
-    // Klick funktion
+    useEffect(() => {
+        setSelectedSeats((prev) => prev.filter((seat) => !occupiedSeats.includes(seat)));
+    }, [occupiedSeats]);
+
     const toggleSeat = (seatNumber: number) => {
+        if (occupiedSeats.includes(seatNumber)) return;
+
         setSelectedSeats((prev) =>
-            prev.includes(seatNumber)
-                ? prev.filter((n) => n !== seatNumber)
-                : [...prev, seatNumber]
+            prev.includes(seatNumber) ? prev.filter((n) => n !== seatNumber) : [...prev, seatNumber]
         );
     };
 
+    const handleConfirm = async () => {
+        if (!canConfirm || !screeningId || isBooking) return;
+
+        const seatsToBook = [...selectedSeats];
+        setIsBooking(true);
+        setBookingMessage("");
+
+        try {
+            const res = await fetch(`/movies/screenings/${encodeURIComponent(screeningId)}/book`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    selectedSeats: seatsToBook,
+                    totalPrice,
+                    guestEmail,
+                }),
+            });
+
+            const data: CreateBookingResponse = await res.json();
+            if (!res.ok || data.error) {
+                setBookingMessage(data.error ?? "Kunde inte skapa bokning.");
+                return;
+            }
+
+            setBookingMessage(`Bokning skapad. Kod: ${data.bookingCode ?? "-"}`);
+            setSelectedSeats([]);
+            setOccupiedSeats((prev) => Array.from(new Set([...prev, ...seatsToBook])));
+        } catch {
+            setBookingMessage("Kunde inte skapa bokning.");
+        } finally {
+            setIsBooking(false);
+        }
+    };
+
+    const renderSeatRows = () =>
+        seatRows.map((count, rowIndex) => {
+            const startNumber = seatRows.slice(0, rowIndex).reduce((a, b) => a + b, 0);
+
+            return (
+                <div key={rowIndex} className="seat-row">
+                    {Array.from({ length: count })
+                        .map((_, seatIndex) => ({ seatNumber: startNumber + seatIndex + 1 }))
+                        .reverse()
+                        .map(({ seatNumber }) => (
+                            <div
+                                key={seatNumber}
+                                className={
+                                    occupiedSeats.includes(seatNumber)
+                                        ? "seat taken"
+                                        : selectedSeats.includes(seatNumber)
+                                            ? "seat selected"
+                                            : "seat available"
+                                }
+                                onClick={() => toggleSeat(seatNumber)}
+                            >
+                                {seatNumber}
+                            </div>
+                        ))}
+                </div>
+            );
+        });
+
     return (
         <div className="main-container">
-
             <div className="booking-wrapper">
-
                 <div className="booking-columns">
-
                     <div className="booking-info">
                         {screening ? (
                             <p>
-                                Datum: {screening.screeningDate} | Tid: {screening.screeningTime} | Salong: {screening.salonId}
+                                Film: {movieTitle || "-"} | Datum: {displayDate} | Tid: {screening.screeningTime} | Salong: {screening.salonId}
                             </p>
                         ) : (
                             <p>Ingen visning vald.</p>
                         )}
                     </div>
-
 
                     <div className="left-column">
                         <div className="ticket-section">
@@ -98,8 +252,7 @@ export default function Seats() {
 
                             <div className="ticket-row">
                                 <span>Vuxen</span>
-                                <span>140 kr</span>
-
+                                <span>{ADULT_PRICE} kr</span>
                                 <div className="counter">
                                     <button onClick={() => setAdult(Math.max(0, adult - 1))}>-</button>
                                     <span>{adult}</span>
@@ -109,8 +262,7 @@ export default function Seats() {
 
                             <div className="ticket-row">
                                 <span>Pensionär</span>
-                                <span>120 kr</span>
-
+                                <span>{SENIOR_PRICE} kr</span>
                                 <div className="counter">
                                     <button onClick={() => setSenior(Math.max(0, senior - 1))}>-</button>
                                     <span>{senior}</span>
@@ -120,24 +272,26 @@ export default function Seats() {
 
                             <div className="ticket-row">
                                 <span>Barn</span>
-                                <span>80 kr</span>
-
+                                <span>{CHILD_PRICE} kr</span>
                                 <div className="counter">
                                     <button onClick={() => setChild(Math.max(0, child - 1))}>-</button>
                                     <span>{child}</span>
                                     <button onClick={() => setChild(child + 1)}>+</button>
                                 </div>
                             </div>
+
+                            <p>Totalt: {totalPrice} kr</p>
                         </div>
-                        <button className="Bta">Bekräfta</button>
 
+                        <button className="Bta" disabled={!canConfirm || isBooking} onClick={handleConfirm}>
+                            {isBooking ? "Bokar..." : "Bekräfta"}
+                        </button>
+                        {bookingMessage && <p>{bookingMessage}</p>}
                     </div>
-
 
                     <div className="right-column">
                         <div className="seat-section">
-
-                            <h3>Vänligen välj plats:</h3>
+                            <h3>Vänligen valj plats:</h3>
 
                             <div className="legend">
                                 <span className="legend-item green">Tomma</span>
@@ -145,41 +299,18 @@ export default function Seats() {
                                 <span className="legend-item red">Upptagna</span>
                             </div>
 
-                            <div className="seat-layout">
-                                {seatRows.map((count, rowIndex) => {
-                                    const startNumber = seatRows
-                                        .slice(0, rowIndex)
-                                        .reduce((a, b) => a + b, 0);
+                            <div className="seat-layout">{renderSeatRows()}</div>
 
-                                    return (
-                                        <div key={rowIndex} className="seat-row">
-                                            {Array.from({ length: count })
-                                                .map((_, seatIndex) => {
-                                                    const seatNumber = startNumber + seatIndex + 1;
-                                                    return { seatNumber };
-                                                })
-                                                .reverse()
-                                                .map(({ seatNumber }) => (
-                                                    <div
-                                                        key={seatNumber}
-                                                        className={
-                                                            selectedSeats.includes(seatNumber)
-                                                                ? "seat selected"
-                                                                : "seat available"
-                                                        }
-                                                        onClick={() => toggleSeat(seatNumber)}
-                                                    >
-                                                        {seatNumber}
-                                                    </div>
-                                                ))}
-                                        </div>
-                                    );
-                                })}
+                            <div className="email-section">
+                                <input
+                                    type="email"
+                                    value={guestEmail}
+                                    onChange={(e) => setGuestEmail(e.target.value)}
+                                    placeholder="Skriv din e-post (om du inte är inloggad)"
+                                />
                             </div>
-
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>

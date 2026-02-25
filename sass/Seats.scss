@@ -1,6 +1,6 @@
 .booking-wrapper {
     width: 70%;
-    margin: 200px auto 2rem auto;
+    margin: 200px auto 0 auto;
 }
 
 .main-container {
@@ -9,6 +9,7 @@
     min-height: 100vh;
     /* täcker hela sidan */
     padding-top: 160px;
+    padding-bottom: 2rem;
     /* flyttar ner allt under headern */
 }
 
@@ -171,14 +172,21 @@
 
 .booking-columns {
     display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
     gap: 2rem;
     margin-bottom: 2rem;
+}
+
+.booking-info {
+    flex: 0 0 100%;
+    margin-bottom: 0.5rem;
 }
 
 /* Vänster kolumn (biljetter) */
 .left-column {
     flex: 1;
-    margin-left: -100px;
+    margin-left: 0;
 }
 
 /* Höger kolumn (stolar) */
@@ -219,4 +227,10 @@
     font-size: 1.1rem;
     cursor: pointer;
 
+}
+
+.Bta:disabled {
+    background: #8a8a8a;
+    color: #f3f3f3;
+    cursor: not-allowed;
 }
