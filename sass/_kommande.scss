@@ -49,12 +49,19 @@
     font-weight: 400;
   }
 
-  p {
+  .kommande-genre {
     margin: 0;
     color: #2f2f2f;
     font-size: 0.9rem;
     text-decoration: underline;
     text-underline-offset: 2px;
+    text-align: left;
+  }
+
+  .kommande-release-date {
+    margin: 0.3rem 0 0;
+    color: #2f2f2f;
+    font-size: 0.88rem;
     text-align: left;
   }
 }

@@ -21,6 +21,14 @@ function removeDuplicateMoviesById(movieList: Movie[]): Movie[] {
     });
 }
 
+function formatReleaseDate(screeningDate: string): string {
+    return new Date(screeningDate).toLocaleDateString("sv-SE", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+    });
+}
+
 export default function Kommande() {
     const [movies, setMovies] = useState<Movie[]>([]);
     const [loading, setLoading] = useState(false);
@@ -86,7 +94,8 @@ useEffect(() => {
                   className="kommande-poster"
                 />
                 <h3>{movie.title}</h3>
-                <p>{movie.genre}</p>
+                <p className="kommande-genre">{movie.genre}</p>
+                <p className="kommande-release-date">Releasedatum: {formatReleaseDate(movie.screeningDate)}</p>
               </article>
             ))}
           </div>
