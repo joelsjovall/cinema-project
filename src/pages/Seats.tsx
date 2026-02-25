@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 
 interface Screening {
     id: number;
@@ -15,6 +16,8 @@ interface Salon {
 }
 
 export default function Seats() {
+    const [searchParams] = useSearchParams();
+    const screeningId = searchParams.get("screeningId") ?? "";
     const [screening, setScreening] = useState<Screening | null>(null);
     const [salon, setSalon] = useState<Salon | null>(null);
 
@@ -24,6 +27,35 @@ export default function Seats() {
     };
 
     const seatRows = salon ? seatMaps[Number(salon.id)] ?? [] : [];
+
+    useEffect(() => {
+        if (!screeningId) {
+            setScreening(null);
+            setSalon(null);
+            return;
+        }
+
+        async function fetchScreening() {
+            try {
+                const res = await fetch(`/movies/screenings/${encodeURIComponent(screeningId)}`);
+                if (!res.ok) return;
+                const data = await res.json();
+                setScreening(data);
+                if (data?.salonId != null) {
+                    setSalon({
+                        id: Number(data.salonId),
+                        name: "",
+                        totalSeats: 0
+                    });
+                }
+            } catch {
+                setScreening(null);
+                setSalon(null);
+            }
+        }
+
+        fetchScreening();
+    }, [screeningId]);
 
 
     const [adult, setAdult] = useState(0);
@@ -48,6 +80,16 @@ export default function Seats() {
             <div className="booking-wrapper">
 
                 <div className="booking-columns">
+
+                    <div className="booking-info">
+                        {screening ? (
+                            <p>
+                                Datum: {screening.screeningDate} | Tid: {screening.screeningTime} | Salong: {screening.salonId}
+                            </p>
+                        ) : (
+                            <p>Ingen visning vald.</p>
+                        )}
+                    </div>
 
 
                     <div className="left-column">

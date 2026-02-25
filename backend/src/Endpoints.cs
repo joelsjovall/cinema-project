@@ -18,6 +18,28 @@ public static class MovieRoutes
 
     App.MapGet("/movies/{id}", (int id) => repo.GetById(id));
 
+    // GET /movies/{id}/screenings
+    App.MapGet("/movies/{id}/screenings", (HttpContext context, int id) =>
+        RestResult.Parse(
+            context,
+            SQLQuery(
+                "SELECT * FROM screenings WHERE movieId = @movieId ORDER BY screeningDate, screeningTime",
+                Obj(new { movieId = id })
+            )
+        )
+    );
+
+    // GET /movies/screenings/{id}
+    App.MapGet("/movies/screenings/{id}", (HttpContext context, int id) =>
+        RestResult.Parse(
+            context,
+            SQLQueryOne(
+                "SELECT * FROM screenings WHERE id = @id",
+                Obj(new { id })
+            )
+        )
+    );
+
     // GET /movies/search?title=avengers
     App.MapGet("/movies/search", (string title) => repo.SearchByTitle(title));
 
