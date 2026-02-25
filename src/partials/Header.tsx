@@ -6,10 +6,9 @@ function Header() {
   const navigate = useNavigate();
   const { user, logout, authLoading } = useAuth();
 
-  async function handleAuthClick() {
+  function handleAuthClick() {
     if (user) {
-      await logout();
-      navigate("/");
+      navigate("/mina-sidor");
       return;
     }
     navigate("/login");
@@ -37,7 +36,7 @@ function Header() {
           onClick={handleAuthClick}
           disabled={authLoading}
         >
-          {user ? "Logga ut" : "Mina sidor"}
+          Mina sidor
         </button>
       </div>
     </header>
