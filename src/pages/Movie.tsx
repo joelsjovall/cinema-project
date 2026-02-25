@@ -15,8 +15,41 @@ interface Movie {
 }
 
 interface Screening {
-  id: number;
-  screeningDate: string;
+  id?: number;
+  screeningDate?: string | null;
+  screeningTime?: string | null;
+  movieId?: number | string | null;
+  salonId?: number | string | null;
+}
+
+function normalizeScreening(raw: Screening) {
+  const screeningDate =
+    raw.screeningDate ??
+    (raw as any).screeningdate ??
+    (raw as any).screening_date ??
+    (raw as any).date ??
+    null;
+
+  const screeningTime =
+    raw.screeningTime ??
+    (raw as any).screeningtime ??
+    (raw as any).screening_time ??
+    (raw as any).time ??
+    null;
+
+  const movieId =
+    raw.movieId ??
+    (raw as any).movieid ??
+    (raw as any).movie_id ??
+    null;
+
+  const salonId =
+    raw.salonId ??
+    (raw as any).salonid ??
+    (raw as any).salon_id ??
+    null;
+
+  return { screeningDate, screeningTime, movieId, salonId };
 }
 
 function formatDateLabel(dateKey: string) {
@@ -50,34 +83,49 @@ export default function Movie() {
       setLoading(true);
       setError("");
       try {
-        const [movieRes, screeningsRes] = await Promise.all([
-          fetch(`${API}/movies/${id}`),
-          fetch(`${API}/movies`)
-        ]);
-
-        if (!movieRes.ok || !screeningsRes.ok) {
+        const movieRes = await fetch(`${API}/movies/${id}`);
+        if (!movieRes.ok) {
           throw new Error("Could not load movie");
         }
 
         const movieData = await movieRes.json();
         setMovie(movieData);
 
-        const allScreenings: Screening[] = await screeningsRes.json();
-        const movieScreenings = allScreenings.filter((s) => String(s.id) === String(id));
+        let movieScreenings: Screening[] = [];
+        try {
+          const screeningsRes = await fetch(`${API}/movies/${id}/screenings`);
+          if (screeningsRes.ok) {
+            const allScreenings: Screening[] = await screeningsRes.json();
+            movieScreenings = allScreenings.filter((s) => {
+              const normalized = normalizeScreening(s);
+              return String(normalized.movieId) === String(id);
+            });
+          } else {
+            console.error("Could not load screenings:", screeningsRes.status);
+          }
+        } catch (e) {
+          console.error("Screenings fetch failed:", e);
+        }
 
         const grouped = new Map<string, Set<string>>();
         for (const s of movieScreenings) {
-          const d = new Date(s.screeningDate);
-          if (Number.isNaN(d.getTime())) continue;
+          const normalized = normalizeScreening(s);
+          const dateKey = normalized.screeningDate?.slice(0, 10);
+          if (!dateKey) continue;
 
-          const dateKey = d.toLocaleDateString("sv-SE");
-          const timeValue = d.toLocaleTimeString("sv-SE", {
-            hour: "2-digit",
-            minute: "2-digit"
-          });
+          let timeValue = normalized.screeningTime ?? "";
+          if (!timeValue && normalized.screeningDate?.includes("T")) {
+            const d = new Date(normalized.screeningDate);
+            if (!Number.isNaN(d.getTime())) {
+              timeValue = d.toLocaleTimeString("sv-SE", {
+                hour: "2-digit",
+                minute: "2-digit"
+              });
+            }
+          }
 
           if (!grouped.has(dateKey)) grouped.set(dateKey, new Set<string>());
-          grouped.get(dateKey)!.add(timeValue);
+          if (timeValue) grouped.get(dateKey)!.add(timeValue);
         }
 
         const sortedDates = Array.from(grouped.keys()).sort(
@@ -125,9 +173,9 @@ export default function Movie() {
           <section className="movie-info">
             <h1 className="movie-title">{movie.title}</h1>
             <p className="movie-meta"><strong>Genre:</strong> {movie.genre}</p>
+            <p className="movie-meta"><strong>Åldersgräns:</strong> {movie.ageRestriction}+</p>
             <p className="movie-meta"><strong>Beskrivning:</strong></p>
             {movie.description && <p className="movie-description">{movie.description}</p>}
-            <p className="movie-meta"><strong>Aldersgrans:</strong> {movie.ageRestriction}+</p>
           </section>
 
           <aside className="movie-right">
@@ -147,7 +195,7 @@ export default function Movie() {
             </div>
 
             <div className="date-filter">
-              <label htmlFor="screening-date">Valj dag</label>
+              <label htmlFor="screening-date"></label>
               <select
                 id="screening-date"
                 value={selectedDate}
@@ -156,7 +204,7 @@ export default function Movie() {
                   setSelectedTime("");
                 }}
               >
-                <option value="">Valj en dag</option>
+                <option value="">Välj en dag</option>
                 {availableDates.map((dateKey) => (
                   <option key={dateKey} value={dateKey}>
                     {formatDateLabel(dateKey)}
@@ -179,14 +227,14 @@ export default function Movie() {
                     </button>
                   ))
                 ) : (
-                  <div className="no-times">Inga tider for valt datum.</div>
+                  <div className="no-times">Inga tider för valt datum.</div>
                 )}
               </div>
             )}
 
             <div className="showtime-grid single-action">
               <button className="showtime-pill action" type="button" disabled={!canContinue}>
-                Ga vidare --&gt;
+                Gå vidare
               </button>
             </div>
           </aside>
