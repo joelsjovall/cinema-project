@@ -4,6 +4,13 @@ public static class BookingRoutes
 {
     public static void Start()
     {
+        // Ensure ACL rule exists for booking routes (user/admin)
+        SQLQuery(
+            @"INSERT IGNORE INTO acl (userRoles, method, allow, route, `match`, comment)
+              VALUES ('user, admin', '*', 'allow', '/bookings', 'true', 'Allow users to manage their bookings')"
+        );
+        Acl.UnpackRules(SQLQuery("SELECT * FROM acl ORDER BY allow"));
+
         App.MapGet("/bookings/me", (HttpContext context) =>
         {
             var user = Session.Get(context, "user");
@@ -44,6 +51,31 @@ public static class BookingRoutes
                 context,
                 SQLQuery(sql, new { userId = user.id }, context)
             );
+        });
+
+        App.MapDelete("/bookings/{id}/cancel", (HttpContext context, int id) =>
+        {
+            var user = Session.Get(context, "user");
+            if (user == null)
+            {
+                return RestResult.Parse(context, new { error = "Not logged in." });
+            }
+
+            var booking = SQLQueryOne(
+                "SELECT * FROM bookings WHERE id = @id AND userId = @userId",
+                new { id, userId = user.id }
+            );
+            if (booking == null)
+            {
+                return RestResult.Parse(context, new { error = "Not found." });
+            }
+
+            // Release seats and mark booking as cancelled
+            SQLQuery("DELETE FROM bookingSeats WHERE bookingId = @id", new { id });
+            SQLQuery("DELETE FROM bookingTicketTypes WHERE bookingId = @id", new { id });
+            SQLQuery("UPDATE bookings SET status = 'cancelled' WHERE id = @id", new { id });
+
+            return RestResult.Parse(context, new { status = "Cancelled." });
         });
     }
 }

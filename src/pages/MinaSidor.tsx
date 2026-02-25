@@ -27,35 +27,44 @@ export default function MinaSidor() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
-    useEffect(() => {
-        if (!user) return;
-        let cancelled = false;
+    async function loadBookings() {
         setLoading(true);
         setError("");
+        try {
+            const res = await fetch(`${API}/bookings/me`, { credentials: "include" });
+            const data = await res.json();
+            if (!res.ok || data?.error) {
+                throw new Error(data?.error ?? "Kunde inte ladda bokningar.");
+            }
+            setBookings(Array.isArray(data) ? data : []);
+        } catch (err) {
+            setError(err instanceof Error ? err.message : "Kunde inte ladda bokningar.");
+            setBookings([]);
+        } finally {
+            setLoading(false);
+        }
+    }
 
-        fetch(`${API}/bookings/me`, { credentials: "include" })
-            .then(async (res) => {
-                const data = await res.json();
-                if (!res.ok || data?.error) {
-                    throw new Error(data?.error ?? "Kunde inte ladda bokningar.");
-                }
-                if (!cancelled) {
-                    setBookings(Array.isArray(data) ? data : []);
-                }
-            })
-            .catch((err) => {
-                if (!cancelled) {
-                    setError(err instanceof Error ? err.message : "Kunde inte ladda bokningar.");
-                    setBookings([]);
-                }
-            })
-            .finally(() => {
-                if (!cancelled) setLoading(false);
+    async function cancelBooking(id: number) {
+        if (!confirm("Vill du avbryta den här bokningen?")) return;
+        try {
+            const res = await fetch(`${API}/bookings/${id}/cancel`, {
+                method: "DELETE",
+                credentials: "include",
             });
+            const data = await res.json();
+            if (!res.ok || data?.error) {
+                throw new Error(data?.error ?? "Kunde inte avbryta bokningen.");
+            }
+            await loadBookings();
+        } catch (err) {
+            setError(err instanceof Error ? err.message : "Kunde inte avbryta bokningen.");
+        }
+    }
 
-        return () => {
-            cancelled = true;
-        };
+    useEffect(() => {
+        if (!user) return;
+        loadBookings().catch(() => null);
     }, [user]);
 
     if (authLoading) {
@@ -111,7 +120,7 @@ export default function MinaSidor() {
                                         )}
                                     </div>
                                     <div className="booking-info">
-                                        <div className="booking-title">{b.title ?? "Okänd film"}</div>
+                                        <div className="booking-title">{b.title ?? "Ok�nd film"}</div>
                                         <div className="booking-row">
                                             <span>{b.screeningDate ?? ""}</span>
                                             <span>{b.screeningTime ?? ""}</span>
@@ -125,6 +134,14 @@ export default function MinaSidor() {
                                             <span>{b.totalPrice != null ? `${b.totalPrice} kr` : ""}</span>
                                             <span>{b.status ?? ""}</span>
                                         </div>
+                                        {b.status !== "cancelled" && (
+                                            <button
+                                                className="booking-cancel-btn"
+                                                onClick={() => cancelBooking(b.id)}
+                                            >
+                                                Avbryt bokning
+                                            </button>
+                                        )}
                                     </div>
                                 </div>
                             ))}

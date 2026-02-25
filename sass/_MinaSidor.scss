@@ -96,6 +96,23 @@
     font-size: 0.9rem;
 }
 
+.booking-cancel-btn {
+    margin-top: 0.5rem;
+    align-self: flex-start;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.85rem;
+    border-radius: 6px;
+    border: 1px solid #2b6b3a;
+    background: transparent;
+    color: #2b6b3a;
+    cursor: pointer;
+}
+
+.booking-cancel-btn:hover {
+    background: #2b6b3a;
+    color: #ffffff;
+}
+
 .mina-footer {
     margin-top: 2rem;
     display: flex;
