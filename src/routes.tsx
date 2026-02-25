@@ -7,7 +7,7 @@ import Createaccount from "./pages/Createaccount";
 
 const routes: RouteObject[] = [
     { index: true, element: <Home /> },
-    { path: "kommande", element: <Kommande /> },
+    { path: "kommande_Filmer", element: <Kommande /> },
     { path: "kiosk", element: <Kiosk /> },
     { path: "login", element: <Login /> },
     { path: "*", element: <div>404 - Sidan finns inte</div> },
