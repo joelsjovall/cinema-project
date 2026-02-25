@@ -95,7 +95,7 @@ useEffect(() => {
                 />
                 <h3>{movie.title}</h3>
                 <p className="kommande-genre">{movie.genre}</p>
-                <p className="kommande-release-date">Releasedatum: {formatReleaseDate(movie.screeningDate)}</p>
+                <p className="kommande-release-date">Släpps: {formatReleaseDate(movie.screeningDate)}</p>
               </article>
             ))}
           </div>
