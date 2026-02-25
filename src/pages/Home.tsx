@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 const API = "";
+const UPCOMING_YEAR = 2027;
 
 interface Movie {
     id: number;
@@ -23,6 +24,12 @@ function dedupeMoviesById(movieList: Movie[]): Movie[] {
         seen.add(movie.id);
         return true;
     });
+}
+
+function filterNowShowing(movieList: Movie[]): Movie[] {
+    return dedupeMoviesById(movieList).filter(
+        (movie) => new Date(movie.screeningDate).getFullYear() < UPCOMING_YEAR
+    );
 }
 
 
@@ -91,7 +98,7 @@ export default function Home() {
             console.log("Response:", res);
             const data = await res.json();
             console.log("Data:", data);
-            const list = dedupeMoviesById(Array.isArray(data) ? data : data.movies ?? []);
+            const list = filterNowShowing(Array.isArray(data) ? data : data.movies ?? []);
             setMovies(list);
             updateFilterOptions(list);
         } catch (e) {
@@ -115,7 +122,7 @@ export default function Home() {
                 `${API}/movies/search?title=${encodeURIComponent(searchTitle)}`
             );
             const data = await res.json();
-            setMovies(dedupeMoviesById(data));
+            setMovies(filterNowShowing(data));
         } catch {
             setError("Search failed.");
         } finally {
@@ -135,7 +142,7 @@ export default function Home() {
         try {
             const res = await fetch(`${API}/movies/filter?${params.toString()}`);
             const data = await res.json();
-            setMovies(dedupeMoviesById(data));
+            setMovies(filterNowShowing(data));
         } catch {
             setError("Filter failed.");
         } finally {

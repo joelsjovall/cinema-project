@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function Header() {
-  const navigate = useNavigate();   
+  const navigate = useNavigate();
 
   return (
     <header className="custom-header fixed-top text-white">
@@ -12,7 +12,7 @@ function Header() {
 
       <div className="bubble-group">
         <button className="bubble left" onClick={() => navigate("/")}>Startsida</button>
-        <button className="bubble middle" onClick={() => navigate("/kommande")}>Kommande filmer</button>
+        <button className="bubble middle" onClick={() => navigate("/Kommande_Filmer")}>Kommande filmer</button>
         <button className="bubble right" onClick={() => navigate("/kiosk")}>Kiosken</button>
       </div>
 
