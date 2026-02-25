@@ -98,7 +98,7 @@ export default function MinaSidor() {
                     ) : error ? (
                         <p className="text-danger mt-2 mb-2">{error}</p>
                     ) : bookings.length === 0 ? (
-                        <p>Du har inga bokningar �nnu.</p>
+                        <p>Du har inga bokningar ännu.</p>
                     ) : (
                         <div className="booking-list">
                             {bookings.map((b) => (
