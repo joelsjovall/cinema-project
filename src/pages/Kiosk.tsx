@@ -11,7 +11,7 @@ export default function Kiosk() {
             </div>
 
             <div className="kiosk-container">
-                <h2 className="section-title">Våra kioskvaror</h2>
+                
 
                 <div className="products-grid">
                     <div className="product-card">
