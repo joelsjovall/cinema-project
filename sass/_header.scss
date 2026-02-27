@@ -1,21 +1,21 @@
 .custom-header {
     background-color: #2e673d;
-    padding: 25px 0;
+    padding: 18px 170px 18px 100px;
     display: flex;
     justify-content: center;
     align-items: center;
-
+    position: relative;
 }
 
-/* Grupp som håller ihop bubblorna */
+/* Grupp som h�ller ihop bubblorna */
 .bubble-group {
     display: flex;
     background: white;
     border-radius: 300px;
     overflow: hidden;
-    width: 650px;
+    width: min(650px, 100%);
+    max-width: calc(100vw - 340px);
     margin: 0 auto;
-    /* gör så att hörnen blir gemensamma */
 }
 
 /* Individuella knappar */
@@ -23,11 +23,11 @@
     background: rgb(230, 228, 228);
     color: #000000;
     border: none;
-    padding: 10px 25px;
+    padding: 10px 16px;
     font-weight: 300;
     cursor: pointer;
     transition: 0.2s ease;
-    font-size: smaller;
+    font-size: 0.92rem;
     flex: 1;
     text-align: center;
 }
@@ -52,54 +52,193 @@
 
 .header-logo img {
     width: 60px;
-    /* ändra storlek här */
     height: auto;
-    float: left;
     position: absolute;
     left: 20px;
-    /* avstånd från vänster */
-    top: 0px;
-    /* avstånd från toppen */
-
+    top: 50%;
+    transform: translateY(-50%);
 }
 
-.avatar-logo img {
-    width: 60px;
-
-    height: auto;
-    float: right;
+.right-area {
     position: absolute;
-    right: 30px;
-    top: 15px;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
     display: flex;
     align-items: center;
     gap: 10px;
+}
 
+.avatar-logo img {
+    width: 52px;
+    height: auto;
+    display: block;
 }
 
 .mina-sidor-btn {
-    float: right;
-    right: 110px;
-    display: flex;
-    position: absolute;
-    top: 28px;
     border: none;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 0.35rem 1.1rem; // styr höjd + bredd
-    border-radius: 9999px; // gör den rund/pillformad
+    padding: 0.35rem 1.1rem;
+    border-radius: 9999px;
     background: rgb(230, 228, 228);
     border: 1px solid #fff;
     color: #000000;
     font-weight: 300;
-    font-size: smaller;
-
-    white-space: nowrap; // så texten inte bryts
+    font-size: 0.9rem;
+    white-space: nowrap;
 }
-
 
 .main-content {
     background-color: rgb(206, 226, 204);
     min-height: 100vh;
+}
+
+.mobile-menu-toggle,
+.mobile-menu-panel {
+    display: none;
+}
+
+@media (max-width: 1180px) and (min-width: 769px) {
+    .custom-header {
+        padding: 16px 145px 16px 84px;
+    }
+
+    .bubble-group {
+        max-width: calc(100vw - 290px);
+    }
+
+    .bubble {
+        padding: 9px 12px;
+        font-size: 0.86rem;
+    }
+
+    .header-logo img {
+        width: 52px;
+        left: 14px;
+    }
+
+    .right-area {
+        right: 12px;
+        gap: 8px;
+    }
+
+    .avatar-logo img {
+        width: 44px;
+    }
+
+    .mina-sidor-btn {
+        padding: 0.3rem 0.8rem;
+        font-size: 0.82rem;
+    }
+}
+
+@media (max-width: 920px) and (min-width: 769px) {
+    .custom-header {
+        padding: 14px 118px 14px 72px;
+    }
+
+    .bubble-group {
+        max-width: calc(100vw - 230px);
+    }
+
+    .bubble {
+        padding: 8px 8px;
+        font-size: 0.8rem;
+    }
+
+    .header-logo img {
+        width: 46px;
+    }
+
+    .avatar-logo img {
+        width: 38px;
+    }
+
+    .mina-sidor-btn {
+        padding: 0.26rem 0.62rem;
+        font-size: 0.75rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .custom-header {
+        justify-content: space-between;
+        min-height: 74px;
+        padding: 10px 14px;
+        position: relative;
+    }
+
+    .bubble-group,
+    .right-area {
+        display: none;
+    }
+
+    .header-logo img {
+        position: static;
+        width: 64px;
+        height: auto;
+        display: block;
+        transform: none;
+    }
+
+    .mobile-menu-toggle {
+        display: inline-flex;
+        width: 44px;
+        height: 44px;
+        border: none;
+        background: transparent;
+        padding: 0;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .mobile-menu-toggle span {
+        display: block;
+        width: 30px;
+        height: 4px;
+        border-radius: 3px;
+        background: #0b0b0b;
+        transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    .mobile-menu-toggle.is-open span:nth-child(1) {
+        transform: translateY(10px) rotate(45deg);
+    }
+
+    .mobile-menu-toggle.is-open span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .mobile-menu-toggle.is-open span:nth-child(3) {
+        transform: translateY(-10px) rotate(-45deg);
+    }
+
+    .mobile-menu-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        position: absolute;
+        top: calc(100% + 6px);
+        right: 14px;
+        z-index: 1200;
+        min-width: 210px;
+        padding: 0.65rem;
+        border-radius: 10px;
+        background: #f2f2f2;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
+    }
+
+    .mobile-menu-panel button {
+        border: none;
+        background: #e3e3e3;
+        color: #121212;
+        border-radius: 8px;
+        text-align: left;
+        padding: 0.6rem 0.75rem;
+        font-size: 0.95rem;
+    }
 }

@@ -27,7 +27,22 @@
 .ticket-section h3,
 .seat-section h3 {
     margin-bottom: 1rem;
-    color: #1f6b3a;
+    color: #111111;
+}
+
+.seat-header-row {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: fit-content;
+    margin: 0 auto 1rem auto;
+    gap: 0.35rem;
+}
+
+.seat-header-row .legend {
+    margin-bottom: 0;
+    justify-content: flex-start;
 }
 
 .ticket-row {
@@ -46,9 +61,8 @@
 .legend {
     display: flex;
     gap: 1rem;
-    margin-bottom: 1rem;
-    padding-left: 75px;
-
+    margin-bottom: 0;
+    justify-content: center;
 }
 
 .legend-item {
@@ -174,7 +188,7 @@
     display: flex;
     flex-wrap: wrap;
     align-items: flex-start;
-    gap: 2rem;
+    gap: 1.25rem;
     margin-bottom: 2rem;
 }
 
@@ -195,15 +209,18 @@
 }
 
 .seat-section {
-    padding-left: 300px;
+    padding-left: 160px;
 
 
 }
 
 .seat-section h3 {
+    padding-left: 0;
+    margin-bottom: 0;
+}
 
-    padding-left: 75px;
-
+.ticket-section h3 {
+    margin-bottom: 3.25rem;
 }
 
 .seat.selected {
@@ -233,4 +250,188 @@
     background: #8a8a8a;
     color: #f3f3f3;
     cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+    .booking-wrapper {
+        width: min(94%, 460px);
+        margin: 90px auto 0 auto;
+    }
+
+    .main-container {
+        padding-bottom: 1.5rem;
+    }
+
+    .booking-columns {
+        display: flex;
+        flex-direction: column;
+        gap: 1.4rem;
+        margin-bottom: 1rem;
+    }
+
+    .booking-info,
+    .left-column,
+    .right-column {
+        width: 100%;
+        flex: 0 0 auto;
+    }
+
+    .ticket-section,
+    .seat-section {
+        padding-left: 0;
+    }
+
+    .ticket-section h3 {
+        margin-bottom: 1.1rem;
+        color: #202020;
+        text-align: center;
+        font-size: 2rem;
+        line-height: 1.2;
+    }
+
+    .seat-section h3 {
+        padding-left: 0;
+        margin-bottom: 0;
+        color: #202020;
+        text-align: left;
+        font-size: 2.05rem;
+    }
+
+    .seat-header-row {
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
+        width: fit-content;
+        margin: 0 0 0.5rem 0;
+        gap: 0.25rem;
+    }
+
+    .ticket-row {
+        max-width: 300px;
+        margin: 0 auto 0.8rem auto;
+        padding: 0.2rem 0.2rem;
+        background: transparent;
+        border-radius: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.15rem;
+    }
+
+    .counter {
+        gap: 0.7rem;
+    }
+
+    .counter button {
+        width: 26px;
+        height: 26px;
+        border: 1px solid #0f2b49;
+        background: transparent;
+        color: #0f2b49;
+        font-size: 1.1rem;
+    }
+
+    .counter span {
+        width: 18px;
+        font-size: 1rem;
+        color: #111;
+    }
+
+    .ticket-section p {
+        text-align: center;
+        margin: 0.8rem 0 0;
+        font-size: 1.05rem;
+        color: #202020;
+    }
+
+    .legend {
+        justify-content: flex-start;
+        flex-direction: column;
+        gap: 0.2rem;
+        margin-bottom: 0;
+    }
+
+    .legend-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        background: transparent;
+        color: #222;
+        border-radius: 0;
+        padding: 0;
+        font-size: 0.82rem;
+    }
+
+    .legend-item::before {
+        content: "";
+        width: 9px;
+        height: 9px;
+        border: 1px solid #333;
+    }
+
+    .legend-item.green::before {
+        background: #82d176;
+    }
+
+    .legend-item.yellow::before {
+        background: #f1c40f;
+    }
+
+    .legend-item.red::before {
+        background: #ff5c5c;
+    }
+
+    .seat-layout {
+        gap: 0;
+        margin-bottom: 1rem;
+    }
+
+    .seat-row {
+        gap: 0;
+    }
+
+    .seat {
+        width: 30px;
+        height: 30px;
+        border-radius: 0;
+        border: 1px solid #333;
+        color: #1f1f1f;
+        font-size: 0.85rem;
+    }
+
+    .seat.available {
+        background: #82d176;
+    }
+
+    .seat.selected {
+        background: #f3d34a;
+        color: #161616;
+    }
+
+    .seat.taken {
+        background: #ff5c5c;
+        color: #161616;
+    }
+
+    .email-section {
+        margin-top: 0.8rem;
+        margin-bottom: 0;
+    }
+
+    .email-section input {
+        border: 1px solid #666;
+        border-radius: 0;
+        padding: 0.6rem;
+        font-size: 0.95rem;
+    }
+
+    .Bta {
+        width: 120px;
+        margin-top: 1rem;
+        margin-left: auto;
+        display: block;
+        border-radius: 12px;
+        padding: 0.75rem 1rem;
+        font-size: 0.95rem;
+    }
 }

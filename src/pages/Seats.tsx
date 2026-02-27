@@ -291,12 +291,13 @@ export default function Seats() {
 
                     <div className="right-column">
                         <div className="seat-section">
-                            <h3>Vänligen valj plats:</h3>
-
-                            <div className="legend">
-                                <span className="legend-item green">Tomma</span>
-                                <span className="legend-item yellow">Valda</span>
-                                <span className="legend-item red">Upptagna</span>
+                            <div className="seat-header-row">
+                                <h3>Vänligen välj plats:</h3>
+                                <div className="legend">
+                                    <span className="legend-item green">Tomma</span>
+                                    <span className="legend-item yellow">Valda</span>
+                                    <span className="legend-item red">Upptagna</span>
+                                </div>
                             </div>
 
                             <div className="seat-layout">{renderSeatRows()}</div>
@@ -316,3 +317,5 @@ export default function Seats() {
         </div>
     );
 }
+
+
