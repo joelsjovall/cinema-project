@@ -8,7 +8,7 @@ export default function OmBiografen() {
 
   return (
     <div className="home-page container-fluid pb-4">
-      <h1 className="mb-4">Om biografen</h1>
+      <h1 className="mb-4">Om Biografen</h1>
 
       <p
         style={{
@@ -18,9 +18,9 @@ export default function OmBiografen() {
           lineHeight: 1.6,
         }}
       >
-        Filmvisarna är en modern biografupplevelse med fokus på komfort,
-        kvalitet och enkel bokning. Välj film, välj tid och njut av vår salong –
-        med större dukar, 3D-visningar och snacks från kiosken.
+        Gröna Duken är en modern biografupplevelse med fokus på komfort,
+        kvalitet och enkel bokning. Välj film, välj tid och välj din plats –
+        sedan är det bara att luta sig tillbaka och njuta.
       </p>
 
       <h2 className="mb-3" style={{ fontSize: 24 }}>
@@ -34,7 +34,7 @@ export default function OmBiografen() {
           gap: 22,
         }}
       >
-        {/* 3D -> Startsida */}
+        {/* Välj plats -> Startsida */}
         <div
           onClick={goHome}
           role="link"
@@ -42,7 +42,7 @@ export default function OmBiografen() {
           onKeyDown={(e) => e.key === "Enter" && goHome()}
           style={{
             cursor: "pointer",
-            background: "rgba(40,40,40,0.85)",
+            background: "#2e673d",
             borderRadius: 18,
             overflow: "hidden",
             boxShadow: "0 12px 24px rgba(0,0,0,0.35)",
@@ -50,7 +50,7 @@ export default function OmBiografen() {
         >
           <img
             src="/pictures/Cinema_thumbnail/31.jpg"
-            alt="3D"
+            alt="Välj plats"
             style={{
               width: "100%",
               height: 230,
@@ -59,18 +59,26 @@ export default function OmBiografen() {
             }}
           />
           <div style={{ padding: 18 }}>
-            <h3 style={{ margin: "0 0 10px 0", fontSize: 22 }}>3D</h3>
+            <h3
+              style={{
+                margin: "0 0 10px 0",
+                fontSize: 22,
+                textAlign: "center",
+                color: "#ffffff",
+              }}
+            >
+              Välj plats
+            </h3>
             <p style={{ margin: 0, opacity: 0.85, lineHeight: 1.55 }}>
-              Upplev filmer närmare än någonsin – där scenerna känns levande i
-              salongen.
+              Efter att du valt film och tid kan du välja din plats i salongen.
             </p>
           </div>
         </div>
 
-        {/* XL (ingen klick) */}
+        {/* Dukarna (ingen klick) */}
         <div
           style={{
-            background: "rgba(40,40,40,0.85)",
+            background: "#2e673d",
             borderRadius: 18,
             overflow: "hidden",
             boxShadow: "0 12px 24px rgba(0,0,0,0.35)",
@@ -78,7 +86,7 @@ export default function OmBiografen() {
         >
           <img
             src="/pictures/Cinema_thumbnail/32.jpg"
-            alt="XL"
+            alt="Dukarna"
             style={{
               width: "100%",
               height: 230,
@@ -87,14 +95,23 @@ export default function OmBiografen() {
             }}
           />
           <div style={{ padding: 18 }}>
-            <h3 style={{ margin: "0 0 10px 0", fontSize: 22 }}>XL</h3>
+            <h3
+              style={{
+                margin: "0 0 10px 0",
+                fontSize: 22,
+                textAlign: "center",
+                color: "#ffffff",
+              }}
+            >
+              Dukarna
+            </h3>
             <p style={{ margin: 0, opacity: 0.85, lineHeight: 1.55 }}>
               Större duk, större känsla – perfekt för storfilm.
             </p>
           </div>
         </div>
 
-        {/* Nachos -> Kiosk */}
+        {/* Dryck & Snacks -> Kiosk */}
         <div
           onClick={goKiosk}
           role="link"
@@ -102,7 +119,7 @@ export default function OmBiografen() {
           onKeyDown={(e) => e.key === "Enter" && goKiosk()}
           style={{
             cursor: "pointer",
-            background: "rgba(40,40,40,0.85)",
+            background: "#2e673d",
             borderRadius: 18,
             overflow: "hidden",
             boxShadow: "0 12px 24px rgba(0,0,0,0.35)",
@@ -110,7 +127,7 @@ export default function OmBiografen() {
         >
           <img
             src="/pictures/Cinema_thumbnail/33.jpg"
-            alt="Nachos och snacks"
+            alt="Dryck & Snacks"
             style={{
               width: "100%",
               height: 230,
@@ -119,12 +136,18 @@ export default function OmBiografen() {
             }}
           />
           <div style={{ padding: 18 }}>
-            <h3 style={{ margin: "0 0 10px 0", fontSize: 22 }}>
-              Nachos och snacks
+            <h3
+              style={{
+                margin: "0 0 10px 0",
+                fontSize: 22,
+                textAlign: "center",
+                color: "#ffffff",
+              }}
+            >
+              Dryck & Snacks
             </h3>
             <p style={{ margin: 0, opacity: 0.85, lineHeight: 1.55 }}>
-              Välj snacks från kiosken – nachos, popcorn och dryck till din
-              filmkväll.
+              Välj dryck och snacks från kiosken till din favoritfilm.
             </p>
           </div>
         </div>
