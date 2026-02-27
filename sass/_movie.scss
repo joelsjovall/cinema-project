@@ -20,10 +20,9 @@
 
   .movie-title {
     margin: 0 0 1rem;
-    font-size: clamp(2rem, 4vw, 2.9rem);
-    font-style: italic;
     font-weight: 500;
     text-shadow: none !important;
+    text-align: center;
   }
 
   .movie-meta,
