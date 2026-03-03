@@ -17,6 +17,14 @@ namespace WebApp
     public string? Trailer_url { get; set; }
 
     public string Description { get; set; }
+
+    public int? ProductionYear { get; set; }
+    public int? LengthMinutes { get; set; }
+    public string? Distributor { get; set; }
+    public string? Language { get; set; }
+    public string? Subtitles { get; set; }
+    public string? Director { get; set; }
+
   }
 
   public class MovieRepository
@@ -44,7 +52,13 @@ namespace WebApp
                 s.screeningDate,
                 m.image_url,
                 m.trailer_url,
-                m.description
+                m.description,
+                m.production_year,
+                m.length_minutes,
+                m.distributor,
+                m.language,
+                m.subtitles,
+                m.director
             FROM movies m
             JOIN screenings s ON s.movieId = m.id";
 
@@ -64,7 +78,14 @@ namespace WebApp
           ScreeningDate = reader.GetDateTime("screeningDate"),
           // Image_url = reader.GetString("image_url")
           Image_url = reader.IsDBNull(reader.GetOrdinal("image_url")) ? null : reader.GetString("image_url"),
-          Trailer_url = reader.IsDBNull(reader.GetOrdinal("trailer_url")) ? null : reader.GetString("trailer_url")
+          Trailer_url = reader.IsDBNull(reader.GetOrdinal("trailer_url")) ? null : reader.GetString("trailer_url"),
+
+          ProductionYear = reader.IsDBNull(reader.GetOrdinal("production_year")) ? null : reader.GetInt32("production_year"),
+          LengthMinutes = reader.IsDBNull(reader.GetOrdinal("length_minutes")) ? null : reader.GetInt32("length_minutes"),
+          Distributor = reader.IsDBNull(reader.GetOrdinal("distributor")) ? null : reader.GetString("distributor"),
+          Language = reader.IsDBNull(reader.GetOrdinal("language")) ? null : reader.GetString("language"),
+          Subtitles = reader.IsDBNull(reader.GetOrdinal("subtitles")) ? null : reader.GetString("subtitles"),
+          Director = reader.IsDBNull(reader.GetOrdinal("director")) ? null : reader.GetString("director"),
         });
       }
       return list;

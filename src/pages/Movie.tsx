@@ -12,6 +12,13 @@ interface Movie {
   image_url?: string | null;
   description?: string | null;
   trailer_url?: string | null;
+
+  productionYear?: number | null;
+  lengthMinutes?: number | null;
+  distributor?: string | null;
+  language?: string | null;
+  subtitles?: string | null;
+  director?: string | null;
 }
 
 interface Screening {
@@ -193,6 +200,12 @@ export default function Movie() {
             <h1 className="movie-title">{movie.title}</h1>
             <p className="movie-meta"><strong>Genre:</strong> {movie.genre}</p>
             <p className="movie-meta"><strong>Åldersgräns:</strong> {movie.ageRestriction}+</p>
+            <p className="movie-meta"><strong>Produktionsår:</strong> {movie.productionYear ?? "-"}</p>
+            <p className="movie-meta"><strong>Längd:</strong> {movie.lengthMinutes ? `${movie.lengthMinutes} min` : "-"}</p>
+            <p className="movie-meta"><strong>Distributör:</strong> {movie.distributor ?? "-"}</p>
+            <p className="movie-meta"><strong>Språk:</strong> {movie.language ?? "-"}</p>
+            <p className="movie-meta"><strong>Undertexter:</strong> {movie.subtitles ?? "-"}</p>
+            <p className="movie-meta"><strong>Regissör:</strong> {movie.director ?? "-"}</p>
             <p className="movie-meta"><strong>Beskrivning:</strong></p>
             {movie.description && <p className="movie-description">{movie.description}</p>}
           </section>
