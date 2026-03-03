@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "node node_modules/react-rapide dev",
+    "dev": "concurrently -n BACKEND,FRONTEND -c blue,green \"cd backend && dotnet watch run\" \"node node_modules/react-rapide dev\"",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "node node_modules/react-rapide preview",
@@ -39,6 +39,7 @@
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "@vitejs/plugin-react": "^4.3.4",
+    "concurrently": "^9.2.1",
     "eslint": "^9.39.1",
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.24",
