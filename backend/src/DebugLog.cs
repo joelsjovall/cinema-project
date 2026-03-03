@@ -1,4 +1,5 @@
 namespace WebApp;
+
 public static class DebugLog
 {
     private static readonly Obj memory = new();
@@ -46,30 +47,44 @@ public static class DebugLog
     public static async void Write()
     {
         if (!Globals.debugOn) { return; }
+
         while (true)
         {
-            memory.GetKeys().ForEach(key =>
+            try
             {
-                var item = memory[key];
-                if (
-                    item.RESPONSE_DONE != null ||
-                    item.timestamp + 5000 < Now
-                )
+                var keys = memory.GetKeys().Cast<string>().ToList();
+
+                keys.ForEach(key =>
                 {
-                    if (item.RESPONSE_DONE != null)
+                    var item = memory[key];
+                    if (item == null) return;
+
+                    if (
+                        item.RESPONSE_DONE != null ||
+                        item.timestamp + 5000 < Now
+                    )
                     {
-                        item.timeTakenMs =
-                            item.RESPONSE_DONE - item.timestamp;
-                        item.Delete("RESPONSE_DONE");
+                        if (item.RESPONSE_DONE != null)
+                        {
+                            item.timeTakenMs =
+                                item.RESPONSE_DONE - item.timestamp;
+                            item.Delete("RESPONSE_DONE");
+                        }
+                        else
+                        {
+                            item.Delete("timeTaken");
+                        }
+
+                        Log(item);
+                        memory.Delete(key);
                     }
-                    else
-                    {
-                        item.Delete("timeTaken");
-                    }
-                    Log(item);
-                    memory.Delete(key);
-                }
-            });
+                });
+            }
+            catch
+            {
+                // Om log in kraschar ska inte hela API:t dö 
+            }
+
             await Task.Delay(500);
         }
     }
