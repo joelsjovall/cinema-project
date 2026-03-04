@@ -1,11 +1,57 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../utils/auth';
 
 function Header() {
   const navigate = useNavigate();
-  const { user, logout, authLoading } = useAuth();
+  const { user, authLoading } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showMobileHeader, setShowMobileHeader] = useState(true);
+  const lastScrollY = useRef(0);
+
+  useEffect(() => {
+    const mobileBreakpoint = 768;
+    const minDelta = 6;
+    const revealNearTop = 24;
+
+    function onScroll() {
+      const currentY = window.scrollY || 0;
+      const isMobile = window.innerWidth <= mobileBreakpoint;
+
+      if (!isMobile || mobileMenuOpen) {
+        setShowMobileHeader(true);
+        lastScrollY.current = currentY;
+        return;
+      }
+
+      if (currentY <= revealNearTop) {
+        setShowMobileHeader(true);
+        lastScrollY.current = currentY;
+        return;
+      }
+
+      const delta = currentY - lastScrollY.current;
+      if (Math.abs(delta) < minDelta) return;
+
+      setShowMobileHeader(delta < 0);
+      lastScrollY.current = currentY;
+    }
+
+    function onResize() {
+      if (window.innerWidth > mobileBreakpoint) {
+        setShowMobileHeader(true);
+      }
+    }
+
+    lastScrollY.current = window.scrollY || 0;
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onResize);
+
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onResize);
+    };
+  }, [mobileMenuOpen]);
 
   function goTo(path: string) {
     navigate(path);
@@ -21,7 +67,7 @@ function Header() {
   }
 
   return (
-    <header className="custom-header fixed-top text-white">
+    <header className={`custom-header fixed-top text-white${showMobileHeader ? '' : ' mobile-header-hidden'}`}>
       <div className="header-logo img">
         <img src="pictures/util_images/logo.png" alt="logga" />
       </div>
