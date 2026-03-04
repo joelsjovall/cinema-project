@@ -29,7 +29,24 @@
     border: 3px solid #448547; //färgen
     border-radius: 12px;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+    transition: transform 0.2s ease;
+      cursor: pointer;
+    
+      &:hover {
+        transform: translateY(-5px);
+      }
   }
+
+    // .home-page.container-fluid {
+    //   .movie-card {
+    //     transition: transform 0.2s ease;
+    //     cursor: pointer;
+  
+    //     &:hover {
+    //       transform: translateY(-5px);
+    //     }
+    //   }
+    // }
 
 }
 
