@@ -1,18 +1,23 @@
 import { Link } from "react-router-dom";
 
-function Footer() {
+type FooterProps = {
+  onChatToggle: () => void;
+};
+
+function Footer({ onChatToggle }: FooterProps) {
   return (
-    <footer className="footer   q text-white py-3">
+    <footer id="site-footer" className="footer q text-white py-3">
       <div className="container-fluid">
         <div className="row align-items-center">
-          {/* Tom vänsterkolumn för balans */}
           <div className="col-3"></div>
 
-          {/* Centrerade länkar */}
           <div className="col-6 d-flex justify-content-center gap-5">
             <div className="text-center">
               <h6>
-                <Link to="/om-biografen" className="text-black text-decoration-none">
+                <Link
+                  to="/om-biografen"
+                  className="text-black text-decoration-none"
+                >
                   Hjälp och kontakt
                 </Link>
               </h6>
@@ -48,7 +53,13 @@ function Footer() {
 
           <div className="col-3 text-end">
             <p className="mb-1">Behöver du hjälp?</p>
-            <button className="btn btn-primary">Chatta med vår ai-bot</button>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={onChatToggle}
+            >
+              Chatta med vår ai-bot
+            </button>
           </div>
         </div>
       </div>

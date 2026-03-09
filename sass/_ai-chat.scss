@@ -1,0 +1,50 @@
+.ai-chat-dock {
+  position: fixed;
+  right: 16px;
+  bottom: calc(var(--footer-height, 0px) + 16px);
+
+  width: min(380px, calc(100vw - 32px));
+  height: 460px;
+
+  background: #ffffff;
+  border: 1px solid #dcdcdc;
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+  z-index: 9999;
+}
+
+.ai-chat-dock__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 12px 14px;
+  background-color: #0d6efd;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.ai-chat-dock__close {
+  border: none;
+  background: transparent;
+  color: #ffffff;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.ai-chat-dock__body {
+  height: calc(100% - 52px);
+  overflow-y: auto;
+  background-color: #ffffff;
+}
+
+@media (max-width: 768px) {
+  .ai-chat-dock {
+    right: 12px;
+    left: 12px;
+    width: auto;
+    height: 420px;
+  }
+}
