@@ -308,9 +308,9 @@ public static class MovieRoutes
       "
     );
   }
-  catch
+  catch (Exception ex)
   {
-
+    Console.WriteLine("EMAIL ERROR: " + ex.Message);
   }
 
   return RestResult.Parse(context, Obj(new
