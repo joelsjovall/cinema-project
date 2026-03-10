@@ -1,10 +1,23 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 
 type FooterProps = {
   onChatToggle: () => void;
 };
 
+const COOKIES_STORAGE_KEY = "Cookiemeddelande";
+const COOKIES_RESET_EVENT = "cookiemeddelande:reset";
+
 function Footer({ onChatToggle }: FooterProps) {
+  function handleCookiesReset() {
+    try {
+      localStorage.removeItem(COOKIES_STORAGE_KEY);
+    } catch {
+      // Ignore storage errors for demo reset.
+    }
+
+    window.dispatchEvent(new Event(COOKIES_RESET_EVENT));
+  }
+
   return (
     <footer id="site-footer" className="footer q text-white py-3">
       <div className="container-fluid">
@@ -33,12 +46,13 @@ function Footer({ onChatToggle }: FooterProps) {
 
             <div className="text-center">
               <h6>
-                <a
-                  href="/kundservice"
-                  className="text-black text-decoration-none"
+                <button
+                  type="button"
+                  className="btn btn-link p-0 text-black text-decoration-none"
+                  onClick={handleCookiesReset}
                 >
-                  Kundservice
-                </a>
+                  Cookies
+                </button>
               </h6>
               <p className="mb-0">
                 <a

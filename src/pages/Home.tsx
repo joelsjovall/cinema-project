@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import WelcomePopup from "../utils/Cookiemeddelande";
 
 const API = "";
 const UPCOMING_YEAR = 2027;
@@ -41,15 +42,15 @@ export default function Home() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
-    // Search state
+    // Sök
     const [searchTitle, setSearchTitle] = useState("");
 
-    // Filter state
+    // Filter
     const [filterGenre, setFilterGenre] = useState("");
     const [filterMaxAge, setFilterMaxAge] = useState("");
     const [filterDate, setFilterDate] = useState("");
 
-    // Hamta filmer + filterval nar sidan laddas.
+    // Hämta filmer + filterval när sidan laddas.
     useEffect(() => {
         fetchAll();
         fetchFilterOptions();
@@ -67,7 +68,7 @@ export default function Home() {
         setAvailableMaxAges(ages);
     }
 
-    // Hamta filterval fran backend (genrer + aldersgranser).
+    // Hämta filterval från backend (genrer + åldersgränser).
     async function fetchFilterOptions() {
         try {
             const [genresRes, agesRes] = await Promise.all([
@@ -88,7 +89,7 @@ export default function Home() {
         }
     }
 
-    // Hamta alla filmer, deduplicera och uppdatera listan.
+    // Hämta alla filmer, deduplicera och uppdatera listan.
     async function fetchAll() {
         console.log("Fetching movies...");
         setLoading(true);
@@ -109,7 +110,7 @@ export default function Home() {
         }
     }
 
-    // Sok pa titel. Tom sokning fallbackar till alla filmer.
+    // Sök pa titel. Tom sökning fallbackar till alla filmer.
     async function handleSearch() {
         if (!searchTitle.trim()) {
             fetchAll();
@@ -150,7 +151,7 @@ export default function Home() {
         }
     }
 
-    // Nollstall sok/filter och ladda om standardlistan.
+    // Nollställ sök/filter och ladda om standardlistan.
     function handleReset() {
         setSearchTitle("");
         setFilterGenre("");
@@ -162,6 +163,7 @@ export default function Home() {
 
     return (
         <div className="home-page container-fluid pb-4">
+            <WelcomePopup />
             <h1 className="mb-4">Filmer på bio just nu</h1>
             <div className="row g-3 mb-4">
                 <div className="col-12 col-md-6">
@@ -245,7 +247,7 @@ export default function Home() {
 
             {error && <div className="alert alert-danger">{error}</div>}
 
-            {/* Visa loader under hamtning, annars resultat eller tomlista. */}
+            {/* Visa loader under hämtning, annars resultat eller tom lista. */}
             {loading ? (
                 <div className="text-center py-5">
                     <div className="spinner-border" role="status" />
@@ -281,3 +283,5 @@ export default function Home() {
         </div>
     );
 }
+
+
