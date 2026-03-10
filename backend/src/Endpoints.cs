@@ -294,6 +294,29 @@ public static class MovieRoutes
           insertBookingSeatCommand.ExecuteNonQuery();
         }
 
+        if (userIdToStore != null)
+        {
+          var pointsToAdd = selectedSeatNumbers.Length * 20;
+          var updatePointsCommand = db.CreateCommand();
+          updatePointsCommand.Transaction = tx;
+          updatePointsCommand.CommandText =
+            "UPDATE users SET points = IFNULL(points, 0) + @points WHERE id = @userId";
+          updatePointsCommand.Parameters.AddWithValue("@points", pointsToAdd);
+          updatePointsCommand.Parameters.AddWithValue("@userId", userIdToStore);
+          updatePointsCommand.ExecuteNonQuery();
+
+          try
+          {
+            if (loggedInUser != null)
+            {
+              var currentPoints = loggedInUser.points == null ? 0 : Convert.ToInt32(loggedInUser.points);
+              loggedInUser.points = currentPoints + pointsToAdd;
+              Session.Set(context, "user", loggedInUser);
+            }
+          }
+          catch { }
+        }
+
         tx.Commit();
         return RestResult.Parse(context, Obj(new
         {

@@ -101,8 +101,18 @@ export default function MinaSidor() {
         <div className="center-page mina-page">
             <div className="mina-box">
                 <div className="mina-hero">
-                    <h1>Mina sidor</h1>
-                    <p>Inloggad som {user.email ?? "ok�nd anv�ndare"}</p>
+                    {(() => {
+                        const rawPoints = (user as { points?: unknown } | null)?.points;
+                        const points = typeof rawPoints === "number" ? rawPoints : Number(rawPoints ?? 0);
+                        const safePoints = Number.isFinite(points) ? points : 0;
+                        return (
+                            <>
+                                <h1>Mina sidor</h1>
+                                <p>Inloggad som {user.email ?? "ok�nd anv�ndare"}</p>
+                                <p>Dina poäng: {safePoints}</p>
+                            </>
+                        );
+                    })()}
                 </div>
 
                 <div className="mina-section">
@@ -187,3 +197,5 @@ export default function MinaSidor() {
         </div>
     );
 }
+
+

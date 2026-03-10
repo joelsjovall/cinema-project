@@ -1,4 +1,5 @@
 import { useLocation } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 type BookingState = {
     movieTitle?: string;
@@ -9,6 +10,7 @@ type BookingState = {
 };
 
 export default function BokningsBF() {
+    const navigate = useNavigate();
     const location = useLocation();
     const state = (location.state as BookingState | null) ?? null;
 
@@ -44,7 +46,11 @@ export default function BokningsBF() {
                     <strong>Stol:</strong>{" "}
                     <span>{seatsLabel}</span>
                 </p>
+
+                <button className="bubbleHome" onClick={() => navigate('/')}>Startsida</button>
             </section>
+
+
         </div>
     );
 }
