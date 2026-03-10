@@ -282,6 +282,7 @@ public static class MovieRoutes
     }
 
     await tx.CommitAsync();
+
   }
   catch (Exception ex)
   {
@@ -292,21 +293,72 @@ public static class MovieRoutes
   }
 
   // MAIL UTANFÖR TRANSAKTION
+
+  var screeningInfo = SQLQueryOne(@"
+SELECT 
+  m.title AS movieTitle,
+  s.screeningDate AS screeningDate,
+  s.screeningTime AS screeningTime
+FROM screenings s
+JOIN movies m ON m.id = s.movieId
+WHERE s.id = @screeningId
+", Obj(new { screeningId = id }));
+
+
+
+  string movieTitle = "";
+  string screeningDate = "";
+  string screeningTime = "";
+
+  if (screeningInfo != null)
+  {
+    movieTitle = Convert.ToString(screeningInfo.movieTitle) ?? "";
+
+    var dateObj = screeningInfo.screeningDate;
+    var timeObj = screeningInfo.screeningTime;
+
+    screeningDate = dateObj != null ? Convert.ToDateTime(dateObj).ToString("dddd dd MMMM", new System.Globalization.CultureInfo("sv-SE")) : "";
+    screeningTime = timeObj != null ? Convert.ToDateTime(timeObj).ToString("HH:mm") : "";
+  }
+
+
   try
   {
     var emailService = new EmailService();
 
     await emailService.SendEmailAsync(
-      emailToStore,
-      "Bokningsbekräftelse - Gröna Duken",
-      $@"
-      <h2>Tack för din bokning!</h2>
-      <p><strong>Bokningskod:</strong> {bookingCode}</p>
-      <p><strong>Screening ID:</strong> {id}</p>
-      <p><strong>Platser:</strong> {string.Join(", ", selectedSeatNumbers)}</p>
-      <p><strong>Totalpris:</strong> {request?.totalPrice ?? 0} kr</p>
-      "
-    );
+   emailToStore,
+   "Bokningsbekräftelse - Gröna Duken",
+   $@"
+  <div style='font-family:Arial;padding:20px'>
+  
+  <h2>🎬 Tack för din bokning!</h2>
+
+  <p>Din bokning hos <strong>Gröna Duken</strong> är bekräftad.</p>
+
+  <hr>
+
+  <h3>📄 Bokningsinformation</h3>
+
+  <p><strong>Bokningskod:</strong> {bookingCode}</p>
+  <p><strong>Film:</strong> {movieTitle}</p>
+  <p><strong>Datum:</strong> {screeningDate}</p>
+  <p><strong>Tid:</strong> {screeningTime}</p>
+  <p><strong>Plats:</strong> {string.Join(", ", selectedSeatNumbers)}</p>
+
+  <hr>
+
+  <p><strong>Pris:</strong> {request?.totalPrice ?? 0} kr</p>
+
+  <br>
+
+  <p>Visa bokningskoden i kassan när du kommer till bion.</p>
+
+  <p>Välkommen och trevlig film! 🍿</p>
+
+  </div>
+  "
+ );
   }
   catch (Exception ex)
   {
