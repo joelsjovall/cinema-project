@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import AiChat from "../parts/AiChat";
 
 type Props = {
   isOpen: boolean;
@@ -11,7 +12,6 @@ export default function AiChatDock({ isOpen, onClose }: Props) {
       const footer = document.getElementById("site-footer");
       const footerHeight = footer?.offsetHeight ?? 0;
 
-      // Sätt CSS-variabel så chatten alltid ligger ovanför footern
       document.documentElement.style.setProperty(
         "--footer-height",
         `${footerHeight}px`,
@@ -29,13 +29,13 @@ export default function AiChatDock({ isOpen, onClose }: Props) {
   if (!isOpen) return null;
 
   return (
-    <div className="ai-chat-dock" role="dialog" aria-label="AI chat">
-      <div className="ai-chat-dock__header">
+    <div className="chat" role="dialog" aria-label="AI chat">
+      <div className="chat-header">
         <span>AI-Chat</span>
 
         <button
           type="button"
-          className="ai-chat-dock__close"
+          className="chat-close"
           onClick={onClose}
           aria-label="Close chat"
         >
@@ -43,10 +43,8 @@ export default function AiChatDock({ isOpen, onClose }: Props) {
         </button>
       </div>
 
-      <div className="ai-chat-dock__body">
-        <div className="p-3">
-          <p className="mb-2">AI-chat.</p>
-        </div>
+      <div className="chat-body">
+        <AiChat />
       </div>
     </div>
   );
