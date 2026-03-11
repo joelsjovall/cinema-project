@@ -19,6 +19,7 @@ interface Movie {
   language?: string | null;
   subtitles?: string | null;
   director?: string | null;
+  imdbRating?: string | null;
 }
 
 interface Screening {
@@ -200,6 +201,7 @@ export default function Movie() {
             <h1 className="movie-title">{movie.title}</h1>
             <p className="movie-meta"><strong>Genre:</strong> {movie.genre}</p>
             <p className="movie-meta"><strong>Åldersgräns:</strong> {movie.ageRestriction}+</p>
+            <p className="movie-meta"><strong>IMDb:</strong> {movie.imdbRating ? `${movie.imdbRating}/10` : "-"}</p>
             <p className="movie-meta"><strong>Produktionsår:</strong> {movie.productionYear ?? "-"}</p>
             <p className="movie-meta"><strong>Längd:</strong> {movie.lengthMinutes ? `${movie.lengthMinutes} min` : "-"}</p>
             <p className="movie-meta"><strong>Distributör:</strong> {movie.distributor ?? "-"}</p>

@@ -7,6 +7,10 @@
   padding-top: 120px;
 
   h1 {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: clamp(1.375rem, calc(1.375rem + 1.5vw), 2.5rem);
+    font-weight: 500;
+    line-height: 1.2;
     text-align: center;
   }
 
@@ -24,30 +28,18 @@
     object-fit: cover;
     object-position: center;
     display: block;
-    margin: 0 auto 0.75rem; //flyttar bilden höger/vänster
+    margin: 0 auto 0.75rem; //flyttar bilden hoger/vanster
 
-    border: 3px solid #448547; //färgen
+    border: 3px solid #448547; //fargen
     border-radius: 12px;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
     transition: transform 0.2s ease;
-      cursor: pointer;
-    
-      &:hover {
-        transform: translateY(-5px);
-      }
+    cursor: pointer;
+
+    &:hover {
+      transform: translateY(-5px);
+    }
   }
-
-    // .home-page.container-fluid {
-    //   .movie-card {
-    //     transition: transform 0.2s ease;
-    //     cursor: pointer;
-  
-    //     &:hover {
-    //       transform: translateY(-5px);
-    //     }
-    //   }
-    // }
-
 }
 
 @media (max-width: 992px) {

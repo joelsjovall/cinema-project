@@ -34,10 +34,10 @@ export default function Kommande() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
-useEffect(() => {
-    fetchUpcomingMovies();
-}, []);   
-    
+    useEffect(() => {
+        fetchUpcomingMovies();
+    }, []);
+
     async function fetchUpcomingMovies() {
         setLoading(true);
         setError("");
@@ -55,67 +55,46 @@ useEffect(() => {
                         new Date(b.screeningDate).getTime()
                 );
 
-            const uniqueUpcoming = removeDuplicateMoviesById(upcoming)
-                .slice(0, 4);
-            
+            const uniqueUpcoming = removeDuplicateMoviesById(upcoming).slice(0, 4);
             setMovies(uniqueUpcoming);
-            } catch {
+        } catch {
             setError("Could not load upcoming movies.");
-            } finally {
+        } finally {
             setLoading(false);
-            }
+        }
     }
-    
-
-
-
 
     return (
-    <section className="kommande-page">
-      <div className="kommande-inner">
-        <header className="kommande-heading-row">
-          <h1>Kommande filmer :</h1>
-          <h2>{UPCOMING_YEAR}</h2>
-        </header>
+        <section className="kommande-page">
+            <div className="kommande-inner">
+                <header className="kommande-heading-row">
+                    <h1>Kommande filmer :</h1>
+                    <h2>{UPCOMING_YEAR}</h2>
+                </header>
 
-        {error && <div className="alert alert-danger">{error}</div>}
+                {error && <div className="alert alert-danger">{error}</div>}
 
-        {loading ? (
-          <div className="text-center py-5">
-            <div className="spinner-border" role="status" />
-          </div>
-        ) : (
-          <div className="kommande-grid">
-            {movies.map((movie) => (
-              <article className="kommande-card" key={movie.id}>
-                <img
-                  src={movie.image_url ?? "/images/placeholder.jpg"}
-                  alt={movie.title}
-                  className="kommande-poster"
-                />
-                <h3>{movie.title}</h3>
-                <p className="kommande-genre">{movie.genre}</p>
-                <p className="kommande-release-date">Släpps: {formatReleaseDate(movie.screeningDate)}</p>
-              </article>
-            ))}
-          </div>
-        )}
-      </div>
-    </section>
-  );
+                {loading ? (
+                    <div className="text-center py-5">
+                        <div className="spinner-border" role="status" />
+                    </div>
+                ) : (
+                    <div className="kommande-grid">
+                        {movies.map((movie) => (
+                            <article className="kommande-card" key={movie.id}>
+                                <img
+                                    src={movie.image_url ?? "/images/placeholder.jpg"}
+                                    alt={movie.title}
+                                    className="kommande-poster"
+                                />
+                                <h3>{movie.title}</h3>
+                                <p className="kommande-genre">{movie.genre}</p>
+                                <p className="kommande-release-date">Släpps: {formatReleaseDate(movie.screeningDate)}</p>
+                            </article>
+                        ))}
+                    </div>
+                )}
+            </div>
+        </section>
+    );
 }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
