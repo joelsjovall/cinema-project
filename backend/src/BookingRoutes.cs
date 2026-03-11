@@ -61,6 +61,18 @@ public static class BookingRoutes
         return RestResult.Parse(context, new { error = "Not logged in." });
     }
 
+    // 1. Skapa bokningen i databasen
+    var booking = SQLQueryOne(@"
+        INSERT INTO bookings (userId, screeningId, bookingCode, status, created)
+        VALUES (@userId, @screeningId, @bookingCode, 'confirmed', NOW());
+        SELECT * FROM bookings WHERE bookingCode = @bookingCode;
+    ", new
+    {
+        userId = user.id,
+        screeningId = req.ScreeningId,
+        bookingCode = Guid.NewGuid().ToString().Substring(0, 8)
+    });
+
     App.MapDelete("/bookings/{id}/cancel", (HttpContext context, int id) =>
         {
             var user = Session.Get(context, "user");
