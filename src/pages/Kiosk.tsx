@@ -15,7 +15,11 @@ export default function Kiosk() {
 
                 <div className="products-grid">
                     <div className="product-card">
-                        <div className="product-emoji">🍿</div>
+                        <img
+                            className="product-image popcorn"
+                            src="/pictures/kiosk_bilder/bio-popcorn.jpg"
+                            alt="Popcorn"
+                        />
                         <div className="product-info">
                             <h3>Popcorn</h3>
                             <p>Smaker : Salt / ost / sourcream & onion</p>
@@ -27,7 +31,11 @@ export default function Kiosk() {
                     </div>
 
                     <div className="product-card">
-                        <div className="product-emoji">🥔</div>
+                        <img
+                            className="product-image"
+                            src="/pictures/kiosk_bilder/bio-chips.jpg"
+                            alt="Varma chips"
+                        />
                         <div className="product-info">
                             <h3>Varma chips</h3>
                             <p>Smaker :  Lättsaltade / sourcream & onion / grill</p>
@@ -38,7 +46,11 @@ export default function Kiosk() {
                     </div>
 
                     <div className="product-card">
-                        <div className="product-emoji">🥤</div>
+                        <img
+                            className="product-image drink"
+                            src="/pictures/kiosk_bilder/bio-l%C3%A4sk.jpeg"
+                            alt="LÃ¤sk"
+                        />
                         <div className="product-info">
                             <h3>Läsk</h3>
                             <p>Coca Cola / Coca Cola Zero / Fanta / Fanta Zero / Fanta Exotic / Sprite / Sprite Zero</p>
@@ -50,7 +62,11 @@ export default function Kiosk() {
                     </div>
 
                     <div className="product-card">
-                        <div className="product-emoji">🍬</div>
+                        <img
+                            className="product-image"
+                            src="/pictures/kiosk_bilder/bio-godis.webp"
+                            alt="Godis och choklad"
+                        />
                         <div className="product-info">
                             <h3>Godis och choklad</h3>
                             <p>Massor av sorter!</p>

@@ -1,18 +1,36 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 
-function Footer() {
+type FooterProps = {
+  onChatToggle: () => void;
+};
+
+const COOKIES_STORAGE_KEY = "Cookiemeddelande";
+const COOKIES_RESET_EVENT = "cookiemeddelande:reset";
+
+function Footer({ onChatToggle }: FooterProps) {
+  function handleCookiesReset() {
+    try {
+      localStorage.removeItem(COOKIES_STORAGE_KEY);
+    } catch {
+      // Ignore storage errors for demo reset.
+    }
+
+    window.dispatchEvent(new Event(COOKIES_RESET_EVENT));
+  }
+
   return (
-    <footer className="footer q text-white py-3">
+    <footer id="site-footer" className="footer q text-white py-3">
       <div className="container-fluid">
-        <div className="row align-items-center footer-row">
-          {/* Tom vänsterkolumn för balans */}
-          <div className="col-md-3 d-none d-md-block"></div>
+        <div className="row align-items-center">
+          <div className="col-3"></div>
 
-          {/* Centrerade länkar */}
-          <div className="col-12 col-md-6 d-flex justify-content-center gap-4 gap-md-5 footer-links">
-            <div className="text-center footer-link-block">
+          <div className="col-6 d-flex justify-content-center gap-5">
+            <div className="text-center">
               <h6>
-                <Link to="/om-biografen" className="text-black text-decoration-none">
+                <Link
+                  to="/om-biografen"
+                  className="text-black text-decoration-none"
+                >
                   Hjälp och kontakt
                 </Link>
               </h6>
@@ -28,12 +46,13 @@ function Footer() {
 
             <div className="text-center footer-link-block">
               <h6>
-                <a
-                  href="/kundservice"
-                  className="text-black text-decoration-none"
+                <button
+                  type="button"
+                  className="btn btn-link p-0 text-black text-decoration-none"
+                  onClick={handleCookiesReset}
                 >
-                  Kundservice
-                </a>
+                  Cookies
+                </button>
               </h6>
               <p className="mb-0">
                 <a
@@ -48,7 +67,13 @@ function Footer() {
 
           <div className="col-12 col-md-3 text-center text-md-end footer-help">
             <p className="mb-1">Behöver du hjälp?</p>
-            <button className="btn btn-primary">Chatta med vår ai-bot</button>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={onChatToggle}
+            >
+              Chatta med vår ai-bot
+            </button>
           </div>
         </div>
       </div>
