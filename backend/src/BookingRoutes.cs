@@ -53,7 +53,15 @@ public static class BookingRoutes
             );
         });
 
-        App.MapDelete("/bookings/{id}/cancel", (HttpContext context, int id) =>
+        App.MapPost("/bookings", (HttpContext context, BookingRequest req) =>
+{
+    var user = Session.Get(context, "user");
+    if (user == null)
+    {
+        return RestResult.Parse(context, new { error = "Not logged in." });
+    }
+
+    App.MapDelete("/bookings/{id}/cancel", (HttpContext context, int id) =>
         {
             var user = Session.Get(context, "user");
             if (user == null)
@@ -77,5 +85,6 @@ public static class BookingRoutes
 
             return RestResult.Parse(context, new { status = "Cancelled." });
         });
-    }
+}
+
 }
