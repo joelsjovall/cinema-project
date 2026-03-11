@@ -2,11 +2,13 @@
   padding-top: 160px;
   padding-bottom: 60px;
   min-height: 100vh;
-  
+
   .title {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: clamp(1.375rem, calc(1.375rem + 1.5vw), 2.5rem);
+    font-weight: 500;
+    line-height: 1.2;
     text-align: center;
-    font-size: 52px;
-    font-weight: 300;
     margin-bottom: 24px;
   }
 

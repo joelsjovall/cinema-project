@@ -13,10 +13,9 @@ interface Movie {
     image_url?: string | null;
     trailer_url?: string | null;
     description: string;
+    imdbRating?: string | null;
 }
 
-// Tar bort dubletter sa att varje film (id) bara visas en gang,
-// aven om API:et skickar flera visningar med olika datum.
 function dedupeMoviesById(movieList: Movie[]): Movie[] {
     const seen = new Set<number>();
     return movieList.filter((movie) => {
@@ -32,30 +31,23 @@ function filterNowShowing(movieList: Movie[]): Movie[] {
     );
 }
 
-
 export default function Home() {
-    console.log("Home component loaded");
     const [movies, setMovies] = useState<Movie[]>([]);
     const [availableGenres, setAvailableGenres] = useState<string[]>([]);
     const [availableMaxAges, setAvailableMaxAges] = useState<number[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
-    // Search state
     const [searchTitle, setSearchTitle] = useState("");
-
-    // Filter state
     const [filterGenre, setFilterGenre] = useState("");
     const [filterMaxAge, setFilterMaxAge] = useState("");
     const [filterDate, setFilterDate] = useState("");
 
-    // Hamta filmer + filterval nar sidan laddas.
     useEffect(() => {
         fetchAll();
         fetchFilterOptions();
     }, []);
 
-    // Bygg lokala filterval baserat pa aktuell filmlista.
     function updateFilterOptions(movieList: Movie[]) {
         const genres = Array.from(new Set(movieList.map((m) => m.genre))).sort((a, b) =>
             a.localeCompare(b)
@@ -67,7 +59,6 @@ export default function Home() {
         setAvailableMaxAges(ages);
     }
 
-    // Hamta filterval fran backend (genrer + aldersgranser).
     async function fetchFilterOptions() {
         try {
             const [genresRes, agesRes] = await Promise.all([
@@ -88,28 +79,22 @@ export default function Home() {
         }
     }
 
-    // Hamta alla filmer, deduplicera och uppdatera listan.
     async function fetchAll() {
-        console.log("Fetching movies...");
         setLoading(true);
         setError("");
         try {
             const res = await fetch(`${API}/movies`);
-            console.log("Response:", res);
             const data = await res.json();
-            console.log("Data:", data);
             const list = filterNowShowing(Array.isArray(data) ? data : data.movies ?? []);
             setMovies(list);
             updateFilterOptions(list);
-        } catch (e) {
-            console.log("Error:", e);
+        } catch {
             setError("Could not load movies.");
         } finally {
             setLoading(false);
         }
     }
 
-    // Sok pa titel. Tom sokning fallbackar till alla filmer.
     async function handleSearch() {
         if (!searchTitle.trim()) {
             fetchAll();
@@ -130,7 +115,6 @@ export default function Home() {
         }
     }
 
-    // Filtrera filmer med valda query-parametrar.
     async function handleFilter() {
         setLoading(true);
         setError("");
@@ -150,7 +134,6 @@ export default function Home() {
         }
     }
 
-    // Nollstall sok/filter och ladda om standardlistan.
     function handleReset() {
         setSearchTitle("");
         setFilterGenre("");
@@ -245,7 +228,6 @@ export default function Home() {
 
             {error && <div className="alert alert-danger">{error}</div>}
 
-            {/* Visa loader under hamtning, annars resultat eller tomlista. */}
             {loading ? (
                 <div className="text-center py-5">
                     <div className="spinner-border" role="status" />
@@ -265,6 +247,7 @@ export default function Home() {
                                             className="img-fluid movie-poster" />
                                         <h5 className="card-title text-center">{movie.title}</h5>
                                         <p className="card-text text-muted mb-1">{movie.genre}</p>
+                                        <p className="card-text mb-2">IMDb: {movie.imdbRating ? `${movie.imdbRating}/10` : "-"}</p>
                                         <span className="badge bg-secondary me-2">
                                             Åldersgräns {movie.ageRestriction}+
                                         </span>

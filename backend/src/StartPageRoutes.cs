@@ -24,12 +24,15 @@ namespace WebApp
     public string? Language { get; set; }
     public string? Subtitles { get; set; }
     public string? Director { get; set; }
-
+    public string? ImdbRating { get; set; }
   }
 
   public class MovieRepository
   {
     private readonly string _connectionString;
+    private static readonly OmdbRatingService RatingService = new(
+      Environment.GetEnvironmentVariable("OMDB_API_KEY") ?? ""
+    );
 
     public MovieRepository(string connectionString)
     {
@@ -39,10 +42,9 @@ namespace WebApp
     private MySqlConnection GetConnection() =>
         new MySqlConnection(_connectionString);
 
-    // ── Base query used by all methods ────────────────────────────────────
+    // Base query used by all methods.
     // Joins movies + screenings so we always have title, genre,
     // age_restriction and screeningDate available to work with.
-
     private const string BaseQuery = @"
             SELECT
                 m.id,
@@ -76,10 +78,8 @@ namespace WebApp
           Description = reader.GetString("description"),
           AgeRestriction = reader.GetInt32("age_restriction"),
           ScreeningDate = reader.GetDateTime("screeningDate"),
-          // Image_url = reader.GetString("image_url")
           Image_url = reader.IsDBNull(reader.GetOrdinal("image_url")) ? null : reader.GetString("image_url"),
           Trailer_url = reader.IsDBNull(reader.GetOrdinal("trailer_url")) ? null : reader.GetString("trailer_url"),
-
           ProductionYear = reader.IsDBNull(reader.GetOrdinal("production_year")) ? null : reader.GetInt32("production_year"),
           LengthMinutes = reader.IsDBNull(reader.GetOrdinal("length_minutes")) ? null : reader.GetInt32("length_minutes"),
           Distributor = reader.IsDBNull(reader.GetOrdinal("distributor")) ? null : reader.GetString("distributor"),
@@ -91,14 +91,37 @@ namespace WebApp
       return list;
     }
 
-    // ── 1. Get all movies (startpage) ─────────────────────────────────────
+    private static void EnrichWithImdbRatings(List<Movie> movies)
+    {
+      var uniqueMovies = movies
+        .GroupBy(m => m.Id)
+        .Select(g => g.First())
+        .ToList();
 
+      var ratingsById = new Dictionary<int, string?>();
+      foreach (var movie in uniqueMovies)
+      {
+        ratingsById[movie.Id] = RatingService.GetRating(movie.Title, movie.ProductionYear);
+      }
+
+      foreach (var movie in movies)
+      {
+        if (ratingsById.TryGetValue(movie.Id, out var rating))
+        {
+          movie.ImdbRating = rating;
+        }
+      }
+    }
+
+    // 1. Get all movies (startpage)
     public List<Movie> GetAll()
     {
       using var conn = GetConnection();
       conn.Open();
       using var cmd = new MySqlCommand(BaseQuery + " ORDER BY m.title", conn);
-      return ReadMovies(cmd);
+      var movies = ReadMovies(cmd);
+      EnrichWithImdbRatings(movies);
+      return movies;
     }
 
     public Movie? GetById(int id)
@@ -109,6 +132,7 @@ namespace WebApp
       using var cmd = new MySqlCommand(sql, conn);
       cmd.Parameters.AddWithValue("@id", id);
       var list = ReadMovies(cmd);
+      EnrichWithImdbRatings(list);
       return list.FirstOrDefault();
     }
 
@@ -152,8 +176,7 @@ namespace WebApp
       return ages;
     }
 
-    // ── 2. Search by title ────────────────────────────────────────────────
-
+    // 2. Search by title
     public List<Movie> SearchByTitle(string title)
     {
       using var conn = GetConnection();
@@ -161,12 +184,13 @@ namespace WebApp
       using var cmd = new MySqlCommand(
           BaseQuery + " WHERE m.title LIKE @title ORDER BY m.title", conn);
       cmd.Parameters.AddWithValue("@title", $"%{title}%");
-      return ReadMovies(cmd);
+      var movies = ReadMovies(cmd);
+      EnrichWithImdbRatings(movies);
+      return movies;
     }
 
-    // ── 3. Filter by age, genre and/or date ───────────────────────────────
-    // All three filters are optional — only applied when a value is passed in.
-
+    // 3. Filter by age, genre and/or date.
+    // All three filters are optional - only applied when a value is passed in.
     public List<Movie> Filter(int? maxAge = null, string? genre = null, DateTime? date = null)
     {
       var sql = BaseQuery + " WHERE 1=1";
@@ -185,7 +209,9 @@ namespace WebApp
       if (genre != null) cmd.Parameters.AddWithValue("@genre", genre);
       if (date != null) cmd.Parameters.AddWithValue("@date", date.Value.ToString("yyyy-MM-dd"));
 
-      return ReadMovies(cmd);
+      var movies = ReadMovies(cmd);
+      EnrichWithImdbRatings(movies);
+      return movies;
     }
   }
 }
