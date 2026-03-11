@@ -1,5 +1,9 @@
 namespace WebApp;
 
+using WebApp.Models;
+using WebApp.Services;
+
+
 public static class BookingRoutes
 {
     public static void Start()
@@ -52,28 +56,54 @@ public static class BookingRoutes
                 SQLQuery(sql, new { userId = user.id }, context)
             );
         });
-
         App.MapPost("/bookings", (HttpContext context, BookingRequest req) =>
-{
-    var user = Session.Get(context, "user");
-    if (user == null)
-    {
-        return RestResult.Parse(context, new { error = "Not logged in." });
-    }
+        {
+            var user = Session.Get(context, "user");
+            if (user == null)
+            {
+                return RestResult.Parse(context, new { error = "Not logged in." });
+            }
 
-    // 1. Skapa bokningen i databasen
-    var booking = SQLQueryOne(@"
+            var bookingCode = Guid.NewGuid().ToString().Substring(0, 8);
+
+            // Skapa bokningen
+            var booking = SQLQueryOne(@"
         INSERT INTO bookings (userId, screeningId, bookingCode, status, created)
         VALUES (@userId, @screeningId, @bookingCode, 'confirmed', NOW());
-        SELECT * FROM bookings WHERE bookingCode = @bookingCode;
+        SELECT b.id, b.bookingCode, s.screeningDate, m.title
+        FROM bookings b
+        JOIN screenings s ON s.id = b.screeningId
+        JOIN movies m ON m.id = s.movieId
+        WHERE b.bookingCode = @bookingCode;
     ", new
-    {
-        userId = user.id,
-        screeningId = req.ScreeningId,
-        bookingCode = Guid.NewGuid().ToString().Substring(0, 8)
-    });
+            {
+                userId = user.id,
+                screeningId = req.ScreeningId,
+                bookingCode
+            });
 
-    App.MapDelete("/bookings/{id}/cancel", (HttpContext context, int id) =>
+            // Koppla platser
+            req.SeatIds.ForEach(seatId =>
+            {
+                SQLQuery("INSERT INTO bookingSeats (bookingId, seatId) VALUES (@bookingId, @seatId)",
+                    new { bookingId = booking.id, seatId });
+            });
+
+            // Skicka mail
+            EmailService.SendBookingConfirmation(
+                user.email,
+                booking.title,
+                booking.screeningDate,
+                booking.bookingCode,
+                string.Join(",", req.SeatIds)
+            );
+
+            return RestResult.Parse(context, booking);
+        });
+
+
+
+        App.MapDelete("/bookings/{id}/cancel", (HttpContext context, int id) =>
         {
             var user = Session.Get(context, "user");
             if (user == null)
@@ -97,6 +127,6 @@ public static class BookingRoutes
 
             return RestResult.Parse(context, new { status = "Cancelled." });
         });
-}
+    }
 
 }
