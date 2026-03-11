@@ -101,6 +101,7 @@ export default function MinaSidor() {
         <div className="center-page mina-page">
             <div className="mina-box">
                 <div className="mina-hero">
+<<<<<<< HEAD
                     {(() => {
                         const rawPoints = (user as { points?: unknown } | null)?.points;
                         const points = typeof rawPoints === "number" ? rawPoints : Number(rawPoints ?? 0);
@@ -113,6 +114,10 @@ export default function MinaSidor() {
                             </>
                         );
                     })()}
+=======
+                    <h1>Mina sidor</h1>
+                    <p>Inloggad som {user.email ?? "okänd användare"}</p>
+>>>>>>> 39cb4c2e12622205d4cf215204427abcf3a91104
                 </div>
 
                 <div className="mina-section">
@@ -135,7 +140,7 @@ export default function MinaSidor() {
                                         )}
                                     </div>
                                     <div className="booking-info">
-                                        <div className="booking-title">{b.title ?? "Ok�nd film"}</div>
+                                        <div className="booking-title">{b.title ?? "Okänd film"}</div>
                                         <div className="booking-row">
                                             <span>{formatDate(b.screeningDate)}</span>
                                             <span>{b.screeningTime ?? ""}</span>
@@ -152,7 +157,7 @@ export default function MinaSidor() {
                                         {b.status !== "cancelled" && (
                                             confirmId === b.id ? (
                                                 <div className="booking-confirm">
-                                                    <span>Är du säkerpå att du vill avbryta din bokning?</span>
+                                                    <span>Är du säker på att du vill avbryta din bokning?</span>
                                                     <button
                                                         className="booking-confirm-yes"
                                                         onClick={() => cancelBooking(b.id)}

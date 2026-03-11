@@ -1,47 +1,55 @@
-.kommande-page {  //lägger till bakgrundsfärgen och ser till att den täcker hela hemsidan
+.kommande-page {
+  // lagger till bakgrundsfargen och ser till att den tacker hela hemsidan
   background-color: rgb(206, 226, 204);
   min-height: 100vh;
   padding-top: 150px;
   padding-bottom: 80px;
 }
 
-.kommande-inner {     //begränsar maxbredd och gör layouten responsiv
+.kommande-inner {
+  // begransar maxbredd och gor layouten responsiv
   width: min(980px, 92%);
   margin: 0 auto;
 }
 
-.kommande-heading-row { //Sätter rubrikerna bredvid varandra genom flexbox
+.kommande-heading-row {
+  // Satter rubrikerna bredvid varandra genom flexbox
   display: flex;
   justify-content: center;
   align-items: baseline;
   gap: 5rem;
   margin-bottom: 3.2rem;
 
-  h1,   //gemensam styling för båda rubrikerna
+  h1 {
+    font-family: 'Noto Sans', sans-serif;
+    font-size: clamp(1.375rem, calc(1.375rem + 1.5vw), 2.5rem);
+    font-weight: 500;
+    line-height: 1.2;
+    text-align: center;
+    margin: 0;
+    color: #1b1b1b;
+    text-shadow: none;
+  }
+
   h2 {
     margin: 0;
     color: #1b1b1b;
     font-weight: 500;
     letter-spacing: 0.2px;
-    text-shadow: none;    //tar bort skuggan då det finns i en global h1:a
-  }
-
-  h1 {      //fontstorlek
-    font-size: clamp(1.9rem, 3.5vw, 2.7rem);
-  }
-
-  h2 {      //fontstorlek
+    text-shadow: none;
     font-size: clamp(1.9rem, 3.5vw, 2.7rem);
   }
 }
 
-.kommande-grid {    //grid layout för filmer
+.kommande-grid {
+  // grid layout for filmer
   display: grid;
   grid-template-columns: repeat(4, minmax(150px, 1fr));
   gap: 2.1rem;
 }
 
-.kommande-card {    //för varje film
+.kommande-card {
+  // for varje film
   h3 {
     margin: 0.75rem 0 0.2rem;
     color: #1f1f1f;
@@ -66,18 +74,20 @@
   }
 }
 
-.kommande-poster {    //filmposters proportion
+.kommande-poster {
+  // filmposters proportion
   width: 100%;
-  max-width: 190px;   //begränsar kortets bredd
-  aspect-ratio: 2/3;  //proportion
-  object-fit: cover;  //beskär bilden
-  border: 3px solid #448547;    //samma border som på startsidan kodas nedan
-  border-radius: 12px;             
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25); 
-  display: block;                 
+  max-width: 190px;
+  aspect-ratio: 2/3;
+  object-fit: cover;
+  border: 3px solid #448547;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  display: block;
 }
 
-@media (max-width: 992px) {   //på surfplatta
+@media (max-width: 992px) {
+  // pa surfplatta
   .kommande-grid {
     grid-template-columns: repeat(2, minmax(150px, 1fr));
     row-gap: 2.3rem;
@@ -88,8 +98,9 @@
   }
 }
 
-@media (max-width: 560px) {   //på mobil
-  .kommande-page{
+@media (max-width: 560px) {
+  // pa mobil
+  .kommande-page {
     padding-top: 130px;
   }
 
@@ -98,7 +109,7 @@
     justify-items: center;
   }
 
-  .kommande-card{
+  .kommande-card {
     width: 190px;
   }
 
