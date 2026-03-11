@@ -31,7 +31,7 @@ export default function AiChatDock({ isOpen, onClose }: Props) {
   return (
     <div className="chat" role="dialog" aria-label="AI chat">
       <div className="chat-header">
-        <span>AI-Chat</span>
+        <span>AI-assistent</span>
 
         <button
           type="button"
