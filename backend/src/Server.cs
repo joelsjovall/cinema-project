@@ -2,15 +2,18 @@ namespace WebApp;
 
 public static class Server
 {
+    public static WebApplication App { get; private set; } = null!;
     public static void Start()
     {
         var builder = WebApplication.CreateBuilder();
         App = builder.Build();
+        Shared.App = App;
         Middleware();
         DebugLog.Start();
         Acl.Start();
         MovieRoutes.Start();
         BookingRoutes.Start();
+        AiChatRoutes.Start();
         ErrorHandler.Start();
         FileServer.Start();
         LoginRoutes.Start();
