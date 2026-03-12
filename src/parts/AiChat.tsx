@@ -143,7 +143,7 @@ export default function AiChat() {
           onClick={sendMessage}
           disabled={!input.trim() || isLoading}
         >
-          Send
+          skicka
         </Button>
       </div>
     </div>
