@@ -4,8 +4,8 @@ public static class AiChatRoutes
 {
     private static string aiAccessToken = "";
     private static string systemPrompt = "";
-    private static readonly string proxyUrl = "https://ai-api.nodehill.com";
     private static readonly HttpClient httpClient = new HttpClient();
+    private static readonly string proxyUrl = "https://ai-api.nodehill.com";
 
     public static void Start()
     {
@@ -24,34 +24,63 @@ public static class AiChatRoutes
                     return RestResult.Parse(context, new { error = "Messages array is required." });
                 }
 
-                var fullMessages = Arr();
+                var lastMessage = messages.Length > 0
+                    ? messages[messages.Length - 1].content + ""
+                    : "";
+
+                if (IsMovieListQuestion(lastMessage))
+                {
+                    return RestResult.Parse(context, new
+                    {
+                        choices = Arr(
+                            Obj(new
+                            {
+                                message = Obj(new
+                                {
+                                    role = "assistant",
+                                    content = GetMovieTitlesReply()
+                                })
+                            })
+                        )
+                    });
+                }
+
+                var prompt = systemPrompt;
+
                 if (!string.IsNullOrEmpty(systemPrompt))
                 {
-                    fullMessages.Push(Obj(new { role = "system", content = systemPrompt }));
+                    prompt += "\n\n" + GetMovieTitlesText();
+                }
+
+                var fullMessages = Arr();
+
+                if (!string.IsNullOrEmpty(prompt))
+                {
+                    fullMessages.Push(Obj(new
+                    {
+                        role = "system",
+                        content = prompt
+                    }));
                 }
 
                 messages.ForEach(msg => fullMessages.Push(msg));
 
-                var requestBody = Obj(new { messages = fullMessages });
+                var request = new HttpRequestMessage(
+                    HttpMethod.Post,
+                    $"{proxyUrl}/v1/chat/completions"
+                );
 
-                var request = new HttpRequestMessage(HttpMethod.Post, $"{proxyUrl}/v1/chat/completions");
                 request.Headers.Add("Authorization", $"Bearer {aiAccessToken}");
                 request.Content = new StringContent(
-                    JSON.Stringify(requestBody),
+                    JSON.Stringify(Obj(new { messages = fullMessages })),
                     System.Text.Encoding.UTF8,
                     "application/json"
                 );
 
                 var response = await httpClient.SendAsync(request);
-                var responseContent = await response.Content.ReadAsStringAsync();
+                var responseText = await response.Content.ReadAsStringAsync();
+                var data = JSON.Parse(responseText);
 
-                if (!response.IsSuccessStatusCode)
-                {
-                    var error = JSON.Parse(responseContent);
-                    return RestResult.Parse(context, error);
-                }
-
-                var data = JSON.Parse(responseContent);
                 return RestResult.Parse(context, data);
             }
             catch (Exception ex)
@@ -61,15 +90,90 @@ public static class AiChatRoutes
         });
     }
 
+    private static bool IsMovieListQuestion(string text)
+    {
+        text = text.ToLower();
+
+        return
+            text.Contains("vilka filmer") ||
+            text.Contains("filmer finns") ||
+            text.Contains("filmer visas") ||
+            text.Contains("lista filmer");
+    }
+
+    private static string GetMovieTitlesReply()
+    {
+        try
+        {
+            var movies = SQLQuery(@"SELECT title AS movieTitle
+FROM movies
+ORDER BY title
+LIMIT 10");
+
+            if (movies == null || movies.Length == 0)
+            {
+                return "Det finns inga filmer i systemet just nu.";
+            }
+
+            var text = "Här är filmerna som finns just nu:\n";
+
+            foreach (var movie in movies)
+            {
+                text += $"- {movie.movieTitle}\n";
+            }
+
+            return text;
+        }
+        catch (Exception ex)
+        {
+            return "Det gick inte att läsa filmerna från systemet. " + ex.Message;
+        }
+    }
+
+    private static string GetMovieTitlesText()
+    {
+        try
+        {
+            var movies = SQLQuery(@"SELECT title AS movieTitle
+FROM movies
+ORDER BY title
+LIMIT 10");
+
+            if (movies == null || movies.Length == 0)
+            {
+                return "Systeminformation om filmer:\nInga filmer hittades.";
+            }
+
+            var text = "Systeminformation om filmer:\nHär är filmtitlarna som finns i systemet:\n";
+
+            foreach (var movie in movies)
+            {
+                text += $"- {movie.movieTitle}\n";
+            }
+
+            return text;
+        }
+        catch
+        {
+            return "Systeminformation om filmer:\nDet gick inte att läsa filmer från systemet.";
+        }
+    }
+
     private static void LoadConfig()
     {
         try
         {
-            var configPath = Path.Combine(
+            var path = Path.Combine(
                 AppContext.BaseDirectory, "..", "..", "..", "db-config.json"
             );
-            var configJson = File.ReadAllText(configPath);
-            var config = JSON.Parse(configJson);
+
+            if (!File.Exists(path))
+            {
+                Log("db-config.json not found");
+                return;
+            }
+
+            var config = JSON.Parse(File.ReadAllText(path));
 
             if (config.aiAccessToken != null)
             {
@@ -77,12 +181,12 @@ public static class AiChatRoutes
             }
             else
             {
-                Log("WARNING: aiAccessToken not found in db-config.json!");
+                Log("aiAccessToken not found in db-config.json");
             }
         }
         catch (Exception ex)
         {
-            Log("Error loading AI access token from config:", ex.Message);
+            Log("Error loading config:", ex.Message);
         }
     }
 
@@ -90,17 +194,17 @@ public static class AiChatRoutes
     {
         try
         {
-            var promptPath = Path.Combine(
+            var path = Path.Combine(
                 AppContext.BaseDirectory, "..", "..", "..", "system-prompt.md"
             );
-            if (File.Exists(promptPath))
+
+            if (File.Exists(path))
             {
-                systemPrompt = File.ReadAllText(promptPath);
-                Log("Loaded system prompt from system-prompt.md");
+                systemPrompt = File.ReadAllText(path);
             }
             else
             {
-                Log("No system-prompt.md found, running without system prompt");
+                Log("system-prompt.md not found");
             }
         }
         catch (Exception ex)

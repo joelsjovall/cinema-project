@@ -37,7 +37,7 @@ export default function AiChatDock({ isOpen, onClose }: Props) {
           type="button"
           className="chat-close"
           onClick={onClose}
-          aria-label="Close chat"
+          aria-label="Stäng chat"
         >
           ×
         </button>

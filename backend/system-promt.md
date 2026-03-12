@@ -1,1 +1,0 @@
-Du är en hjälpsam AI-assistent. Du är här för att hjälpa användare med deras frågor och uppgifter.
