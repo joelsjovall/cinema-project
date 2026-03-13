@@ -92,6 +92,7 @@ public static class MovieRoutes
         return RestResult.Parse(context, Arr());
       }
 
+
       var rows = SQLQuery(
         @"SELECT DISTINCT
             CASE s.salonId
@@ -297,6 +298,8 @@ public static class MovieRoutes
 
         tx.Commit();
 
+
+
         // Skicka bekräftelsemail
         try
         {
@@ -304,6 +307,7 @@ public static class MovieRoutes
               emailToStore,
               "Bokningsbekräftelse",
               $"<h1>Tack för din bokning!</h1><p>Ditt bokningsnummer är {bookingCode}.</p>"
+
           );
           Console.WriteLine("Bekräftelsemail skickat!");
         }
@@ -325,5 +329,7 @@ public static class MovieRoutes
         return RestResult.Parse(context, Obj(new { error = ex.Message }));
       }
     });
+
+
   }
 }
