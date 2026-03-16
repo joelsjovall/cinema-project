@@ -1,3 +1,4 @@
+using System.Net;
 using WebApp;
 namespace WebApp;
 
@@ -319,9 +320,71 @@ public static class MovieRoutes
           catch { }
         }
 
+        string movieTitle = "-";
+        string screeningLabel = "-";
+        try
+        {
+          var infoCommand = db.CreateCommand();
+          infoCommand.Transaction = tx;
+          infoCommand.CommandText = @"
+            SELECT m.title AS movieTitle, s.screeningDate, s.screeningTime
+            FROM screenings s
+            JOIN movies m ON m.id = s.movieId
+            WHERE s.id = @screeningId
+            LIMIT 1";
+          infoCommand.Parameters.AddWithValue("@screeningId", id);
+          using var reader = infoCommand.ExecuteReader();
+          if (reader.Read())
+          {
+            if (!reader.IsDBNull(reader.GetOrdinal("movieTitle")))
+            {
+              movieTitle = reader.GetString(reader.GetOrdinal("movieTitle"));
+            }
+
+            DateTime? screeningDate = null;
+            if (!reader.IsDBNull(reader.GetOrdinal("screeningDate")))
+            {
+              screeningDate = reader.GetDateTime(reader.GetOrdinal("screeningDate"));
+            }
+
+            var screeningTime = "";
+            if (!reader.IsDBNull(reader.GetOrdinal("screeningTime")))
+            {
+              screeningTime = reader.GetString(reader.GetOrdinal("screeningTime"));
+            }
+
+            screeningLabel = screeningDate == null
+              ? screeningTime
+              : $"{screeningDate:yyyy-MM-dd} {screeningTime}".Trim();
+            if (string.IsNullOrWhiteSpace(screeningLabel))
+            {
+              screeningLabel = "-";
+            }
+          }
+        }
+        catch
+        {
+          // Fall back to default placeholders if lookup fails.
+        }
+
         tx.Commit();
 
+        var seatsLabel = selectedSeatNumbers.Length > 0
+          ? string.Join(", ", selectedSeatNumbers)
+          : "-";
 
+        var safeMovieTitle = WebUtility.HtmlEncode(movieTitle);
+        var safeScreeningLabel = WebUtility.HtmlEncode(screeningLabel);
+        var safeBookingCode = WebUtility.HtmlEncode(bookingCode);
+        var safeEmail = WebUtility.HtmlEncode(emailToStore);
+        var safeSeats = WebUtility.HtmlEncode(seatsLabel);
+
+        var emailBody = $@"
+<h1>Bokningsbekräftelse</h1>
+<p><strong>Film:</strong> {safeMovieTitle}</p>
+<p><strong>Tid:</strong> {safeScreeningLabel}</p>
+<p><strong>Bokningskod:</strong> {safeBookingCode}</p>
+<p><strong>Stol:</strong> {safeSeats}</p>";
 
         // Skicka bekräftelsemail
         try
@@ -329,7 +392,7 @@ public static class MovieRoutes
           EmailService.SendEmail(
               emailToStore,
               "Bokningsbekräftelse",
-              $"<h1>Tack för din bokning!</h1><p>Ditt bokningsnummer är {bookingCode}.</p>"
+              emailBody
 
           );
           Console.WriteLine("Bekräftelsemail skickat!");
