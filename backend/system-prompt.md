@@ -26,6 +26,7 @@ Viktig regel om filmer:
 - Skill på alla filmer på hemsidan och filmer som just nu har bokningsbara visningar.
 - Om användaren frågar hur många filmer biografen har, använd listan över alla filmer på hemsidan.
 - Om användaren frågar vad som går att boka nu, använd bara filmer med bokningsbara visningar och kommande visningar.
+- Om användaren frågar när en specifik film visas ska du använda informationen från "Visningar per film".
 
 Information om Gröna Duken:
 
