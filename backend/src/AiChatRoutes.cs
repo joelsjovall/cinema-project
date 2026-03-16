@@ -4,15 +4,15 @@ public static class AiChatRoutes
 {
     private static string aiAccessToken = "";
     private static string systemPrompt = "";
-    private static readonly HttpClient httpClient = new HttpClient();
     private static readonly string proxyUrl = "https://ai-api.nodehill.com";
+    private static readonly HttpClient httpClient = new HttpClient();
 
     public static void Start()
     {
         LoadConfig();
         LoadSystemPrompt();
 
-        Server.App.MapPost("/api/chat", async (HttpContext context, JsonElement bodyJson) =>
+        App.MapPost("/api/chat", async (HttpContext context, JsonElement bodyJson) =>
         {
             try
             {
@@ -24,46 +24,25 @@ public static class AiChatRoutes
                     return RestResult.Parse(context, new { error = "Messages array is required." });
                 }
 
-                var lastMessage = messages.Length > 0
-                    ? messages[messages.Length - 1].content + ""
-                    : "";
-
-                if (IsMovieListQuestion(lastMessage))
-                {
-                    return RestResult.Parse(context, new
-                    {
-                        choices = Arr(
-                            Obj(new
-                            {
-                                message = Obj(new
-                                {
-                                    role = "assistant",
-                                    content = GetMovieTitlesReply()
-                                })
-                            })
-                        )
-                    });
-                }
-
-                var prompt = systemPrompt;
-
-                if (!string.IsNullOrEmpty(systemPrompt))
-                {
-                    prompt += "\n\n" + GetMovieTitlesText();
-                }
-
                 var fullMessages = Arr();
+                var cinemaContext = GetCinemaContext();
+                var combinedSystemPrompt = BuildSystemPrompt(cinemaContext);
 
-                if (!string.IsNullOrEmpty(prompt))
+                if (!string.IsNullOrWhiteSpace(combinedSystemPrompt))
                 {
                     fullMessages.Push(Obj(new
                     {
                         role = "system",
-                        content = prompt
+                        content = combinedSystemPrompt
                     }));
                 }
 
                 messages.ForEach(msg => fullMessages.Push(msg));
+
+                var requestBody = Obj(new
+                {
+                    messages = fullMessages
+                });
 
                 var request = new HttpRequestMessage(
                     HttpMethod.Post,
@@ -72,15 +51,32 @@ public static class AiChatRoutes
 
                 request.Headers.Add("Authorization", $"Bearer {aiAccessToken}");
                 request.Content = new StringContent(
-                    JSON.Stringify(Obj(new { messages = fullMessages })),
+                    JSON.Stringify(requestBody),
                     System.Text.Encoding.UTF8,
                     "application/json"
                 );
 
                 var response = await httpClient.SendAsync(request);
-                var responseText = await response.Content.ReadAsStringAsync();
-                var data = JSON.Parse(responseText);
+                var responseContent = await response.Content.ReadAsStringAsync();
 
+                if (!response.IsSuccessStatusCode)
+                {
+                    try
+                    {
+                        var error = JSON.Parse(responseContent);
+                        return RestResult.Parse(context, error);
+                    }
+                    catch
+                    {
+                        return RestResult.Parse(context, new
+                        {
+                            error = "AI API returned an error.",
+                            details = responseContent
+                        });
+                    }
+                }
+
+                var data = JSON.Parse(responseContent);
                 return RestResult.Parse(context, data);
             }
             catch (Exception ex)
@@ -90,72 +86,221 @@ public static class AiChatRoutes
         });
     }
 
-    private static bool IsMovieListQuestion(string text)
+    private static string BuildSystemPrompt(string cinemaContext)
     {
-        text = text.ToLower();
+        if (string.IsNullOrWhiteSpace(systemPrompt) && string.IsNullOrWhiteSpace(cinemaContext))
+        {
+            return "";
+        }
 
-        return
-            text.Contains("vilka filmer") ||
-            text.Contains("filmer finns") ||
-            text.Contains("filmer visas") ||
-            text.Contains("lista filmer");
+        if (string.IsNullOrWhiteSpace(systemPrompt))
+        {
+            return cinemaContext;
+        }
+
+        if (string.IsNullOrWhiteSpace(cinemaContext))
+        {
+            return systemPrompt;
+        }
+
+        return systemPrompt + "\n\n" + cinemaContext;
     }
 
-    private static string GetMovieTitlesReply()
+    private static string GetCinemaContext()
     {
         try
         {
-            var movies = SQLQuery(@"SELECT title AS movieTitle
-FROM movies
-ORDER BY title
-LIMIT 10");
+            var text = "SYSTEMINFORMATION FÖR GRÖNA DUKEN\n";
 
-            if (movies == null || movies.Length == 0)
-            {
-                return "Det finns inga filmer i systemet just nu.";
-            }
+            text += "\nAlla filmer på hemsidan:\n";
+            text += GetAllMoviesText();
 
-            var text = "Här är filmerna som finns just nu:\n";
+            text += "\n\nKommande visningar:\n";
+            text += GetUpcomingScreeningsText();
 
-            foreach (var movie in movies)
-            {
-                text += $"- {movie.movieTitle}\n";
-            }
+            text += "\n\nBiljettpriser:\n";
+            text += GetTicketPricesText();
 
-            return text;
-        }
-        catch (Exception ex)
-        {
-            return "Det gick inte att läsa filmerna från systemet. " + ex.Message;
-        }
-    }
+            text += "\n\nSalonger:\n";
+            text += GetSalonsText();
 
-    private static string GetMovieTitlesText()
-    {
-        try
-        {
-            var movies = SQLQuery(@"SELECT title AS movieTitle
-FROM movies
-ORDER BY title
-LIMIT 10");
+            text += "\n\nBokning:\n";
+            text +=
+                "1. Välj film\n" +
+                "2. Välj datum och tid\n" +
+                "3. Välj platser\n" +
+                "4. Kontrollera totalpris\n" +
+                "5. Slutför bokningen\n" +
+                "Betalning sker på plats i biografen med bokningsnummer.\n";
 
-            if (movies == null || movies.Length == 0)
-            {
-                return "Systeminformation om filmer:\nInga filmer hittades.";
-            }
-
-            var text = "Systeminformation om filmer:\nHär är filmtitlarna som finns i systemet:\n";
-
-            foreach (var movie in movies)
-            {
-                text += $"- {movie.movieTitle}\n";
-            }
-
-            return text;
+            return text.Trim();
         }
         catch
         {
-            return "Systeminformation om filmer:\nDet gick inte att läsa filmer från systemet.";
+            return "Systeminformation saknas just nu.";
+        }
+    }
+
+    private static string GetMoviesText()
+    {
+        try
+        {
+            var rows = SQLQuery(@"SELECT DISTINCT
+                m.id,
+                m.title,
+                m.genre,
+                m.age_restriction,
+                m.length_minutes
+                FROM movies m
+                JOIN screenings s ON s.movieId = m.id
+                WHERE TIMESTAMP(s.screeningDate, s.screeningTime) >= NOW()
+                ORDER BY m.title");
+
+            if (rows == null || rows.Length == 0)
+            {
+                return "Inga filmer med bokningsbara visningar hittades.";
+            }
+
+            var text = "Antal filmer med bokningsbara visningar: " + rows.Length + "\n";
+
+            foreach (var row in rows)
+            {
+                var genre = row.genre == null ? "okänd genre" : row.genre + "";
+                var ageRestriction = row.age_restriction == null ? "okänd åldersgräns" : row.age_restriction + "";
+                var length = row.length_minutes == null ? "okänd längd" : row.length_minutes + " min";
+
+                text += "- " + row.title + " (" + genre + ", " + length + ", " + ageRestriction + " år)\n";
+            }
+
+            return text.Trim();
+        }
+        catch
+        {
+            return "Det gick inte att läsa filmer.";
+        }
+    }
+
+    private static string GetAllMoviesText()
+    {
+        try
+        {
+            var rows = SQLQuery(@"SELECT title, genre, age_restriction, length_minutes
+                FROM movies
+                ORDER BY title");
+
+            if (rows == null || rows.Length == 0)
+            {
+                return "Inga filmer hittades.";
+            }
+
+            var text = "Antal filmer på hemsidan: " + rows.Length + "\n";
+
+            foreach (var row in rows)
+            {
+                var genre = row.genre == null ? "okänd genre" : row.genre + "";
+                var ageRestriction = row.age_restriction == null ? "okänd åldersgräns" : row.age_restriction + "";
+                var length = row.length_minutes == null ? "okänd längd" : row.length_minutes + " min";
+
+                text += "- " + row.title + " (" + genre + ", " + length + ", " + ageRestriction + " år)\n";
+            }
+
+            return text.Trim();
+        }
+        catch
+        {
+            return "Det gick inte att läsa alla filmer.";
+        }
+    }
+
+    private static string GetUpcomingScreeningsText()
+    {
+        try
+        {
+            var rows = SQLQuery(@"SELECT
+                m.title,
+                s.screeningDate,
+                s.screeningTime,
+                sal.name AS salonName
+                FROM screenings s
+                JOIN movies m ON s.movieId = m.id
+                JOIN salons sal ON s.salonId = sal.id
+                WHERE TIMESTAMP(s.screeningDate, s.screeningTime) >= NOW()
+                ORDER BY s.screeningDate, s.screeningTime
+                LIMIT 30");
+
+            if (rows == null || rows.Length == 0)
+            {
+                return "Inga kommande visningar hittades.";
+            }
+
+            var text = "";
+
+            foreach (var row in rows)
+            {
+                text += "- " + row.title + " " + row.screeningDate + " kl. " + row.screeningTime + " i " + row.salonName + "\n";
+            }
+
+            return text.Trim();
+        }
+        catch
+        {
+            return "Det gick inte att läsa kommande visningar.";
+        }
+    }
+
+    private static string GetTicketPricesText()
+    {
+        try
+        {
+            var rows = SQLQuery(@"SELECT name, price
+                FROM ticketTypes
+                ORDER BY price DESC");
+
+            if (rows == null || rows.Length == 0)
+            {
+                return "Inga biljettpriser hittades.";
+            }
+
+            var text = "";
+
+            foreach (var row in rows)
+            {
+                text += "- " + row.name + ": " + row.price + " kr\n";
+            }
+
+            return text.Trim();
+        }
+        catch
+        {
+            return "Det gick inte att läsa biljettpriser.";
+        }
+    }
+
+    private static string GetSalonsText()
+    {
+        try
+        {
+            var rows = SQLQuery(@"SELECT name, totalSeats
+                FROM salons
+                ORDER BY name");
+
+            if (rows == null || rows.Length == 0)
+            {
+                return "Inga salonger hittades.";
+            }
+
+            var text = "";
+
+            foreach (var row in rows)
+            {
+                text += "- " + row.name + ": " + row.totalSeats + " platser\n";
+            }
+
+            return text.Trim();
+        }
+        catch
+        {
+            return "Det gick inte att läsa salonger.";
         }
     }
 
@@ -163,17 +308,12 @@ LIMIT 10");
     {
         try
         {
-            var path = Path.Combine(
+            var configPath = Path.Combine(
                 AppContext.BaseDirectory, "..", "..", "..", "db-config.json"
             );
 
-            if (!File.Exists(path))
-            {
-                Log("db-config.json not found");
-                return;
-            }
-
-            var config = JSON.Parse(File.ReadAllText(path));
+            var configJson = File.ReadAllText(configPath);
+            var config = JSON.Parse(configJson);
 
             if (config.aiAccessToken != null)
             {
@@ -181,12 +321,12 @@ LIMIT 10");
             }
             else
             {
-                Log("aiAccessToken not found in db-config.json");
+                Log("WARNING: aiAccessToken not found in db-config.json!");
             }
         }
         catch (Exception ex)
         {
-            Log("Error loading config:", ex.Message);
+            Log("Error loading AI access token from config:", ex.Message);
         }
     }
 
@@ -194,17 +334,18 @@ LIMIT 10");
     {
         try
         {
-            var path = Path.Combine(
+            var promptPath = Path.Combine(
                 AppContext.BaseDirectory, "..", "..", "..", "system-prompt.md"
             );
 
-            if (File.Exists(path))
+            if (File.Exists(promptPath))
             {
-                systemPrompt = File.ReadAllText(path);
+                systemPrompt = File.ReadAllText(promptPath);
+                Log("Loaded system prompt from system-prompt.md");
             }
             else
             {
-                Log("system-prompt.md not found");
+                Log("No system-prompt.md found, running without system prompt");
             }
         }
         catch (Exception ex)
