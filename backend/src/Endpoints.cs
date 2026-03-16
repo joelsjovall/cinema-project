@@ -1,3 +1,4 @@
+using WebApp;
 namespace WebApp;
 
 public static class MovieRoutes
@@ -90,6 +91,7 @@ public static class MovieRoutes
       {
         return RestResult.Parse(context, Arr());
       }
+
 
       var rows = SQLQuery(
         @"SELECT DISTINCT
@@ -318,6 +320,25 @@ public static class MovieRoutes
         }
 
         tx.Commit();
+
+
+
+        // Skicka bekräftelsemail
+        try
+        {
+          EmailService.SendEmail(
+              emailToStore,
+              "Bokningsbekräftelse",
+              $"<h1>Tack för din bokning!</h1><p>Ditt bokningsnummer är {bookingCode}.</p>"
+
+          );
+          Console.WriteLine("Bekräftelsemail skickat!");
+        }
+        catch (Exception ex)
+        {
+          Console.WriteLine("Mail misslyckades: " + ex.Message);
+        }
+
         return RestResult.Parse(context, Obj(new
         {
           bookingId,
@@ -331,5 +352,7 @@ public static class MovieRoutes
         return RestResult.Parse(context, Obj(new { error = ex.Message }));
       }
     });
+
+
   }
 }
