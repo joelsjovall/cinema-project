@@ -31,6 +31,12 @@ export default function MinaSidor() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [confirmId, setConfirmId] = useState<number | null>(null);
+    const userPoints = (() => {
+        if (!user) return 0;
+        const rawPoints = (user as { points?: unknown }).points;
+        const normalized = typeof rawPoints === "number" ? rawPoints : Number(rawPoints ?? 0);
+        return Number.isFinite(normalized) ? normalized : 0;
+    })();
 
     async function loadBookings() {
         setLoading(true);
@@ -103,6 +109,7 @@ export default function MinaSidor() {
                 <div className="mina-hero">
                     <h1>Mina sidor</h1>
                     <p>Inloggad som {user.email ?? "okänd användare"}</p>
+                    <p>Poäng: {userPoints}</p>
                 </div>
 
                 <div className="mina-section">
@@ -187,3 +194,5 @@ export default function MinaSidor() {
         </div>
     );
 }
+
+

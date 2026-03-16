@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import WelcomePopup from "../utils/Cookiemeddelande";
 
 const API = "";
 const UPCOMING_YEAR = 2027;
@@ -145,6 +146,7 @@ export default function Home() {
 
     return (
         <div className="home-page container-fluid pb-4">
+            <WelcomePopup />
             <h1 className="mb-4">Filmer på bio just nu</h1>
             <div className="row g-3 mb-4">
                 <div className="col-12 col-md-6">

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
-
+import { useNavigate, useSearchParams } from "react-router-dom";
 interface Screening {
     id: number;
     salonId: number;
@@ -40,6 +39,7 @@ export default function Seats() {
     const CHILD_PRICE = 80;
 
     const [searchParams] = useSearchParams();
+    const navigate = useNavigate();
     const screeningId = searchParams.get("screeningId") ?? "";
 
     const [screening, setScreening] = useState<Screening | null>(null);
@@ -53,6 +53,7 @@ export default function Seats() {
     const [selectedSeats, setSelectedSeats] = useState<number[]>([]);
     const [occupiedSeats, setOccupiedSeats] = useState<number[]>([]);
     const [guestEmail, setGuestEmail] = useState("");
+    const [loggedInEmail, setLoggedInEmail] = useState("");
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [bookingMessage, setBookingMessage] = useState<string>("");
     const [isBooking, setIsBooking] = useState(false);
@@ -67,8 +68,8 @@ export default function Seats() {
 
     const totalTickets = adult + senior + child;
     const totalPrice = adult * ADULT_PRICE + senior * SENIOR_PRICE + child * CHILD_PRICE;
-    const hasGuestEmail = guestEmail.trim().length > 0;
-    const canConfirm = totalTickets > 0 && selectedSeats.length === totalTickets && (isLoggedIn || hasGuestEmail);
+    const emailToUse = isLoggedIn ? loggedInEmail.trim() : guestEmail.trim();
+    const canConfirm = totalTickets > 0 && selectedSeats.length === totalTickets && emailToUse.length > 0;
 
     useEffect(() => {
         async function fetchLoginStatus() {
@@ -76,13 +77,18 @@ export default function Seats() {
                 const res = await fetch("/api/login");
                 if (!res.ok) {
                     setIsLoggedIn(false);
+                    setLoggedInEmail("");
                     return;
                 }
 
                 const data: LoginUserResponse = await res.json();
-                setIsLoggedIn(!data.error && !!data.email);
+                const email = data.email?.trim() ?? "";
+                const loggedIn = !data.error && email.length > 0;
+                setIsLoggedIn(loggedIn);
+                setLoggedInEmail(loggedIn ? email : "");
             } catch {
                 setIsLoggedIn(false);
+                setLoggedInEmail("");
             }
         }
 
@@ -184,7 +190,7 @@ export default function Seats() {
                 body: JSON.stringify({
                     selectedSeats: seatsToBook,
                     totalPrice,
-                    guestEmail,
+                    guestEmail: emailToUse,
                 }),
             });
 
@@ -197,6 +203,15 @@ export default function Seats() {
             setBookingMessage(`Bokning skapad. Kod: ${data.bookingCode ?? "-"}`);
             setSelectedSeats([]);
             setOccupiedSeats((prev) => Array.from(new Set([...prev, ...seatsToBook])));
+            navigate("/BokningsBF", {
+                state: {
+                    movieTitle: movieTitle || "-",
+                    screeningTime: `${displayDate} ${screening?.screeningTime ?? ""}`.trim(),
+                    bookingCode: data.bookingCode ?? "-",
+                    email: emailToUse || "-",
+                    seats: seatsToBook,
+                },
+            });
         } catch {
             setBookingMessage("Kunde inte skapa bokning.");
         } finally {
@@ -287,6 +302,7 @@ export default function Seats() {
                             {isBooking ? "Bokar..." : "Bekr√§fta"}
                         </button>
                         {bookingMessage && <p>{bookingMessage}</p>}
+
                     </div>
 
                     <div className="right-column">
@@ -305,9 +321,10 @@ export default function Seats() {
                             <div className="email-section">
                                 <input
                                     type="email"
-                                    value={guestEmail}
+                                    value={isLoggedIn ? loggedInEmail : guestEmail}
                                     onChange={(e) => setGuestEmail(e.target.value)}
-                                    placeholder="Skriv din e-post (om du inte √§r inloggad)"
+                                    disabled={isLoggedIn}
+                                    placeholder={isLoggedIn ? "E-post h‰mtad frÂn inloggad anv‰ndare" : "Skriv din e-post"}
                                 />
                             </div>
                         </div>
@@ -317,5 +334,6 @@ export default function Seats() {
         </div>
     );
 }
+
 
 

@@ -6,3 +6,46 @@
 .mb-1 {
     color: black;
 }
+
+@media (max-width: 767.98px) {
+    .footer {
+        padding-bottom: 8px;
+        padding-top: 10px;
+    }
+
+    .footer .footer-row {
+        row-gap: 10px;
+    }
+
+    .footer .footer-links {
+        gap: 18px !important;
+    }
+
+    .footer .footer-link-block h6 {
+        margin-bottom: 2px;
+        font-size: 0.95rem;
+    }
+
+    .footer .footer-link-block p {
+        font-size: 0.9rem;
+    }
+
+    .footer .footer-help {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .footer .footer-help p {
+        margin: 0 !important;
+        font-size: 0.95rem;
+        line-height: 1.1;
+    }
+
+    .footer .footer-help .btn {
+        padding: 0.35rem 0.75rem;
+        font-size: 0.9rem;
+        white-space: nowrap;
+    }
+}

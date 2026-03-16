@@ -18,6 +18,15 @@ type AuthContextValue = {
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
+async function parseJsonResponse(res: Response) {
+    const contentType = res.headers.get("content-type") ?? "";
+    if (!contentType.toLowerCase().includes("application/json")) {
+        await res.text();
+        throw new Error("Servern svarade inte med JSON. Kontrollera att backend kör och att /api proxas rätt.");
+    }
+    return res.json();
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<AuthUser | null>(null);
     const [authLoading, setAuthLoading] = useState(true);
@@ -28,7 +37,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 method: "GET",
                 credentials: "include",
             });
-            const data = await res.json();
+            const data = await parseJsonResponse(res);
             if (!res.ok || data?.error) {
                 setUser(null);
                 return;
@@ -55,7 +64,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             body: JSON.stringify({ email, password }),
         });
 
-        const data = await res.json();
+        const data = await parseJsonResponse(res);
         if (!res.ok || data?.error) {
             const message = data?.error ? toSwedishError(data.error) : "Inloggning misslyckades.";
             throw new Error(message);
@@ -107,3 +116,6 @@ export function useAuth() {
     }
     return ctx;
 }
+
+
+

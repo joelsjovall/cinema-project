@@ -7,7 +7,7 @@
     position: relative;
 }
 
-/* Grupp som håller ihop bubblorna */
+/* Grupp som hÃ¥ller ihop bubblorna */
 .bubble-group {
     display: flex;
     background: white;
@@ -168,6 +168,12 @@
         min-height: 74px;
         padding: 10px 14px;
         position: relative;
+        transition: transform 0.25s ease-in-out;
+        will-change: transform;
+    }
+
+    .custom-header.mobile-header-hidden {
+        transform: translateY(-110%);
     }
 
     .bubble-group,

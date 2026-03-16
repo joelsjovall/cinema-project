@@ -1,0 +1,59 @@
+.bokningsbf-page {
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.bokningsbf-card {
+  width: 100%;
+  max-width: 820px;
+  border: 2px solid #1f2937;
+  border-radius: 16px;
+  padding: 32px;
+  background: #5bf384;
+  color: #111827;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+.bubbleHome {
+  display: block;
+  margin: 24px auto 0;
+  padding: 14px 36px;
+  min-width: 220px;
+  border: 2px solid #111827;
+  border-radius: 30px;
+  background: #111827;
+  color: #f9fafb;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+
+.bokningsbf-title {
+  margin-top: 0;
+  margin-bottom: 24px;
+  font-size: 34px;
+}
+
+.bokningsbf-row {
+  margin: 10px 0;
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .bokningsbf-page {
+    padding: 16px;
+  }
+
+  .bokningsbf-card {
+    padding: 22px;
+  }
+
+  .bokningsbf-title {
+    font-size: 28px;
+  }
+}

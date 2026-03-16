@@ -8,6 +8,7 @@ import Createaccount from "./pages/Createaccount";
 import Movie from "./pages/Movie";
 import Seats from "./pages/Seats";
 import MinaSidor from "./pages/MinaSidor";
+import BokningsBF from "./pages/BokningsBF";
 
 const routes: RouteObject[] = [
   { index: true, element: <Home /> },
@@ -20,6 +21,7 @@ const routes: RouteObject[] = [
   { path: "*", element: <div>404 - Sidan finns inte</div> },
   { path: "/Createaccount", element: <Createaccount /> },
   { path: "/Seats", element: <Seats /> },
+  { path: "/BokningsBF", element: <BokningsBF /> },
 ];
 
 export default routes;

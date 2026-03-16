@@ -68,7 +68,8 @@ public static class DbQuery
                 firstName VARCHAR(255) NOT NULL,
                 lastName VARCHAR(255) NOT NULL,
                 role VARCHAR(50) NOT NULL DEFAULT 'user',
-                password VARCHAR(255) NOT NULL
+                password VARCHAR(255) NOT NULL,
+                points INT NOT NULL DEFAULT 0
             );
 
             CREATE TABLE IF NOT EXISTS products (

@@ -46,4 +46,13 @@
   .home-page {
     width: 90%;
   }
+
+  .card img.movie-poster {
+    cursor: pointer;
+
+    &:hover {
+      transform: translateY(-10px);
+    }
+  }
+
 }
