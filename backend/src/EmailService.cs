@@ -6,6 +6,25 @@ namespace WebApp
 {
   public static class EmailService
   {
+    public static void SendBookingConfirmation(
+      string to,
+      string movieTitle,
+      string screeningDate,
+      string bookingCode,
+      string seats
+    )
+    {
+      var subject = "Din bokning hos Grona Duken";
+      var body =
+        "<h2>Tack for din bokning!</h2>" +
+        $"<p><strong>Film:</strong> {movieTitle}</p>" +
+        $"<p><strong>Datum:</strong> {screeningDate}</p>" +
+        $"<p><strong>Platser:</strong> {seats}</p>" +
+        $"<p><strong>Bokningskod:</strong> {bookingCode}</p>";
+
+      SendEmail(to, subject, body);
+    }
+
     public static void SendEmail(string to, string subject, string body)
     {
       var message = new MimeMessage();
