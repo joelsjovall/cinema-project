@@ -1,5 +1,4 @@
 namespace WebApp;
-
 public static class AiChatRoutes
 {
     private static string aiAccessToken = "";
