@@ -16,6 +16,15 @@ interface ChatResponse {
   error?: string;
 }
 
+const suggestedQuestions = [
+  "Vad kostar en biljett",
+  "Vilka salonger har ni?",
+  "Vad finns i kiosken?",
+  "Hur bokar jag?",
+  "När går The Lion King?",
+  "Vad är er inriktning?",
+];
+
 export default function AiChat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -35,8 +44,14 @@ export default function AiChat() {
     }
   }, [input]);
 
-  const sendMessage = async () => {
-    const text = input.trim();
+  const clearChat = () => {
+    if (isLoading) return;
+    setMessages([]);
+    setInput("");
+  };
+
+  const sendMessage = async (customText?: string) => {
+    const text = (customText ?? input).trim();
     if (!text || isLoading) return;
 
     const userMessage: Message = { role: "user", content: text };
@@ -47,12 +62,14 @@ export default function AiChat() {
     setIsLoading(true);
 
     try {
+      const recentMessages = nextMessages.slice(-6);
+
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ messages: nextMessages }),
+        body: JSON.stringify({ messages: recentMessages }),
       });
 
       const rawText = await response.text();
@@ -97,7 +114,25 @@ export default function AiChat() {
     <div className="ai-inner">
       <div className="messages">
         {messages.length === 0 && (
-          <div className="empty-message">Börja chatta med AI-assistenten.</div>
+          <>
+            <div className="empty-message">
+              Börja chatta med AI-assistenten.
+            </div>
+
+            <div className="ai-suggestions">
+              {suggestedQuestions.map((question, index) => (
+                <button
+                  key={index}
+                  type="button"
+                  className="ai-question-btn"
+                  onClick={() => sendMessage(question)}
+                  disabled={isLoading}
+                >
+                  {question}
+                </button>
+              ))}
+            </div>
+          </>
         )}
 
         {messages.map((message, index) => (
@@ -128,6 +163,17 @@ export default function AiChat() {
       </div>
 
       <div className="input-area">
+        <div className="ai-actions">
+          <Button
+            variant="outline-secondary"
+            size="sm"
+            onClick={clearChat}
+            disabled={isLoading || messages.length === 0}
+          >
+            Rensa chatten
+          </Button>
+        </div>
+
         <Form.Control
           as="textarea"
           ref={textareaRef}
@@ -136,11 +182,12 @@ export default function AiChat() {
           onKeyDown={handleKeyDown}
           placeholder="Skriv ditt meddelande..."
           rows={1}
+          disabled={isLoading}
         />
 
         <Button
           variant="primary"
-          onClick={sendMessage}
+          onClick={() => sendMessage()}
           disabled={!input.trim() || isLoading}
         >
           skicka

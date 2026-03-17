@@ -1,5 +1,4 @@
 namespace WebApp;
-
 public static class AiChatRoutes
 {
     private static string aiAccessToken = "";
@@ -19,21 +18,28 @@ public static class AiChatRoutes
                 var body = JSON.Parse(bodyJson.ToString());
                 var messages = (Arr)body.messages;
 
-                if (messages == null)
-                {
+                if (messages == null || messages.Length == 0)
                     return RestResult.Parse(context, new { error = "Messages array is required." });
+
+                var lastUserMessage = GetLastUserMessage(messages);
+
+                if (!string.IsNullOrWhiteSpace(lastUserMessage))
+                {
+                    var directAnswer = TryGetDirectAnswer(lastUserMessage);
+
+                    if (!string.IsNullOrWhiteSpace(directAnswer))
+                        return RestResult.Parse(context, CreateAssistantResponse(directAnswer));
                 }
 
                 var fullMessages = Arr();
-                var cinemaContext = GetCinemaContext();
-                var combinedSystemPrompt = BuildSystemPrompt(cinemaContext);
+                var fallbackPrompt = BuildFallbackSystemPrompt();
 
-                if (!string.IsNullOrWhiteSpace(combinedSystemPrompt))
+                if (!string.IsNullOrWhiteSpace(fallbackPrompt))
                 {
                     fullMessages.Push(Obj(new
                     {
                         role = "system",
-                        content = combinedSystemPrompt
+                        content = fallbackPrompt
                     }));
                 }
 
@@ -60,24 +66,13 @@ public static class AiChatRoutes
                 var responseContent = await response.Content.ReadAsStringAsync();
 
                 if (!response.IsSuccessStatusCode)
-                {
-                    try
+                    return RestResult.Parse(context, new
                     {
-                        var error = JSON.Parse(responseContent);
-                        return RestResult.Parse(context, error);
-                    }
-                    catch
-                    {
-                        return RestResult.Parse(context, new
-                        {
-                            error = "AI API returned an error.",
-                            details = responseContent
-                        });
-                    }
-                }
+                        error = "AI API returned an error.",
+                        details = responseContent
+                    });
 
-                var data = JSON.Parse(responseContent);
-                return RestResult.Parse(context, data);
+                return RestResult.Parse(context, JSON.Parse(responseContent));
             }
             catch (Exception ex)
             {
@@ -86,222 +81,307 @@ public static class AiChatRoutes
         });
     }
 
-    private static string BuildSystemPrompt(string cinemaContext)
+    private static string GetLastUserMessage(Arr messages)
     {
-        if (string.IsNullOrWhiteSpace(systemPrompt) && string.IsNullOrWhiteSpace(cinemaContext))
+        for (var i = messages.Length - 1; i >= 0; i--)
+        {
+            if ((messages[i].role + "").ToLower() == "user")
+                return (messages[i].content + "").Trim();
+        }
+
+        return "";
+    }
+
+    private static object CreateAssistantResponse(string text)
+    {
+        return new
+        {
+            choices = Arr(
+                Obj(new
+                {
+                    message = Obj(new
+                    {
+                        role = "assistant",
+                        content = text
+                    })
+                })
+            )
+        };
+    }
+
+    private static string TryGetDirectAnswer(string userText)
+    {
+        var text = Normalize(userText);
+
+        if (IsOpeningHoursQuestion(text))
+            return GetOpeningHoursAnswer();
+
+        if (IsTicketPriceQuestion(text))
+            return GetTicketPricesAnswer();
+
+        if (IsCinemaFocusQuestion(text))
+            return GetCinemaFocusAnswer();
+
+        if (IsKioskQuestion(text))
+            return GetKioskAnswer();
+
+        if (IsBookingQuestion(text))
+            return GetBookingAnswer();
+
+        if (IsSalonsQuestion(text))
+            return GetSalonsAnswer();
+
+        var movieTitle = FindMovieTitleInText(userText);
+
+        if (!string.IsNullOrWhiteSpace(movieTitle) && IsMovieScheduleQuestion(text))
+            return GetMovieScheduleAnswer(movieTitle);
+
+        return "";
+    }
+
+    private static string Normalize(string text)
+    {
+        return (text ?? "").Trim().ToLower();
+    }
+
+    private static bool IsOpeningHoursQuestion(string text)
+    {
+        return
+            text.Contains("öppettider") ||
+            text.Contains("oppettider") ||
+            text.Contains("när öppnar") ||
+            text.Contains("nar oppnar") ||
+            text.Contains("när stänger") ||
+            text.Contains("nar stanger");
+    }
+
+    private static bool IsTicketPriceQuestion(string text)
+    {
+        return
+            text.Contains("vad kostar") ||
+            text.Contains("biljettpris") ||
+            text.Contains("biljettpriser") ||
+            text.Contains("vuxenbiljett") ||
+            text.Contains("barnbiljett") ||
+            text.Contains("pensionärsbiljett") ||
+            text.Contains("pensionarsbiljett");
+    }
+
+    private static bool IsCinemaFocusQuestion(string text)
+    {
+        return
+            text.Contains("inriktning") ||
+            text.Contains("vad är ni för biograf") ||
+            text.Contains("vad ar ni for biograf") ||
+            text.Contains("vad visar ni för filmer") ||
+            text.Contains("vad visar ni for filmer");
+    }
+
+    private static bool IsKioskQuestion(string text)
+    {
+        return
+            text.Contains("kiosk") ||
+            text.Contains("snacks") ||
+            text.Contains("popcorn") ||
+            text.Contains("godis") ||
+            text.Contains("chips") ||
+            text.Contains("läsk") ||
+            text.Contains("lask");
+    }
+
+    private static bool IsBookingQuestion(string text)
+    {
+        return
+            text.Contains("hur bokar jag") ||
+            text.Contains("hur fungerar bokningen") ||
+            text.Contains("hur köper jag biljett") ||
+            text.Contains("hur koper jag biljett");
+    }
+
+    private static bool IsSalonsQuestion(string text)
+    {
+        return
+            text.Contains("salonger") ||
+            text.Contains("platser") ||
+            text.Contains("hur stor") ||
+            text.Contains("hur många platser") ||
+            text.Contains("hur manga platser");
+    }
+
+    private static bool IsMovieScheduleQuestion(string text)
+    {
+        return
+            text.Contains("när går") ||
+            text.Contains("nar gar") ||
+            text.Contains("vilka tider") ||
+            text.Contains("när visas") ||
+            text.Contains("nar visas") ||
+            text.Contains("visningstider");
+    }
+
+    private static string FindMovieTitleInText(string userText)
+    {
+        try
+        {
+            var rows = SQLQuery(@"SELECT title FROM movies ORDER BY title");
+            var input = Normalize(userText);
+
+            foreach (var row in rows)
+            {
+                var title = row.title + "";
+                if (input.Contains(Normalize(title)))
+                    return title;
+            }
+
+            return "";
+        }
+        catch
         {
             return "";
         }
-
-        if (string.IsNullOrWhiteSpace(systemPrompt))
-        {
-            return cinemaContext;
-        }
-
-        if (string.IsNullOrWhiteSpace(cinemaContext))
-        {
-            return systemPrompt;
-        }
-
-        return systemPrompt + "\n\n" + cinemaContext;
     }
 
-    private static string GetCinemaContext()
+    private static string GetOpeningHoursAnswer()
+    {
+        // Ändra texten om hemsidan säger något annat
+        return "Biografens öppettider finns på hemsidan. Vanligtvis öppnar biografen i samband med dagens visningar.";
+    }
+
+    private static string GetTicketPricesAnswer()
     {
         try
         {
-            var text = "SYSTEMINFORMATION FÖR GRÖNA DUKEN\n";
-
-            text += "\nAlla filmer på hemsidan:\n";
-            text += GetAllMoviesText();
-
-            text += "\n\nKommande visningar:\n";
-            text += GetUpcomingScreeningsText();
-
-            text += "\n\nBiljettpriser:\n";
-            text += GetTicketPricesText();
-
-            text += "\n\nSalonger:\n";
-            text += GetSalonsText();
-
-            text += "\n\nBokning:\n";
-            text +=
-                "1. Välj film\n" +
-                "2. Välj datum och tid\n" +
-                "3. Välj platser\n" +
-                "4. Kontrollera totalpris\n" +
-                "5. Slutför bokningen\n" +
-                "Betalning sker på plats i biografen med bokningsnummer.\n";
-
-            return text.Trim();
-        }
-        catch
-        {
-            return "Systeminformation saknas just nu.";
-        }
-    }
-
-    private static string GetMoviesText()
-    {
-        try
-        {
-            var rows = SQLQuery(@"SELECT DISTINCT
-                m.id,
-                m.title,
-                m.genre,
-                m.age_restriction,
-                m.length_minutes
-                FROM movies m
-                JOIN screenings s ON s.movieId = m.id
-                WHERE TIMESTAMP(s.screeningDate, s.screeningTime) >= NOW()
-                ORDER BY m.title");
+            var rows = SQLQuery(@"SELECT name, price FROM ticketTypes ORDER BY price DESC");
 
             if (rows == null || rows.Length == 0)
-            {
-                return "Inga filmer med bokningsbara visningar hittades.";
-            }
+                return "Det finns inga biljettpriser just nu.";
 
-            var text = "Antal filmer med bokningsbara visningar: " + rows.Length + "\n";
+            var text = "Biljettpriser:\n";
 
             foreach (var row in rows)
-            {
-                var genre = row.genre == null ? "okänd genre" : row.genre + "";
-                var ageRestriction = row.age_restriction == null ? "okänd åldersgräns" : row.age_restriction + "";
-                var length = row.length_minutes == null ? "okänd längd" : row.length_minutes + " min";
-
-                text += "- " + row.title + " (" + genre + ", " + length + ", " + ageRestriction + " år)\n";
-            }
-
-            return text.Trim();
-        }
-        catch
-        {
-            return "Det gick inte att läsa filmer.";
-        }
-    }
-
-    private static string GetAllMoviesText()
-    {
-        try
-        {
-            var rows = SQLQuery(@"SELECT title, genre, age_restriction, length_minutes
-                FROM movies
-                ORDER BY title");
-
-            if (rows == null || rows.Length == 0)
-            {
-                return "Inga filmer hittades.";
-            }
-
-            var text = "Antal filmer på hemsidan: " + rows.Length + "\n";
-
-            foreach (var row in rows)
-            {
-                var genre = row.genre == null ? "okänd genre" : row.genre + "";
-                var ageRestriction = row.age_restriction == null ? "okänd åldersgräns" : row.age_restriction + "";
-                var length = row.length_minutes == null ? "okänd längd" : row.length_minutes + " min";
-
-                text += "- " + row.title + " (" + genre + ", " + length + ", " + ageRestriction + " år)\n";
-            }
-
-            return text.Trim();
-        }
-        catch
-        {
-            return "Det gick inte att läsa alla filmer.";
-        }
-    }
-
-    private static string GetUpcomingScreeningsText()
-    {
-        try
-        {
-            var rows = SQLQuery(@"SELECT
-                m.title,
-                s.screeningDate,
-                s.screeningTime,
-                sal.name AS salonName
-                FROM screenings s
-                JOIN movies m ON s.movieId = m.id
-                JOIN salons sal ON s.salonId = sal.id
-                WHERE TIMESTAMP(s.screeningDate, s.screeningTime) >= NOW()
-                ORDER BY s.screeningDate, s.screeningTime
-                LIMIT 30");
-
-            if (rows == null || rows.Length == 0)
-            {
-                return "Inga kommande visningar hittades.";
-            }
-
-            var text = "";
-
-            foreach (var row in rows)
-            {
-                text += "- " + row.title + " " + row.screeningDate + " kl. " + row.screeningTime + " i " + row.salonName + "\n";
-            }
-
-            return text.Trim();
-        }
-        catch
-        {
-            return "Det gick inte att läsa kommande visningar.";
-        }
-    }
-
-    private static string GetTicketPricesText()
-    {
-        try
-        {
-            var rows = SQLQuery(@"SELECT name, price
-                FROM ticketTypes
-                ORDER BY price DESC");
-
-            if (rows == null || rows.Length == 0)
-            {
-                return "Inga biljettpriser hittades.";
-            }
-
-            var text = "";
-
-            foreach (var row in rows)
-            {
                 text += "- " + row.name + ": " + row.price + " kr\n";
-            }
 
             return text.Trim();
         }
         catch
         {
-            return "Det gick inte att läsa biljettpriser.";
+            return "Det gick inte att läsa biljettpriserna just nu.";
         }
     }
 
-    private static string GetSalonsText()
+    private static string GetCinemaFocusAnswer()
+    {
+        // Ändra texten om ni vill beskriva biografen på annat sätt
+        return "Gröna Duken är en biograf där du kan se aktuella filmer och läsa information om visningar, salonger och bokning direkt på webbplatsen.";
+    }
+
+    private static string GetKioskAnswer()
+    {
+        return "I kiosken finns till exempel popcorn, godis, chips och läsk.";
+    }
+
+    private static string GetBookingAnswer()
+    {
+        return
+            "Så här bokar du:\n" +
+            "1. Välj film\n" +
+            "2. Välj visning\n" +
+            "3. Välj platser\n" +
+            "4. Slutför bokningen\n\n" +
+            "Betalning sker på plats i biografen.";
+    }
+
+    private static string GetSalonsAnswer()
     {
         try
         {
-            var rows = SQLQuery(@"SELECT name, totalSeats
-                FROM salons
-                ORDER BY name");
+            var rows = SQLQuery(@"SELECT name, totalSeats FROM salons ORDER BY name");
 
             if (rows == null || rows.Length == 0)
-            {
-                return "Inga salonger hittades.";
-            }
+                return "Det finns inga salonger just nu.";
 
-            var text = "";
+            var text = "Våra salonger:\n";
+
+            foreach (var row in rows)
+                text += "- " + row.name + ": " + row.totalSeats + " platser\n";
+
+            return text.Trim();
+        }
+        catch
+        {
+            return "Det gick inte att läsa salongerna just nu.";
+        }
+    }
+
+    private static string GetMovieScheduleAnswer(string movieTitle)
+    {
+        try
+        {
+            var escapedTitle = EscapeSql(movieTitle);
+
+            var rows = SQLQuery($@"SELECT s.screeningDate, s.screeningTime, sal.name AS salonName
+                FROM screenings s
+                JOIN movies m ON m.id = s.movieId
+                JOIN salons sal ON sal.id = s.salonId
+                WHERE m.title = '{escapedTitle}'
+                AND TIMESTAMP(s.screeningDate, s.screeningTime) >= NOW()
+                ORDER BY s.screeningDate, s.screeningTime");
+
+            if (rows == null || rows.Length == 0)
+                return $"Det finns inga kommande visningar för {movieTitle} just nu.";
+
+            var text = movieTitle + " visas:\n";
 
             foreach (var row in rows)
             {
-                text += "- " + row.name + ": " + row.totalSeats + " platser\n";
+                text += "- " + FormatDate(row.screeningDate) +
+                        " kl. " + FormatTime(row.screeningTime) +
+                        " i " + row.salonName + "\n";
             }
 
             return text.Trim();
         }
         catch
         {
-            return "Det gick inte att läsa salonger.";
+            return "Det gick inte att läsa visningstiderna just nu.";
         }
+    }
+
+    private static string BuildFallbackSystemPrompt()
+    {
+        if (string.IsNullOrWhiteSpace(systemPrompt))
+            return "";
+
+        return systemPrompt;
+    }
+
+    private static string FormatDate(dynamic value)
+    {
+        try
+        {
+            return Convert.ToDateTime(value + "").ToString("yyyy-MM-dd");
+        }
+        catch
+        {
+            return value + "";
+        }
+    }
+
+    private static string FormatTime(dynamic value)
+    {
+        try
+        {
+            return TimeSpan.Parse(value + "").ToString(@"hh\:mm");
+        }
+        catch
+        {
+            return value + "";
+        }
+    }
+
+    private static string EscapeSql(string text)
+    {
+        return (text ?? "").Replace("'", "''");
     }
 
     private static void LoadConfig()
@@ -316,17 +396,11 @@ public static class AiChatRoutes
             var config = JSON.Parse(configJson);
 
             if (config.aiAccessToken != null)
-            {
                 aiAccessToken = (string)config.aiAccessToken;
-            }
-            else
-            {
-                Log("WARNING: aiAccessToken not found in db-config.json!");
-            }
         }
         catch (Exception ex)
         {
-            Log("Error loading AI access token from config:", ex.Message);
+            Log("Error loading AI access token:", ex.Message);
         }
     }
 
@@ -339,14 +413,7 @@ public static class AiChatRoutes
             );
 
             if (File.Exists(promptPath))
-            {
                 systemPrompt = File.ReadAllText(promptPath);
-                Log("Loaded system prompt from system-prompt.md");
-            }
-            else
-            {
-                Log("No system-prompt.md found, running without system prompt");
-            }
         }
         catch (Exception ex)
         {

@@ -1,7 +1,6 @@
 namespace WebApp;
 
 using WebApp.Models;
-using WebApp.Services;
 
 
 public static class BookingRoutes
@@ -90,7 +89,7 @@ public static class BookingRoutes
             });
 
             // Skicka mail
-            EmailService.SendBookingConfirmation(
+           EmailService.SendBookingConfirmation(
                 user.email,
                 booking.title,
                 booking.screeningDate,
