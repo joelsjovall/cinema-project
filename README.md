@@ -37,7 +37,7 @@ Projektet använder MySQL, och backend kopplar upp sig mot databasen vid uppstar
 
 Viktigt att veta
 För att IMDb-betygen ska visas korrekt behövs en giltig OMDb API-nyckel. Den sätts i terminalen innan projektet startas med:
-$env:OMDB_API_KEY="da4167d8"
+export OMDB_API_KEY="da4167d8"
 
 AI-chatten kräver också korrekt konfiguration för att fungera. Den använder en access token som läses in från backend/db-config.json. Om denna token saknas eller är ogiltig kommer resten av hemsidan fortfarande att fungera, men AI-chatten kommer inte att kunna svara på användarens frågor.
 Filen backend/db-config.json ska vara uppbyggd så här:
