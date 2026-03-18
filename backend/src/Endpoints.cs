@@ -350,7 +350,28 @@ public static class MovieRoutes
             var screeningTime = "";
             if (!reader.IsDBNull(reader.GetOrdinal("screeningTime")))
             {
-              screeningTime = reader.GetString(reader.GetOrdinal("screeningTime"));
+              var ordinal = reader.GetOrdinal("screeningTime");
+              var rawTime = reader.GetValue(ordinal);
+              if (rawTime is TimeSpan ts)
+              {
+                screeningTime = ts.ToString(@"hh\:mm");
+              }
+              else if (rawTime is DateTime dt)
+              {
+                screeningTime = dt.ToString("HH:mm");
+              }
+              else
+              {
+                var timeStr = Convert.ToString(rawTime) ?? "";
+                if (!string.IsNullOrWhiteSpace(timeStr) && TimeSpan.TryParse(timeStr, out var parsed))
+                {
+                  screeningTime = parsed.ToString(@"hh\:mm");
+                }
+                else
+                {
+                  screeningTime = timeStr.Trim();
+                }
+              }
             }
 
             screeningLabel = screeningDate == null

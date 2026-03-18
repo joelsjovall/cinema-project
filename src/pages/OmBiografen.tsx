@@ -16,8 +16,6 @@ export default function OmBiografen() {
         sedan är det bara att luta sig tillbaka och njuta.
       </p>
 
-      <h2 className="subtitle">Våra upplevelser</h2>
-
       <div className="grid">
         {/* Välj plats */}
         <div
@@ -36,7 +34,7 @@ export default function OmBiografen() {
           <div className="body">
             <h3 className="card-title">Välj plats</h3>
             <p className="card-text">
-              Efter att du valt film och tid kan du välja din plats i salongen.
+              Efter att du valt film och tid väljer du din plats i salongen.
             </p>
           </div>
         </div>
@@ -52,7 +50,7 @@ export default function OmBiografen() {
           <div className="body">
             <h3 className="card-title">Dukarna</h3>
             <p className="card-text">
-              Större duk, större känsla – perfekt för storfilm.
+              Större duk - perfekt för storfilm.
             </p>
           </div>
         </div>
