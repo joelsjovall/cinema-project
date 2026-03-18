@@ -35,7 +35,7 @@ export default function BokningsBF() {
                     <span>{screeningTime}</span>
                 </p>
                 <p className="bokningsbf-row">
-                    <strong>Bookningskod:</strong>{" "}
+                    <strong>Bokningskod:</strong>{" "}
                     <span>{bookingCode}</span>
                 </p>
                 <p className="bokningsbf-row">

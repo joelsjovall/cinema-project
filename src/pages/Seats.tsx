@@ -267,7 +267,7 @@ export default function Seats() {
 
                             <div className="ticket-row">
                                 <span>Vuxen</span>
-                                <span>{ADULT_PRICE} kr</span>
+                                <span>{ADULT_PRICE} kr / 180 po√§ng</span>
                                 <div className="counter">
                                     <button onClick={() => setAdult(Math.max(0, adult - 1))}>-</button>
                                     <span>{adult}</span>
@@ -277,7 +277,7 @@ export default function Seats() {
 
                             <div className="ticket-row">
                                 <span>Pension√§r</span>
-                                <span>{SENIOR_PRICE} kr</span>
+                                <span>{SENIOR_PRICE} kr / 140 po√§ng</span>
                                 <div className="counter">
                                     <button onClick={() => setSenior(Math.max(0, senior - 1))}>-</button>
                                     <span>{senior}</span>
@@ -287,7 +287,7 @@ export default function Seats() {
 
                             <div className="ticket-row">
                                 <span>Barn</span>
-                                <span>{CHILD_PRICE} kr</span>
+                                <span>{CHILD_PRICE} kr / 100 po√§ng</span>
                                 <div className="counter">
                                     <button onClick={() => setChild(Math.max(0, child - 1))}>-</button>
                                     <span>{child}</span>
@@ -324,7 +324,7 @@ export default function Seats() {
                                     value={isLoggedIn ? loggedInEmail : guestEmail}
                                     onChange={(e) => setGuestEmail(e.target.value)}
                                     disabled={isLoggedIn}
-                                    placeholder={isLoggedIn ? "E-post h‰mtad frÂn inloggad anv‰ndare" : "Skriv din e-post"}
+                                    placeholder={isLoggedIn ? "E-post hÔøΩmtad frÔøΩn inloggad anvÔøΩndare" : "Skriv din e-post"}
                                 />
                             </div>
                         </div>

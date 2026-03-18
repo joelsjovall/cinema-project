@@ -45,7 +45,7 @@ export default function Login() {
                         required
                     />
 
-                    <label htmlFor="password">Losenord</label>
+                    <label htmlFor="password">Lösenord</label>
                     <input
                         id="password"
                         type="password"
