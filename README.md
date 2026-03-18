@@ -2,7 +2,7 @@
 
 - Joel Sjövall, GitHub: `joelsjovall`
 - Måns Oskarsson, GitHub: `mansoskarsson`
-- Sigge von Eggers Patron, GitHub: `siggeelli-pixel`
+- Sigge von Eggers Patron, GitHub: `siggevep`
 - Lukas Eriksson, GitHub: `Lukutv04`
 - Pedram Basim, GitHub: `pedram-cyber`
 
