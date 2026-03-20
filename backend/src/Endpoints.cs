@@ -154,7 +154,7 @@ public static class MovieRoutes
       {
         var loggedInUser = Session.Get(context, "user");
         int? userIdToStore = null;
-        var emailToStore = "";
+        var emailToStore = (request?.guestEmail ?? "").Trim();
         if (loggedInUser != null)
         {
           try
@@ -166,19 +166,17 @@ public static class MovieRoutes
           }
           catch { }
 
-          try
+          if (string.IsNullOrWhiteSpace(emailToStore))
           {
-            if (loggedInUser.email != null)
+            try
             {
-              emailToStore = Convert.ToString(loggedInUser.email) ?? "";
+              if (loggedInUser.email != null)
+              {
+                emailToStore = Convert.ToString(loggedInUser.email) ?? "";
+              }
             }
+            catch { }
           }
-          catch { }
-        }
-
-        if (string.IsNullOrWhiteSpace(emailToStore))
-        {
-          emailToStore = (request?.guestEmail ?? "").Trim();
         }
 
         if (string.IsNullOrWhiteSpace(emailToStore))
