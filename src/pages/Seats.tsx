@@ -74,7 +74,7 @@ export default function Seats() {
     useEffect(() => {
         async function fetchLoginStatus() {
             try {
-                const res = await fetch("/api/login");
+                const res = await fetch("/api/login", { credentials: "include" });
                 if (!res.ok) {
                     setIsLoggedIn(false);
                     setLoggedInEmail("");
@@ -187,6 +187,7 @@ export default function Seats() {
             const res = await fetch(`/movies/screenings/${encodeURIComponent(screeningId)}/book`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
+                credentials: "include",
                 body: JSON.stringify({
                     selectedSeats: seatsToBook,
                     totalPrice,
@@ -317,14 +318,18 @@ export default function Seats() {
                             </div>
 
                             <div className="seat-layout">{renderSeatRows()}</div>
-
                             <div className="email-section">
                                 <input
                                     type="email"
                                     value={isLoggedIn ? loggedInEmail : guestEmail}
-                                    onChange={(e) => setGuestEmail(e.target.value)}
-                                    disabled={isLoggedIn}
-                                    placeholder={isLoggedIn ? "E-post hï¿½mtad frï¿½n inloggad anvï¿½ndare" : "Skriv din e-post"}
+                                    onChange={(e) =>
+                                        isLoggedIn ? setLoggedInEmail(e.target.value) : setGuestEmail(e.target.value)
+                                    }
+                                    placeholder={
+                                        isLoggedIn
+                                            ? "E-post (kan ändras från inloggad användare)"
+                                            : "Skriv din e-post"
+                                    }
                                 />
                             </div>
                         </div>
@@ -334,6 +339,9 @@ export default function Seats() {
         </div>
     );
 }
+
+
+
 
 
 

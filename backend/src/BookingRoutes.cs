@@ -88,13 +88,40 @@ public static class BookingRoutes
                     new { bookingId = booking.id, seatId });
             });
 
-            // Skicka mail
-           EmailService.SendBookingConfirmation(
+            var seatsLabel = req.SeatIds == null || req.SeatIds.Count == 0
+                ? "-"
+                : string.Join(", ", req.SeatIds);
+
+            var pointsToAdd = (req.SeatIds == null ? 0 : req.SeatIds.Count) * 20;
+            if (pointsToAdd > 0)
+            {
+                SQLQuery(
+                    "UPDATE users SET points = IFNULL(points, 0) + @points WHERE id = @userId",
+                    new { points = pointsToAdd, userId = user.id }
+                );
+                try
+                {
+                    var currentPoints = user.points == null ? 0 : Convert.ToInt32(user.points);
+                    user.points = currentPoints + pointsToAdd;
+                    Session.Set(context, "user", user);
+                }
+                catch { }
+            }
+
+            var safeTitle = System.Net.WebUtility.HtmlEncode(booking.title ?? "-");
+            var safeDate = System.Net.WebUtility.HtmlEncode(booking.screeningDate?.ToString() ?? "-");
+            var safeCode = System.Net.WebUtility.HtmlEncode(booking.bookingCode?.ToString() ?? "-");
+            var safeSeats = System.Net.WebUtility.HtmlEncode(seatsLabel);
+            var emailBody = $@"
+<h1>Bokningsbekräftelse</h1>
+<p><strong>Film:</strong> {safeTitle}</p>
+<p><strong>Tid:</strong> {safeDate}</p>
+<p><strong>Bokningskod:</strong> {safeCode}</p>
+<p><strong>Stol:</strong> {safeSeats}</p>";
+            EmailService.SendEmail(
                 user.email,
-                booking.title,
-                booking.screeningDate,
-                booking.bookingCode,
-                string.Join(",", req.SeatIds)
+                "Bokningsbekräftelse",
+                emailBody
             );
 
             return RestResult.Parse(context, booking);
